@@ -1,0 +1,21 @@
+##equation: Br(+)+O_2->O_2(+)+Br
+##type:
+##unit:        eV, cm2
+##date:        2008/01/30
+##method:      
+#
+##ref.auth:    W.L. Morgan
+##Ref. title : Plasma Chemistry Model for HBr/Cl2/O2 Gas Mixture
+##ref.journal: Kinema Research & Software July 1996
+#
+83022
+Br(+)+O_2->O_2(+)+Br
+0.0
+4
+83 1806 85 1804
+-1  -1  +1  +1
+255
+ 1
+ 0.00E-02 0.00E-16
+ 1
+7.10E-10  0.0  0.00E+00

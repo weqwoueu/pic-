@@ -1,0 +1,45 @@
+#
+##date: 2003/3/7
+# recombination  O(-)+O(+) -> 2O
+#
+##equation:   O(-)+O(+) -> 2O
+##type:       recombination
+##method:     digitalize from scanned figure
+##ref.auth:   Ronald E. Olson, James R. Peterson, and John Moseley
+##ref.title:  Ion=Ion Recombination Total Cross Sections -- Atomic Species
+##ref.journal: The Journal of Chemical Physics
+##ref.fig:    Fig.5
+87000
+O(-)+O(+)->2O
+0.0
+3
+ 87  82  80
+ -1  -1  +2
+10
+21
+  0.096375 9.8749e-13
+   0.13872 7.0886e-13
+   0.17848 5.3492e-13
+   0.24435 3.9866e-13
+   0.34276 3.0467e-13
+   0.48053 2.4176e-13
+   0.63293 1.9792e-13
+   0.91001 1.5221e-13
+    1.2438  1.254e-13
+    1.9009 1.0141e-13
+    2.4089 9.1198e-14
+    3.4579 7.7532e-14
+    4.8374 7.0174e-14
+    6.5992 6.5123e-14
+     9.231 5.9312e-14
+    14.082  5.369e-14
+    20.184 5.0143e-14
+    49.925 4.3475e-14
+    114.68  3.722e-14
+    270.18  3.069e-14
+    402.25 2.7093e-14
+1
+1.0e-7 0.0 0.0
+
+
+

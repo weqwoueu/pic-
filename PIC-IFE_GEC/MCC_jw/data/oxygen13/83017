@@ -1,0 +1,38 @@
+##eqation:     O(-)+O_2->O(-)+O_2
+##type:        Scattering
+##unit:        eV, cm2
+##date:        2001/1/12
+##method:      digitalize from scanned figure
+##
+##
+##ref.auth:    V. Vahedi and M. Surendra
+##ref.title:   A Monte Carlo collision model for the particle-in-cell
+##             method:  applications to argon and oxgen discharges 
+##ref.journal: Computer Physics Communications 87, 179 (1995)
+##
+83017
+O(-)+O_2->O(-)+O_2
+0.0
+2
+  3083  3814
+ 0   0
+1
+     16
+0.010007  4.9628e-15
+0.19912  4.9934e-15
+0.25002  4.4592e-15
+0.32784  4.0586e-15
+0.60812  3.2378e-15
+0.88869  2.838e-15
+1.5446  2.3961e-15
+2.6271  2.0615e-15
+3.7567  1.8767e-15
+6.5292  1.6147e-15
+12.923  1.4433e-15
+19.936  1.3648e-15
+29.77  1.2905e-15
+40.764  1.22e-15
+64.259  1.1758e-15
+96.998  1.1547e-15
+-1
+0.00E+00  0.00E+00  0.00E+00

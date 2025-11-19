@@ -1,0 +1,50 @@
+#e+Cl(*)->Cl(+)+e+e
+#Ionization cross section
+#
+#S Tinck, W Boullart and A Bogaerts
+#Simulation of an Ar/Cl2 inductively coupled plasma:
+#study of the effect of bias, power and pressure and
+#comparison with experiments
+#J. Phys. D: Appl. Phys. 41 (2008) 065207(14pp)
+#Fig.1 (a)
+#digitalized by Matsunaga Dec.5th, 2013.
+####
+# threshold energy 3.0eV is uncertain 
+170003
+e(-)+Cl(*)->Cl(+)+e(-)+e(-)
+3.0
+3
+173   1   172
+  -1   1    1
+2
+28
+3.0      0.0
+3.038    1.359E-16
+4.304    1.931E-16
+5.063    2.994E-16
+6.329    4.994E-16
+11.24    6.755E-16
+14.95    7.035E-16
+22.38    6.486E-16
+33.51    5.084E-16
+40.94    4.501E-16
+52.08    3.827E-16
+63.22    3.253E-16
+66.93    3.124E-16
+70.64    3.000E-16
+74.36    2.766E-16
+81.78    2.766E-16
+89.21    2.449E-16
+100.3    2.258E-16
+107.8    2.082E-16
+111.5    1.999E-16
+148.6    1.632E-16
+156      1.632E-16
+159.8    1.567E-16
+163.5    1.567E-16
+167.2    1.505E-16
+178.3    1.387E-16
+185.7    1.332E-16
+196.9    1.279E-16
+-1
+0.00E+00  0.00E+00  0.00E+00

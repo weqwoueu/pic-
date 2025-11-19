@@ -1,0 +1,7 @@
+&ControlFlow
+CF%InitDensity        =   96.4d20,
+CF%NRun               =   10000,
+CF%NDiagShort         =   10,
+CF%NDiagLong          =   100,
+CF%ParticlePerGrid    =   100,
+/

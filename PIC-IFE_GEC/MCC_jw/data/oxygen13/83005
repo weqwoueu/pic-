@@ -1,0 +1,62 @@
+##equation:     e+O_2->O(^3P)+O(^3P)+e
+##type:        Dissociation 6.0
+##unit:        eV, cm2
+##............
+##  2001 から2017/11 まで下記文献に記されているデータをもちいていた．
+## 
+##date:        2001/1/12
+##method:      digitalize from scanned figure
+##
+##
+##ref.auth:    V. Vahedi and M. Surendra
+##ref.title:   A Monte Carlo collision model for the particle-in-cell
+##             method:  applications to argon and oxgen discharges 
+##ref.journal: Computer Physics Communications 87, 179 (1995)
+##...........
+## 2017/11/15 Itikawa の論文を参照して改訂．
+## [ref1]
+## Yukikazu Itikawa
+## Cross Sections for Electron Collisions with Oxygen Molecules
+## J.Pys. Chem. Ref. Data, Vol. 38, No. 1, 2009
+## 
+## [ref2]
+## P. C. Cosby
+## J. Chem., Phys. 98, 9560 (1993)
+##
+## [ref3]
+## J T Gudmundsson and E G Thorsteinsson
+## Oxygen discharges diluted with argon: dissociation processes
+## Plasma Sources Sci. Technol. 16 (2007) 399-412
+## 
+## [ref1]のTable.10 に[ref2] を参照したelectron impact によるトータルのdissociation
+##  cross section が記載されている．また[ref3]には次のようなratio が記載されている．
+##  e + O_2 --> O(^3P) + O(^3P) + e    0.097 
+##              O(^3P) + O(^1D) + e    0.889
+##              O(^1D) + O(^1D) + e    0.013
+##  
+## このファイルのデータは[ref1] Table.10 の数値に0.097 を乗じた値．
+## 
+83005
+e(-)+O_2->O+O+e(-)
+13.5
+3
+ 3083   1  3080
+ -1   0  +2
+255
+14
+13.5     2.13E-18
+18.5     5.13E-18
+21.0     5.48E-18
+23.5     5.09E-18
+28.5     5.69E-18
+33.5     6.43E-18
+38.5     5.92E-18
+48.5     5.18E-18
+58.5     4.31E-18
+73.5     3.55E-18
+98.5     3.21E-18
+148.5    2.87E-18
+198.5    2.82E-18
+1000.0   2.72E-18
+-1
+0.00E+00  0.00E+00  0.00E+00

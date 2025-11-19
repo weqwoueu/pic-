@@ -1,0 +1,32 @@
+##equation:    e(-)+SF_6->SF_2(-)+4F
+##type:        dissociative attachment
+##unit:        eV, cm2
+##input date:  2014/8/21
+##method:      digitize from scanned figure
+##
+##ref.auth:    L. G. Christophorou and J.K. Olthoff
+##ref.title:   Electron Interactions with SF6
+##ref.journal: J. Phys. Chem. Ref. Data Vol.29, No.3(2000) pp. 267-330
+##ref.table:   table 27
+#
+160034
+e(-)+SF_6->SF_2(-)+4F
+10.25
+4
+1600  1   1615  90
+  -1 -1      1   4
+3
+13
+10.25   0.00019E-18
+10.5    0.00037E-18
+11.0    0.00140E-18
+11.5    0.00420E-18
+12.0    0.00760E-18
+12.5    0.01060E-18
+13.0    0.00870E-18
+13.5    0.00440E-18
+14.0    0.00170E-18
+14.5    0.00068E-18
+15.0    0.00028E-18
+16.0    0.00
+100.0   0.00

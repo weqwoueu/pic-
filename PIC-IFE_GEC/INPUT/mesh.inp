@@ -1,0 +1,89 @@
+0., 0., 0.						!	xmin(zmin), ymin(rmin), zmin
+1024.0,4.0, 0.				!	xmax(zmax), ymax(rmax), zmax(zmax)
+1025, 5, 0					!	nx(nz), ny(nr), nz(nr): (total point number)
+1.0, 1.0						!	hx, hy, 
+1.0	
+
+0., 0., 0.						!	xmin(zmin), ymin(rmin), zmin
+64.,16, 0.					!	xmax(zmax), ymax(rmax), zmax(zmax)
+33, 9, 0						!	nx(nz), ny(nr), nz(nr): (total point number)
+2, 2						!	hx, hy, 
+1.0	
+
+
+0., 0., 0.						!	xmin(zmin), ymin(rmin), zmin
+2.0,0.2, 0.				!	xmax(zmax), ymax(rmax), zmax(zmax)
+21, 3, 0					!	nx(nz), ny(nr), nz(nr): (total point number)
+0.1, 0.1						!	hx, hy, 
+1.0	
+
+
+0., 0., 0.						!	xmin(zmin), ymin(rmin), zmin
+800.,80., 0.					!	xmax(zmax), ymax(rmax), zmax(zmax)
+201, 21, 0						!	nx(nz), ny(nr), nz(nr): (total point number)
+4, 4						!	hx, hy, 
+1.0	
+
+
+0., 0., 0.						!	xmin(zmin), ymin(rmin), zmin
+800.,80., 0.					!	xmax(zmax), ymax(rmax), zmax(zmax)
+801, 81, 0						!	nx(nz), ny(nr), nz(nr): (total point number)
+1, 1						!	hx, hy, 
+1.0	
+
+
+
+0., 0., 0.						!	xmin(zmin), ymin(rmin), zmin
+800.,40., 0.					!	xmax(zmax), ymax(rmax), zmax(zmax)
+801, 41, 0						!	nx(nz), ny(nr), nz(nr): (total point number)
+1, 1						!	hx, hy, 
+1.0	
+
+
+
+0., 0., 0.						!	xmin(zmin), ymin(rmin), zmin
+128.,10., 0.					!	xmax(zmax), ymax(rmax), zmax(zmax)
+257, 21, 0						!	nx(nz), ny(nr), nz(nr): (total point number)
+0.5, 0.5						!	hx, hy, 
+1.0	
+
+
+
+
+
+
+					£¡	hz
+
+0,	0					!
+140,	100					!
+71,	51					!
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+1.005523733223640, 1.741618194159679, 1.	!	hx, hy, hz
+1						!	NGx: Number of subgrids in x direction
+0.						!	xmins
+1.005523733223640				!	dxmins
+0						!	betaxs
+1						!	NGy: Number of subgrids in y direction
+0.						!	ymins
+1.741618194159679				!	dymins
+0						!	betays
+2						!	NGz: Number of subgrids in z direction
+0., 114.					!	zmins
+1., 1.						!	dzmins
+0, 1.2						!	betazs

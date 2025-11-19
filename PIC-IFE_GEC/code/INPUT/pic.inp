@@ -1,0 +1,64 @@
+﻿! IFE-2D
+  0, 5532 	!restart option ( 1 = yes ), restart lap
+  .true.              	!是否用隐格式计算 IMPIC_index
+  .false.             	! 磁场是否存在 Bfiled_index
+ 1.49D15           	! 密度参考值 Density_ref(m-3)
+  2.585	               	! 温度参考值 Temperature_ref(eV)
+  200           	! 每个网格的初始电子数
+  1.0D0,1.0D0,1.0D0                                !affp(ipf(jj)):每种粒子的模拟粒子数代表的真实粒子数
+  10000000			!N_part_tot 
+  .TRUE.,.TRUE.	!OutputRemovedParticles
+  2		!ispe_tot
+  1000000, 1	!nt, dt
+  1000000		!Erostart
+  1		!n_updatefld
+  1000000		!n_pdiag !Never USE
+  1,1,1 		!n_stride(1-ispe_tot)
+  2000		!n_engydiag
+  1000		!n_gdiag
+  1844		!n_dump
+  1,1,51		!index_xyz
+  1.,1.,51.		!xyz_center
+  4.		!c
+  -1.6022D-19,9.1095D-31	        ! qs, xm (electron)    
+  1.6022D-19,6.64D-26	        ! qs, xm (Xe-ion) (Ar -ion)
+  .FALSE.,.FALSE.,.FALSE.,.FALSE.			    !Set BoundaryType,f_periodic
+  .TRUE.,.TRUE.,.TRUE.,.TRUE.	            !f_zeroe, neumann boundary
+  .TRUE.,.TRUE.,.FALSE.,.FALSE.,.TRUE.,.TRUE.	 	!periodic
+  .FALSE.,.FALSE.,.TRUE.,.TRUE.,.FALSE.,.FALSE.		!pabsorb
+  .FALSE.,.FALSE.,.FALSE.,.FALSE.,.FALSE.,.FALSE.	!preflect
+  .FALSE.,.FALSE.,.FALSE.,.FALSE.,.FALSE.,.FALSE.   	!pemit
+  0.,0.,0.,0.			!SetPhiOuterBC, phiouter        
+  .05, 1., 360.			!SetEleRef, den0_ref, Te_ref, phi0_ref
+  2				           !ispe_inject            SetupPartInject
+  1				           !ipf(1): eletron
+  1D8 			       !dens0(m-3)真实密度
+  0.0                      !theta0(弧度制)入射角
+  2.585			           !temp0(eV)真实温度
+  -0.0D3, -0.0D3, 0.0D0	   !vd :(delta = 0) vx, vy, vz=0, (delta = 1) vz, vr_normal, vr_tangent vd=8,80du
+  0.0, 0.0, 0.0			   !vt(根据温度计算)
+  100.0			           !Length（入射口的宽度）
+  100.0				       !Z_start（入射口起点位置）
+  100.0			           !R_start（入射起始位置）
+  2				           !ipf(2): ion
+  1D8 			       !dens0(m-3)真实密度
+  0.0                      !theta0(弧度制)入射角
+  0.02585			               !temp0(eV)真实温度
+  0.0D3, 0.0D3, 0.0D0	  	 	!vd :(delta = 0) vx, vy, vz=0, (delta = 1) vz, vr_normal, vr_tangent vd=8,80du
+  0.0, 0.0, 0.0			   !vt(根据温度计算)
+  100.0			           !Length（入射口的宽度）
+  100.0				       !Z_start（入射口起点位置）
+  100.0			           !R_start（入射起始位置）
+   3				!Te_Sec : energy of secondary electron
+
+
+
+   0.0, 0.0, 0.0			!efx_ext, efy_ext, efz_ext
+   2.0, 0.0, 0.0			!bfx_ext, bfy_ext, bfz_ext
+
+
+
+
+   0.5				!Lz, LoadPart
+#########################################################
+#1/25/2004

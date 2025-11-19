@@ -1,0 +1,21 @@
+##equation:    Ar(+)+H_2->ArH(+)+H
+##type:        Dissociative charge transfer
+##date:        2016/04/18
+#
+##ref.auth:    R. A. Arakoni, A. N. Bhoj and M. J. Kushner
+#
+##ref.title:  H2 generation in Ar/NH3 microdischarges
+##ref.journal: J. Phys. D: Appl. Phys. 40 (2007) 2476-2490
+##ref.table: TABLE I
+#
+185103
+Ar(+)+H_2->ArH(+)+H
+ 0.0
+4
+14  181  960  10
+-1  -1   +1  +1  
+255
+ 1
+ 0.0 0.0
+ 1
+1.00E-9  0.00E+00  0.00E+00

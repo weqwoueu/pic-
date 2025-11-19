@@ -1,0 +1,39 @@
+##equation:  e(-)+C_2F_5->C_2F_5+e(-)
+##type: !!! momentun transfer !!! (not conveted to elastic cross-section)
+##date:     2008/01/11
+##method:   digitalize from scanned figure
+##
+##ref.auth:    M. Hayashi and A. Niwa
+##ref.title:   Electron Collision Cross Sections for C2F6 and N2O
+##ref.journal: ???? pp.27--33
+##ref.table:   Fig. 1. (Qm)  <- c2f6/626001:e+C_2F_6->CF_3+CF_3+e
+631000
+e(-)+C_2F_5->C_2F_5+e(-)
+0.0
+2
+631  1
+  0  0
+1
+   20
+ 0.0019283 9.9116e-15
+ 0.0036828 4.1356e-15
+ 0.0080453 1.5735e-15
+  0.015561 7.8061e-16
+   0.03259 4.6683e-16
+  0.062054 3.8916e-16
+   0.13495 4.1812e-16
+    0.2893  5.558e-16
+   0.65403 8.2213e-16
+    1.2599 1.0218e-15
+    2.5271 1.2205e-15
+    4.7431 1.2756e-15
+    9.3974 1.1831e-15
+     18.88 9.7358e-16
+    41.132 6.9241e-16
+    80.525 4.6041e-16
+    164.18 2.7898e-16
+    296.71 1.6891e-16
+    597.49 8.1618e-17
+    983.64  4.381e-17
+-1
+0.00E+00  0.00E+00  0.00E+00

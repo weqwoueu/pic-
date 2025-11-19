@@ -1,0 +1,29 @@
+##eqation:     e(-)+CF_4->CF_3(-)+F
+##type:        dissociation
+##unit:        eV, cm2
+##date:        2000/7/18
+##method:      numerial table
+##
+##ref.auth:    Russell A.Bonham
+##ref.title:   Electron Impact Cross Section Data for Carbon Tetrafluoride
+##ref.journal: Jpn. J. Appl. Phys. Vol. 33(1994)pp. 4157--4164
+##             Part I, No. 7B, July 1994
+##ref.table:   Table IV
+##ref.range:   5eV - 10.0 eV
+#
+614003
+e(-)+CF_4->CF_3(-)+F
+5.0
+4
+610  1  614  90
+ -1 -1   +1  +1
+255
+6
+5.0     0.0001e-16
+6.0     0.0004e-16
+7.0     0.0023e-16
+8.0     0.0030e-16
+9.0     0.00108e-16
+10.0    0.0002e-16
+-1
+0.00E+00  0.00E+00  0.00E+00

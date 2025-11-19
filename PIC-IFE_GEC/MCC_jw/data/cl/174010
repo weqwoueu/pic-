@@ -1,0 +1,17 @@
+#Cl(+)+Cl_2->Cl_2(+)+Cl
+#Nonresonant charge transfer cross section
+#P.L.G. Ventzek, M. Grapperhaus, and M.J. Kushner, 
+#J. Vac. Sci. Technol. B 12, 3118 (1994)
+#
+174010
+Cl(+)+Cl_2->Cl_2(+)+Cl
+0.0
+4
+174   172   176   170
+ -1    -1    +1    +1
+6
+ 2
+ 0.00     1.00E-16
+ 1.00E+03 1.00E-16
+1
+5.40E-10  0.00E+00  0.00E+00

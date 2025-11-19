@@ -1,0 +1,18 @@
+##equation:    Ar_2+Ar_2->Ar_2(+)+Ar+Ar+e(-) 
+##type:        dissociative ionization
+##date:        2013/09/10
+#
+## Kannari F, Obara M and Fujioka T 1985
+## J. Appl. Phys. 57 4309
+#
+180018
+Ar_2+Ar_2->Ar_2(+)+Ar+Ar+e(-) 
+ 0.0
+5
+187  187  188  180  1
+-1  -1  +1   +2  +1   
+255
+ 1
+ 0.0 0.0
+ 1
+5.0E-10   0.0   0.0

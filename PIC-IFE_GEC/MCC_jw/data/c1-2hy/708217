@@ -1,0 +1,17 @@
+##equation:     e(-)+C_2H_4(+)->C_2H_3+H
+##type:         recombination
+##Ref:          R. K. Janev and D. Reiter
+##              ``Collision processes of C2,3Hy and C2,3Hy+ hydrocarbons with
+##              electrons and protons''
+##              Phys.Plasmas, Vol. 11, No. 2, 2004
+708217
+e(-)+C_2H_4(+)->C_2H_3+H
+0.0
+4
+713  1  714  10
+-1  -1  +1   +1
+10
+   1
+   0.00    0.00
+2
+  1.304E-08    0.27    0.55

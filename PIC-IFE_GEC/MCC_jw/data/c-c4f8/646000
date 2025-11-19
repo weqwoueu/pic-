@@ -1,0 +1,33 @@
+##eqation:     e(-)+C_4F_8->e(-)+C_4F_8
+##type:        !!! momentum transfer !! NOT conveted to elastic 
+##unit:        eV, cm2
+##date:        2000/8/19
+##method:      Fortran Program function
+##
+##ref.auth:    H Itoh, T Miyachi, M Kawaguchi, Y Nakao and H Tagahira
+##ref.title:   Electron transport coeffients in SF6 and
+##             c-C4F8 mixtures
+##ref.journal: J. Phys. D: Appl. Phys. 24(1991)227-282
+##ref.table:   Figure 2
+646000
+e(-)+C_4F_8->e(-)+C_4F_8
+0.0
+2
+646   1
+  0   0
+1
+13
+  0.1122E-01  0.8100E-14
+   3.981      0.8100E-14
+   4.467      0.4586E-14
+   5.012      0.3265E-14
+   5.623      0.2599E-14
+   6.310      0.2199E-14
+   7.079      0.1933E-14
+   7.943      0.1746E-14
+   8.913      0.1606E-14
+   10.00      0.1500E-14
+   11.22      0.1416E-14
+   12.59      0.1375E-14
+   1000.      0.1375E-14
+-1

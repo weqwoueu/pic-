@@ -1,0 +1,20 @@
+#  Reaction : O(1S)+O->O(1D)+O
+#  Type : Neutral-Neutral
+#  Ref : Kossyi et al
+#       <Kinetic scheme of the non-equilibrium discharge in
+#        nitrogen-oxygen mixtures>
+#        Plasma Sources Sci. Technol. 1 (1992)
+#        equation (164)
+#  Date : 2012/90/14
+#
+830252
+O(1S)+O->O(1D)+O
+0.0
+3
+  3082  3080  3081
+  -1   0   1
+255
+1
+0.0  0.0
+1
+  5.0000E-11  0.0000E+00  2.5948E-02

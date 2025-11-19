@@ -1,0 +1,26 @@
+#euation: e+Cl_2->Cl_2(C^1\Pi)->Cl+Cl+e
+#type: Dissociation cross section 
+#Ref. Auth: L. G. Christophorou and J. K. Olthoff
+#Ref. Journal: J. Phys. Chem. Ref. Data 28,131(1999)
+##input date:  2003/03/18
+174004
+e(-)+Cl_2->Cl_2(C^1\Pi)->Cl+Cl+e(-)
+3.1200
+3
+174   1   170
+ -1   0    +2
+255
+ 11
+    3.1200 1.0000e-30
+    8.4    0.48e-16
+    9.9    1.04e-16
+    12.4   1.36e-16
+    14.9   2.07e-16
+    17.4   1.51e-16
+    19.9   1.52e-16
+    22.4   1.19e-16
+    27.4   0.96e-16
+    47.4   0.52e-16
+    97.4   0.24e-16
+-1
+0.00E+00  0.00E+00  0.00E+00

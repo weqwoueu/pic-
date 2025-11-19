@@ -1,0 +1,15 @@
+FUNCTION NORM_2(V)
+
+
+IMPLICIT NONE
+
+REAL(8)									Norm_2
+REAL(8), DIMENSION(2), INTENT(IN)	::	V
+
+REAL(8), DIMENSION(2)				::	V2
+
+V2 = V**2
+
+Norm_2 = DSQRT(SUM(DABS(V2)))
+
+END

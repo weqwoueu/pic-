@@ -1,0 +1,16 @@
+#Ar(+)+Cl_2->Ar+Cl_2(+)
+#Nonresonant charge transfer cross section
+#D. Smith, N.G. Adams, and E. Alge,  
+#J. Phys. B 17, 461 (1984)
+#
+174012
+Ar(+)+Cl_2->Ar+Cl_2(+)
+0.0
+4
+174   181   180   176
+ -1    -1    +1    +1
+6
+ 1
+ 0.00E-02 0.00E-16
+1
+8.40E-11  0.00E+00  0.00E+00

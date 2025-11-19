@@ -1,0 +1,19 @@
+##equation:    e(-)+NF_3->e(-)+NF_3 
+##type:        excitation
+##date:        2008/07/24
+#
+# Modeling chemical downstream etch systems for NF3/O2 Mixtures,
+# E.Meeks, R.S.Larson,S.R.Vosen,and J.W.Shon,
+# J.Electrochem.Soc., Vol.144, No.1357-366(1997)
+#
+71034
+e(-)+NF_3->e(-)+NF_3 
+ 7.70
+2
+1112  1  
+ 0    0  
+100
+ 1
+ 0.0 0.0
+ 1
+5.98E-11   2.52   2.870

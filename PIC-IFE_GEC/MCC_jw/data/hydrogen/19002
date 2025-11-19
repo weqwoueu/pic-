@@ -1,0 +1,19 @@
+#
+# e + H_3(+) -> e + H(+) + 2H
+#
+# Chae-Hwa and Toshiaki Makabe,
+# 'Modeling of N2-H2 Capacitively Coupled Plasma for
+#  Low-K Material Etching',IEEE Trans. Plas. Sci., Vol.32,
+#  No.2, pp390-398,2004.
+#
+19002
+e(-)+H_3(+)->e(-)+H(+)+2H
+0.0
+4
+ 19   1    11  10
+ -1   0   +1   +2 
+4
+  1
+   0.0E+02  0.0E-19
+ 1
+2.20E-9 0.00E+00  0.00E+00

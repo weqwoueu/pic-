@@ -1,0 +1,25 @@
+#
+# Xe+e(-)->Xe(*res)+e(-)
+#
+# Sakai Y, Sawada S and Tagashira H 1991 J.Phys.D:Appl.Phys. 27 2107-10
+#   refered by Akinori Oda et al J.Phys.D:32(1999) 2726-2736
+# 2007/3/2 digitized from scanned figure  h-nakadate@psinc.co.jp
+#
+540004
+Xe+e(-)->Xe(*res)+e(-)
+9.7
+3
+ 540  1  544
+  -1  0    1
+100
+9
+    9.7923 1.0251e-18
+    10.157 7.4069e-18
+    10.609 1.9182e-17
+    12.561 4.6144e-17
+    15.314 5.9395e-17
+    19.676 5.2552e-17
+    31.816    2.2e-17
+     100.4 3.4954e-18
+    1.0E+5 5.546E-23
+

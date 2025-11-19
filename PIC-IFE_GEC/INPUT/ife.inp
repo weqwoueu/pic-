@@ -1,0 +1,14 @@
+1	!	Setup and save a new IFE mesh:		1	Yes,		0	No (Load existing IFE mesh)
+.8	!	Interface elements to total elements fraction (initial guess)
+0	!	Nonlinear solver:			0	Linear,		1	Gauss-Seidel,	2	Newton
+3	!	Sparse linear solver:			1	IMSL PCCG,	2	DLAP PCCG,	3	My PCG
+0	!	Fixed/floating Nodes blocking:		1 Yes,			0	No (Object nodes are floating)
+50000	!	Preconditioned Cojugate Gradient solver maximum number of iterations
+1.D-9	!	Preconditioned Cojugate Gradient solver tolerance for PC version
+100	!	Gauss-Seidel solver maximum number of iterations
+1.D-5	!	Gauss-Seidel solver tolerance for PC version
+100	!	Newton solver maximum number of iterations
+1.D-5	!	Newton solver tolerance for PC version
+0	!	delta  0: 2-D Cartesian coordinates, 1: cylindrical coordinate, axisymmetric situation
+0	!	LOG_modify:  1:	use modify		0: not use modify
+

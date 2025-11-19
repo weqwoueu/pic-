@@ -1,0 +1,24 @@
+##equation:    e(-)+ArH(+)->Ar+H
+##type:        Recombination
+##date:        2016/04/29
+#
+##ref.auth:    J B Mitchell, O Novotny, J L LeGarree, A Florescu-Mitchell,
+#              C Rebrion-Rowe, M S Child, A Svendsen, M A El Ghazaly and
+#              L H Andersen
+#
+##ref.title:  Dissociative recombination of rare gas hydride ions: II. ArH+
+##ref.journal: J. Phys. B: At. Mol. Opt. Phys. 38 (2005) L175-L181
+##ref.table: Figure.1 
+#  Fitted to Arhenius type from the figure. 
+#
+185100
+e(-)+ArH(+)->Ar+H
+ 0.0
+4
+960  1  180  10
+-1  -1   +1  +1   
+10
+ 1
+ 0.0 0.0
+ 1
+1.273E-8  -2.553E-2  5.58

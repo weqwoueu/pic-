@@ -1,0 +1,35 @@
+##equation:     e(-)+CF_4->CF_3(-)+F
+##type:        dissociative attachment
+##unit:        eV, cm2
+##date:        2003/3/4
+##method:      numerical table
+##
+##ref.auth:    L. G. Christophorou ,et al.
+##ref.title:   Electron Interactions with CF4
+##ref.journal: J. Phys. Chem. Ref. Data 25(1996)pp. 1341--1388
+##ref.table:   Table 25, Fig. 34.
+##ref.range:   4.31eV - 10.4 eV
+#
+610014
+e(-)+CF_4->CF_3(-)+F
+4.31
+4
+610  1  614  90
+ -1 -1   +1  +1
+255
+13
+4.31    0.00001e-16
+4.60    0.00003e-16
+4.79    0.00011e-16
+5.0     0.00026e-16
+5.18    0.00045e-16
+6.91    0.0036e-16
+8.93    0.00064e-16
+9.52    0.00022e-16
+9.76    0.00016e-16
+9.96    0.00011e-16
+10.2    0.00005e-16
+10.4    0.00002e-16
+10.401  1.0e-30
+-1
+0.00E+00  0.00E+00  0.00E+00

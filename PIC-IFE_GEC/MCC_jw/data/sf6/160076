@@ -1,0 +1,22 @@
+##eqation:     SF_5(-)+F_2(+)->SF_5+F_2
+##type:        ion-ion recombination
+##unit:        eV, cm2
+##date:        2014/11/27
+##
+##ref.auth:    M Mao, YN Wang and A Bogaerds
+##ref.title:   Numerical study of the plasma chemistry in inductively coupled
+##             SF6/Ar plasmas used for deep silicon etching applications
+##ref.journal: J. Phys. D: Appl. Phys. 44 (2011) 435202
+##             Table 3.
+#
+160076
+SF_5(-)+F_2(+)->SF_5+F_2
+0.0
+4
+ 1604  97  1602  94
+ -1   -1   +1  +1
+255
+ 1
+ 0.00E-02 0.00E-16
+1
+5.00E-08  0.00E+00  0.00E+00

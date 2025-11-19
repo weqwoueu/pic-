@@ -1,0 +1,47 @@
+##equation:    e(-)+SF_5->2e(-)+SF_5(+)
+##type:        dissosiative ionization 
+##unit:        eV, cm2
+##input date:  2005/3/31
+##method:      digitize from scanned figure
+##
+##ref.auth:    L. G. Christophorou and J.K. Olthoff
+##ref.title:   Electron Interactions with SF6
+##ref.journal: J. Phys. Chem. Ref. Data Vol.29, No.3(2000) pp. 267-330
+##ref.table:   figure 16
+##ref.range:   10eV - 1000 eV
+#
+160011
+e(-)+SF_5->2e(-)+SF_5(+)
+11.0
+3
+1602  1   1603
+  -1  1      1
+2
+25
+    11.0   0
+    11.903 1.7802e-17
+    14.079 3.9195e-17
+    16.045 4.9856e-17
+    18.059 6.0526e-17
+    20.073 7.4794e-17
+    22.035 8.9071e-17
+    24.034 1.1412e-16
+    26.055 1.3199e-16
+    28.075 1.3911e-16
+     30.06  1.534e-16
+      34.9 1.7122e-16
+    40.258  2.034e-16
+    45.039 1.9972e-16
+    51.319 2.2115e-16
+    59.954 2.3896e-16
+    70.041 2.5678e-16
+    79.334 2.6027e-16
+    90.426 2.6017e-16
+    99.901 2.6368e-16
+    118.95 2.5995e-16
+    139.88 2.5624e-16
+    159.48 2.4179e-16
+    180.65  2.381e-16
+    200.85 2.3443e-16
+
+

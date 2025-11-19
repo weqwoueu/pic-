@@ -1,0 +1,3 @@
+ Number of Element =          32
+ L2 ErrorH1 Error
+   7.95890864394096        3.42499601080148     

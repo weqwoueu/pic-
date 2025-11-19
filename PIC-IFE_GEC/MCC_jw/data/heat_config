@@ -1,0 +1,75 @@
+# 熱物性値の定義 
+#
+#
+# class (分類名)   # 分類名を追加したら
+#  guim/src/naset/equation/Resource_{ja,en}.txt
+# にも追加すること
+#
+#   label  (物性値名) (物性値の粒子種番号)
+#      ...      ...                ...
+#
+
+# 薄膜生成 CVD PECVD
+#class ThinFilm
+#  label SiH4   510
+#  label Si2H6  521
+#  label CH4    700 
+#  label C2H6   708
+#  label C2H4   712
+#  label C2H2   716
+#  label C3H8  2101
+#  label NH3    670
+
+
+# 金属
+class Metal
+#  label Li  30
+#  label Be  40
+#  label Na 110
+#  label Mg 120
+#  label Al 130
+#  label K  190
+#  label Ca 200
+  label Ti 220
+#  label V  230
+#  label Cr 240
+#  label Mn 250
+#  label Fe 260
+#  label Co 270
+#  label Ni 280
+  label Cu 290
+#  label Zn 300
+#  label Ga 310
+#  label Y  390
+#  label Zr 400
+#  label Nb 410
+#  label Mo 420
+#  label Ag 470
+#  label Cd 480
+#  label In 490
+#  label Sn 500
+#  label W  740
+#  label Pt 780
+#  label Au 790
+#  label Hg 800
+#  label Pb 820
+#  label U  920
+#  label Pu 940
+  label SUS304 999
+
+
+# その他
+class Other
+#  label B      50
+  label Si    140
+#  label Ge    320
+#  label P     150
+#  label S     160
+#  label H2O    89
+#  label CO2   732
+#  label HCl  1711
+#  label HBr  1800
+#  label Br2  1807
+#  label MgO   129
+#  label Alq3 5000
+#  label HMDSO 5001

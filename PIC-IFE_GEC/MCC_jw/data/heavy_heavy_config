@@ -1,0 +1,51 @@
+#
+# The file can be used for describing ion-ion or ion-neutral reactions such as
+#     detachment : X(-) + Y --> X + Y + e(-)
+#     ion recombination : X(-) + Y(+) --> X + Y.
+#
+# 2014.11.28  
+#
+#...............................................................
+# ID no1.  Ion recombination of SFx(-) and positive ions
+#          type=2 : X(-) + Y(+) --> X + Y
+#          X(-) : SF4(-), SF3(-), SF2(-)
+#          Y(+) : SF5(+), SF4(+), SF3(+), SF2(+), SF(+), F(+), F2(+)
+#
+##ref.auth:    M Mao, YN Wang and A Bogaerds
+##ref.title:   Numerical study of the plasma chemistry in inductively coupled
+##             SF6/Ar plasmas used for deep silicon etching applications
+##ref.journal: J. Phys. D: Appl. Phys. 44 (2011) 435202
+##             Table 3.
+#
+ID      1
+1600
+2
+2   5.0E-8  0.0  0.0
+3  7
+1607  1611  1615
+1603  1606  1610  1614  1618  92  97
+1605  1609  1613
+1602  1605  1609  1613  1617  90  94
+IDEND
+#...............................................................
+# ID no2.  Ion detachment of SFx(-) 
+#          type=1 : X(-) + M --> X + M + e(-)
+#          X(-) : SF6(-), SF5(-), SF4(-), SF3(-), SF2(-)
+#          M    : SF6, SF5, SF4, SF3, SF2, SF, S, F, F2
+#
+##ref.auth:    M Mao, YN Wang and A Bogaerds
+##ref.title:   Numerical study of the plasma chemistry in inductively coupled
+##             SF6/Ar plasmas used for deep silicon etching applications
+##ref.journal: J. Phys. D: Appl. Phys. 44 (2011) 435202
+##             Table 3.
+#
+ID      2
+1600
+1
+2   5.27E-14  0.0  0.0
+5  9
+1601  1604  1607  1611  1615
+1600  1602  1605  1609  1613  1617  160  90  94
+1600  1602  1605  1609  1613
+1600  1602  1605  1609  1613  1617  160  90  94
+IDEND

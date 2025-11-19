@@ -1,0 +1,18 @@
+##equation:    e(-)+Ar_2(+)->Ar(*4s)+Ar 
+##type:        dissociative recombination
+##date:        2013/09/10
+#
+## Kannari F, Obara M and Fujioka T 1985
+## J. Appl. Phys. 57 4309
+#
+180017
+e(-)+Ar_2(+)->Ar(*4s)+Ar 
+ 0.0
+4
+188  1  185  180
+-1  -1  +1   +1   
+10
+ 1
+ 0.0 0.0
+ 1
+5.38E-8    -0.66   0.0

@@ -1,0 +1,22 @@
+##equation:     C+O_2->CO+O
+##
+##
+##ref.title: Combustion : Physical and Chemical Fundamentals,
+##           Modeling and Sil\mulation, Experiments,Pollutant Fprmation
+##           4th Edition, Springer 2006
+##           Chapter 21, Appendix 2:Reaction Mechanisms
+##           21.1 Mechanisms of the Oxidation of H2,CO,C1 and C2 Hydrocarbons
+##ref.auth: J.Warnatz,U.Maas,R.W.Dibble
+##            
+##
+732024
+C+O_2->CO+O
+0.0
+4
+60  3083   730   3080
+ -1   -1    +1    +1
+10
+ 1
+   0.0e-01    0.0e-18
+ 1
+9.99e-11  0.00E+00   0.00E+00

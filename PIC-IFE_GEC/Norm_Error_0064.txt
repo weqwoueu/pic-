@@ -1,0 +1,3 @@
+ Number of Element =          64
+ L2 ErrorH1 Error
+  2.725051980233333E-004  2.093870946545904E-002

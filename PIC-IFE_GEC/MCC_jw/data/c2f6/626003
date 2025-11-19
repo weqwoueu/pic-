@@ -1,0 +1,36 @@
+##equation:    e(-)+C_2F_6->CF_3+CF_3(-)
+##type:        electron attachment ??
+##date:        2000/8/16
+##method:      digitalize from scanned figure
+##
+##ref.auth:    M. Hayashi and A. Niwa
+##ref.title:   Electron Collision Cross Sections for C2F6 and N2O
+##ref.journal: ???? pp.27--33
+##ref.table:   Fig. 1.  (Qi)
+626003
+e(-)+C_2F_6->CF_3+CF_3(-)
+2.47
+4
+622   1  613  614
+ -1  -1    1    1
+255
+     17
+2.4707 9.9945e-19
+2.604 1.2705e-18
+2.7075 1.6806e-18
+2.8145 2.3447e-18
+3.0432 3.9423e-18
+3.3791 6.9921e-18
+3.7061 9.7586e-18
+3.9592  1.208e-17
+4.0658 1.2743e-17
+4.2323 1.2917e-17
+4.5271 1.1931e-17
+4.9796 8.5595e-18
+5.1923 5.8982e-18
+5.4887  3.803e-18
+5.5753 2.2633e-18
+5.662 1.4206e-18
+5.8236 1.0462e-18
+-1
+0.00E+00  0.00E+00  0.00E+00

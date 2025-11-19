@@ -1,0 +1,36 @@
+#e+Cl(-)->Cl+e+e
+#Neutralization of Cl(-) ion
+#
+#S Tinck, W Boullart and A Bogaerts
+#Simulation of an Ar/Cl2 inductively coupled plasma:
+#study of the effect of bias, power and pressure and
+#comparison with experiments
+#J. Phys. D: Appl. Phys. 41 (2008) 065207(14pp)
+#Fig.1 (b)
+#digitalized by Matsunaga Dec.5th, 2013.
+####
+170012
+e(-)+Cl(-)->Cl+e(-)+e(-)
+3.4
+3
+171   1   170
+  -1   1    1
+255
+15
+3.4      0.0
+4.031    2.149E-17
+10.6     5.606E-17
+13.89    9.549E-17
+17.17    1.182E-16
+23.75    1.462E-16
+43.46    1.314E-16
+56.6     1.182E-16
+66.46    1.062E-16
+86.18    9.549E-17
+119      8.584E-17
+132.2    7.717E-17
+148.6    6.937E-17
+168.3    6.236E-17
+191.3    6.236E-17
+-1
+0.00E+00  0.00E+00  0.00E+00

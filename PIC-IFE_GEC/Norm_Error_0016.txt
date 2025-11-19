@@ -1,0 +1,3 @@
+ Number of Element =          16
+ L2 ErrorH1 Error
+                     NaN                     NaN

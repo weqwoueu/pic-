@@ -1,0 +1,16 @@
+# equation:   H+H+CH_4->H_2+CH_4
+# type:       neutral-neutral reaction
+# Ref:        Christophe De Bie et al. (Bogaerts)
+#             Plasma Process. Polym. 2011, 8, 1033-1058  Table A.3
+700252
+H+H+CH_4->H_2+CH_4
+0.0
+4
+   10   10  700   14
+   -1   -1   0    +1
+255
+1
+  0.0      0.0
+1
+  6.00E-33   0.0   0.0
+3

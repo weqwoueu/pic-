@@ -1,0 +1,37 @@
+##eqation:     e+O_2->O+O(^3P)+e
+##type:        dissociative extitation
+##unit:        eV, cm2
+##date:        2001/1/12
+##method:      digitalize from scanned figure
+##
+##
+##ref.auth:    V. Vahedi and M. Surendra
+##ref.title:   A Monte Carlo collision model for the particle-in-cell
+##             method:  applications to argon and oxgen discharges 
+##ref.journal: Computer Physics Communications 87, 179 (1995)
+##
+83006
+e(-)+O_2->O+O(^3P)+e(-)
+14.7
+3
+ 83   1  80
+ -1   0  +2
+255
+    15
+14.700  1.0000e-30
+15.281  4.9944e-19
+16.647  7.9801e-19
+17.871  1.1093e-18
+19.514  1.5037e-18
+22.043  2.0131e-18
+25.36   2.5622e-18
+28.496  3.2607e-18
+34.619  3.7997e-18
+40.725  4.4831e-18
+48.408  4.8415e-18
+55.652  4.8454e-18
+67.493  4.8507e-18
+76.359  4.793e-18
+100.359  4.793e-18
+-1
+0.00E+00  0.00E+00  0.00E+00

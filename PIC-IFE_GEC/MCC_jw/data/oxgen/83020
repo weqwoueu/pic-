@@ -1,0 +1,37 @@
+##eqation:     O_2(+)+O_2->O_2+O_2(+)
+##type:        Charge Exchange
+##unit:        eV, cm2
+##date:        2001/1/12
+##method:      digitalize from scanned figure
+##
+##
+##ref.auth:    V. Vahedi and M. Surendra
+##ref.title:   A Monte Carlo collision model for the particle-in-cell
+##             method:  applications to argon and oxgen discharges 
+##ref.journal: Computer Physics Communications 87, 179 (1995)
+##
+83020
+O_2(+)+O_2->O_2+O_2(+)
+0.0
+2
+83  85
+ 0   0
+6
+     15
+0.010097  9.9002e-15
+0.043052  9.935e-15
+0.29673   1.0163e-14
+2.4783    9.8708e-15
+10.072    1.0171e-14
+11.195    9.0168e-15
+14.097    7.4817e-15
+16.757    6.3738e-15
+21.927    5.1498e-15
+32.197    3.894e-15
+45.062    3.0647e-15
+57.29     2.6846e-15
+73.541    2.2891e-15
+86.583    2.1147e-15
+100       1.9798e-15
+-1
+0.00E+00  0.00E+00  0.00E+00

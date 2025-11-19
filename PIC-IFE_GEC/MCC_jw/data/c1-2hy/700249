@@ -1,0 +1,15 @@
+# equation:   C_2H+H_2->C_2H_2+H
+# type:       neutral-neutral reaction
+# Ref:        Christophe De Bie et al. (Bogaerts)
+#             Plasma Process. Polym. 2011, 8, 1033-1058  Table A.3
+700249
+C_2H+H_2->C_2H_2+H
+0.0
+4
+  718   14  716   10
+   -1   -1   +1   +1
+255
+1
+  0.0      0.0
+1
+  1.52E-13   0.0   0.0

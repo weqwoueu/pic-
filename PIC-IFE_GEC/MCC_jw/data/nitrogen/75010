@@ -1,0 +1,35 @@
+##equation:    Ar+ + N2 --> Ar+N2+ 
+##type:        ionization
+##unit:        eV, cm2
+##date:        2006/1/31
+##method:      from NIFS database
+##type:        charge transfer
+##
+##ref.auth:    Gilbody, H.B.$Hasted, J.B.  
+##ref.title:   Anomalies in the adiabatic interpretation of charge-transfer collisions 
+##ref.journal: Proc. R. Soc. London A 238 (1956) 334 (E) 
+75010
+Ar(+)+N_2->Ar+N_2(+)
+13.8
+4
+75  181  180  76
+-1   -1   +1  +1
+6
+  16 
+  1.384000e+01  1.100000e-15
+  3.116000e+01  1.200000e-15
+  1.244000e+02  1.480000e-15
+  4.840000e+02  1.670000e-15
+  1.040000e+03  1.790000e-15
+  1.728000e+03  1.780000e-15
+  2.712000e+03  1.710000e-15
+  4.120000e+03  1.510000e-15
+  6.480000e+03  1.370000e-15
+  9.720000e+03  1.280000e-15
+  1.456000e+04  1.230000e-15
+  1.680000e+04  1.130000e-15
+  1.964000e+04  1.050000e-15
+  2.344000e+04  9.140000e-16
+  2.960000e+04  7.580000e-16
+  3.532000e+04  7.120000e-16
+-1

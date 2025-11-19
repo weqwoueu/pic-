@@ -1,0 +1,22 @@
+##equation:   NH(+)+NH_3->NH_3(+)+NH
+##type:       recombination,charge-exchange,ion-neutral, and neutral-neutral collision
+##unit:       cm^3/s
+##date:        2016/Feb/2
+##method:      numerical table
+##
+##            K Van Laer, S Tinck, V Samara, J F de Marneffe, and A Bogaerts
+##            "Etching of low-k materials for microelectronics applications by
+##            means of a N2/H2 plasma: modeling and experimental investigation",
+##            Plasma Sources Sci. Tecjnol. 22 (2013) 025011(19pp)
+#
+ 67074
+NH(+)+NH_3->NH_3(+)+NH
+ 0.0
+ 4
+   676  670  672  675
+   -1  -1   1   1
+ 255
+  1
+  0.00E-02 0.00E-16
+ 1
+ 1.800E-09  0.00E+00  0.00E+00

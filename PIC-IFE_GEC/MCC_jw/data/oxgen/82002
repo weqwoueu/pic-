@@ -1,0 +1,36 @@
+#
+# recombination  N(+)+O(-)->N+O
+#
+##equation:   N(+)+O(-)->N+O
+##type:       recombination
+##method:     digitalize from scanned figure
+##ref.auth:   Ronald E. Olson, James R. Peterson, and John Moseley
+##ref.title:  Ion=Ion Recombination Total Cross Sections -- Atomic Species
+##ref.journal: The Journal of Chemical Physics
+##ref.fig:    Fig.4
+82002
+N(+)+O(-)->N+O
+0.0
+4
+ 71  82  70  80
+ -1  -1  +1  +1
+10
+13
+   0.10255 9.8773e-13
+   0.12811 7.8941e-13
+   0.22622 4.8913e-13
+    0.5612 2.5653e-13
+    1.2991 1.5149e-13
+    2.0952 1.2056e-13
+    3.8443 8.6323e-14
+    6.8691 6.3765e-14
+    14.529 4.8061e-14
+    35.645 3.4927e-14
+    65.083 2.6794e-14
+    133.51 1.8609e-14
+    266.81  1.325e-14
+-1
+0.0 0.0 0.0
+
+
+

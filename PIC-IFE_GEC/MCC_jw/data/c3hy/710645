@@ -1,0 +1,15 @@
+# equation:   C_3H_5+C_2H_3->C_3H_4+C_2H_4
+# type:       neutral-neutral reaction
+# Ref:        Wing Tsang
+#             J. Phys. Chem. Ref. Data, Vol.20, No.2, 1991
+710645
+C_3H_5+C_2H_3->C_3H_4+C_2H_4
+0.0
+4
+ 2107  714  2109  712
+   -1  -1    +1   +1
+255
+1
+  0.0      0.0
+1
+  4.0E-12   0.0   0.0

@@ -1,0 +1,25 @@
+##equation:  e(-)+NH_3->NH_3+e(-)                    
+## type: elastic scattering
+#
+# M. Hayashi,
+# Nonequilibrium Processes in Partially Ionized Gases, 333-340, (1990) 
+#
+670000
+e(-)+NH_3->NH_3+e(-)                    
+ 0.0
+ 2
+670   1 
+  0   0 
+1
+ 7
+    0.10    2.000E-14
+    2.00    6.300E-16
+    3.00    6.300E-16
+   10.00    1.000E-15
+   20.00    8.000E-16
+   40.00    5.000E-16
+  200.00    6.000E-17
+-1
+0.00E+00  0.00E+00  0.00E+00
+
+

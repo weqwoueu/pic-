@@ -1,0 +1,49 @@
+##equation:    e(-)+SF_6->2e(-)+SF_5(+)+F
+##type:        Dissociative ionization
+##unit:        eV, cm2
+##input date:  2014/8/21
+##method:      from numerical table
+##
+##ref.auth:    R Rejoub, D R Sieglaff, B G Lindsay and R F Stebbings
+##ref.title:   Absolute partial cross sections for electron-impact ionization
+##             of SF6 from threshold to 1000 eV
+##ref.journal: J. Phys. B: At. Mol. Opt. Phys. 34 (2001) 1289-1297
+##ref.table:   Table 1.
+##ref.range:   15.7 eV - 1000 eV
+#
+160001
+e(-)+SF_6->SF_5(+)+2e(-)+F
+15.7
+4
+1600  1   1603   90
+  -1  1      1    1
+2
+28
+15.7   0.00
+18.0   0.06E-16
+20.0   0.19E-16
+22.5   0.46E-16
+25.0   0.86E-16
+27.5   1.18E-16
+30.0   1.47E-16
+32.5   1.84E-16
+35.0   2.03E-16
+40.0   2.36E-16
+45.0   2.57E-16
+50.0   2.74E-16
+60.0   3.01E-16
+70.0   3.12E-16
+80.0   3.23E-16
+90.0   3.23E-16
+100.0  3.34E-16
+120.0  3.31E-16
+140.0  3.34E-16
+160.0  3.32E-16
+200.0  3.23E-16
+250.0  3.03E-16
+300.0  2.93E-16
+400.0  2.62E-16
+500.0  2.42E-16
+600.0  2.21E-16
+800.0  1.86E-16
+1000.0  1.65E-16

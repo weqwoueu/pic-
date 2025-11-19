@@ -1,0 +1,31 @@
+##equation:    e(-)+C_2F_6->e(-)+C_2F_6(vib5)
+##type:        vibrational exitation
+##date:        2000/8/16
+##method:      digitalize from scanned figure
+##
+##ref.auth:    M. Hayashi and A. Niwa
+##ref.title:   Electron Collision Cross Sections for C2F6 and N2O
+##ref.journal: ???? pp.27--33
+##ref.table:   Fig. 1.  (Qv5)
+626004
+e(-)+C_2F_6->e(-)+C_2F_6(vib5)
+0.134
+3
+622   1  651
+ -1   0    1
+100
+ 12
+ 0.13489 9.9317e-19
+ 0.13573 1.1196e-16
+ 0.14475 2.0388e-16
+ 0.18402 2.6649e-16
+  0.2373 2.8914e-16
+ 0.47679 2.3168e-16
+  1.1575 1.2976e-16
+  4.2645  4.889e-17
+    26.2 1.1296e-17
+  118.16 3.2225e-18
+   287.1 1.4783e-18
+  453.53 1.0215e-18
+-1
+0.00E+00  0.00E+00  0.00E+00

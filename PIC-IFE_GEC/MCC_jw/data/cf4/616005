@@ -1,0 +1,36 @@
+##equation:     e(-)+CF_2->CF+F(-)
+##type:        dissociative attachment
+##unit:        eV, cm2
+##date:        2003/3/4
+##method:      numerical table
+##
+##ref.auth:    Paulin Ho,J.E. Johannes,R.J.Buss,and E.Meeks
+##ref.title:   Modeling the plasma chemistry of C2F6 and CHF3 etching of silicon
+##             dioxide, with comparisons to etch rate and diagnostic data
+##ref.journal: J. Vac. Sci. Technol. A 19(5), 2344 (2001)
+##ref.table:   Table I
+##ref.range:   4.31eV - 50.0 eV
+#
+616005
+e(-)+CF_2->CF+F(-)
+4.31
+4
+616  1  619  91
+ -1 -1   +1  +1
+255
+13
+4.31    0.00003e-16
+4.60    0.00009e-16
+4.79    0.00037e-16
+5.0     0.00084e-16
+5.18    0.00157e-16
+6.91    0.0125e-16
+8.93    0.0022e-16
+9.52    0.00077e-16
+9.76    0.00053e-16
+9.96    0.00033e-16
+10.2    0.00017e-16
+10.4    0.00007e-16
+50.0    0.003e-16
+-1
+0.00E+00  0.00E+00  0.00E+00

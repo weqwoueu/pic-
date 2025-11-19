@@ -1,0 +1,145 @@
+0,-1				!               N_Objects(IFE), VacuumRegion : objects(i)%Regions(1)<VacuumRegion, 
+3				!######	objects(i)%Shape		: 3	Box        1  Circle
+0				!	objects(i)%Axis		: 0	No axi, dummy
+41.4, 170.0			!	objects(i)%Dimensions(1)	: (Lx,Ly) = Box Length in X direction, Box Length in Y direction
+0.0,  0.0		    		!	objects(i)%Locations(1,:)	: (x_low, y_low) = Box Low Conner Coordinate
+41.4, 170.0			!	objects(i)%Locations(2,:)	: (x_hig, y_hig) = Box Hig Conner Coordinate
+-2, -1				!	objects(i)%Regions(1:2)	: 1--in, 2--out
+-1                                                             !              objects(i)%Direction:  -1--in, -2--outer of Box or Cicle
+-0				!	objects(i)%Phi 
+1E4				!	objects(i)%Eps 
+0				!	objects(i)%Erosion
+1				!	objects(i)%Wall(1)%Shape
+4				!	objects(i)%Wall(1)%Channelwall
+0.0,  0.0			                !	objects(i)%Wall(1)%Limits(1,1:2)
+0.0, 0.0			                !	objects(i)%Wall(1)%Limits(2,1:2)
+1				!	objects(i)%Wall(1)%stepx
+3				!######	objects(i)%Shape		: 3	Box        1  Circle
+0				!	objects(i)%Axis		: 0	No axi, dummy
+41.5, 170.0			!	objects(i)%Dimensions(1)	: (Lx,Ly) = Box Length in X direction, Box Length in Y direction
+123.5,  0.0		    		!	objects(i)%Locations(1,:)	: (x_low, y_low) = Box Low Conner Coordinate
+165.0, 170.0			!	objects(i)%Locations(2,:)	: (x_hig, y_hig) = Box Hig Conner Coordinate
+-2, -1				!	objects(i)%Regions(1:2)	: 1--in, 2--out
+-1                                                             !              objects(i)%Direction:  -1--in, -2--outer of Box or Cicle
+-0				!	objects(i)%Phi 
+1E4				!	objects(i)%Eps 
+0				!	objects(i)%Erosion
+1				!	objects(i)%Wall(1)%Shape
+4				!	objects(i)%Wall(1)%Channelwall
+0.0,  0.0			                !	objects(i)%Wall(1)%Limits(1,1:2)
+0.0, 0.0			                !	objects(i)%Wall(1)%Limits(2,1:2)
+1				!	objects(i)%Wall(1)%stepx
+4				!N_Boundary
+1,  -1,    0.0,  0.0,   0.0,   160.0		!bc_index(:), bc_value(:), bc_point_1(2,:), bc_point_2(2,:)    左边
+1,    0, 80.0,  0.0,  80.0, 160.0		!bc_index = 1: Direchlet, bc_index = 0: Neuuman    bc_index = -1: periodic 右边
+0,    0,    0.0,  0.0,  80.0,  0. 		!bc_value = Boundary Value: Direchlet, bc_value = Boundary Flux: Neuuman    底边
+1,    -2,    0.0,  160.0,  80.0, 160.0	!bc_point_1 = Boundary Start Point Position,bc_point_2 = Boundary End Point Position    上边
+
+
+
+1,0  				!if .....  xj=alpha*xi+Q... ALQ(1,:)=AL,ALQ(2,:)=Q
+1,0
+-200,-200
+-200,-200
+
+
+-1,  -0, -0.0,   -0.0,    -0.0, 200.	!bc_index(:), bc_value(:), bc_point_1(2,:), bc_point_2(2,:)
+-1,  -0, 360.0, -0.0,  360.0, 200.	!bc_index = 1: Direchlet, bc_index = 0: Neuuman
+1,  -5, -0.0,   -0.0,  360.0,  -0. 	!bc_value = Boundary Value: Direchlet, bc_value = Boundary Flux: Neuuman 
+1,  -0, -0.0,   200., 360.0, 200.	!bc_point_1 = Boundary Start Point Position,bc_point_2 = Boundary End Point Position 
+
+
+
+2,-1				!               N_Objects(IFE), VacuumRegion : objects(i)%Regions(1)<VacuumRegion, 
+1				!######	objects(i)%Shape		: 3	Box        1  Circle
+0				!	objects(i)%Axis		: 0	No axi, dummy
+470.8098, 0.0 		!	objects(i)%Dimensions(1)	: (Lx,Ly) = Box Length in X direction, Box Length in Y direction
+0.0,  0.0		    	!	objects(i)%Locations(1,:)	: (x_low, y_low) = Box Low Conner Coordinate
+0.0, 0.0			!	objects(i)%Locations(2,:)	: (x_hig, y_hig) = Box Hig Conner Coordinate
+-2, -1				!	objects(i)%Regions(1:2)	: 1--in, 2--out
+-1                                                             !              objects(i)%Direction:  -1--in, -2--outer of Box or Cicle
+-0				!	objects(i)%Phi 
+1.0E1				!	objects(i)%Eps 
+0				!	objects(i)%Erosion
+1				!	objects(i)%Wall(1)%Shape
+4				!	objects(i)%Wall(1)%Channelwall
+0.0,  0.0			                !	objects(i)%Wall(1)%Limits(1,1:2)
+0.0, 0.0			                !	objects(i)%Wall(1)%Limits(2,1:2)
+1				!	objects(i)%Wall(1)%stepx
+1				!######	objects(i)%Shape		: 3	Box        1  Circle
+0				!	objects(i)%Axis		: 0	No axi, dummy
+672.5854, 0.0	 		!	objects(i)%Dimensions(1)	: (Lx,Ly) = Box Length in X direction, Box Length in Y direction
+0.0,  0.0		    	!	objects(i)%Locations(1,:)	: (x_low, y_low) = Box Low Conner Coordinate
+0.0, 0.0			!	objects(i)%Locations(2,:)	: (x_hig, y_hig) = Box Hig Conner Coordinate
+-1, -2				!	objects(i)%Regions(1:2)	: 1--in, 2--out
+-2                                                             !              objects(i)%Direction:  -1--in, -2--outer of Box or Cicle
+-0				!	objects(i)%Phi 
+1.0E1				!	objects(i)%Eps 
+0				!	objects(i)%Erosion
+1				!	objects(i)%Wall(1)%Shape
+4				!	objects(i)%Wall(1)%Channelwall
+0.0,  0.0			                !	objects(i)%Wall(1)%Limits(1,1:2)
+0.0, 0.0			!	objects(i)%Wall(1)%Limits(2,1:2)
+1				!	objects(i)%Wall(1)%stepx
+4				!N_Boundary
+1,  -0, -700.0,   -700.0,    -700.0, 700.	!bc_index(:), bc_value(:), bc_point_1(2,:), bc_point_2(2,:)
+1,  -0, 700.0, -700.0,  700.0, 700.	!bc_index = 1: Direchlet, bc_index = 0: Neuuman
+1,  -0, -700.0,   -700.0,  700.0,  -700. 	!bc_value = Boundary Value: Direchlet, bc_value = Boundary Flux: Neuuman 
+1,  -0, -700.0,   700., 700.0, 700.	!bc_point_1 = Boundary Start Point Position,bc_point_2 = Boundary End Point Position 
+1,0  				!if .....  xj=alpha*xi+Q... ALQ(1,:)=AL,ALQ(2,:)=Q
+1,0
+-200,-200
+-200,-200
+
+
+
+
+
+
+
+3				!	objects(i)%Shape		: 3	Box
+0				!	objects(i)%Axis		: 0	No axi, dummy
+120.0,  45.0	 		!	objects(i)%Dimensions(1)	: (Lx,Ly) = Box Length in X direction, Box Length in Y direction
+30.0,  -20.0		    	!	objects(i)%Locations(1,:)	: (x_low, y_low) = Box Low Conner Coordinate
+150.0,  25.0			!	objects(i)%Locations(2,:)	: (x_hig, y_hig) = Box Hig Conner Coordinate
+-2, -1				!	objects(i)%Regions(1:2)	: in, out
+0.0				!	objects(i)%Phi 
+1.E6				!	objects(i)%Eps 
+11				!	objects(i)%Shape		: 11	Line
+2				!	objects(i)%Axis		: //y
+0.0, 20.0 			!	objects(i)%Dimensions(1:)	: dummy	:(Lx,Ly) = Box Length in X direction, Box Length in Y direction 
+151.0,  0.0		    	!	objects(i)%Locations(1,:)	: (x_low, y_low) = Box Low Conner Coordinate
+151.0,  20.0			!	objects(i)%Locations(2,:)	: (x_hig, y_hig) = Box Hig Conner Coordinate
+-3, -1				!	objects(i)%Regions(1:2)	: in, out
+0.0				!	objects(i)%Phi 
+1.E6				!	objects(i)%Eps 
+
+
+
+
+11				!	objects(i)%Shape		: 11	Line
+2				!	objects(i)%Axis		: //y
+0.0, 0.0 			!	objects(i)%Dimensions(1:)	: dummy	:(Lx,Ly) = Box Length in X direction, Box Length in Y direction 
+150.0,  0.0		    	!	objects(i)%Locations(1,:)	: (x_low, y_low) = Box Low Conner Coordinate
+150.0,  20.0			!	objects(i)%Locations(2,:)	: (x_hig, y_hig) = Box Hig Conner Coordinate
+-2, -1				!	objects(i)%Regions(1:2)	: in, out
+0.0				!	objects(i)%Phi 
+1.E6				!	objects(i)%Eps 
+
+
+
+3				!	objects(i)%Shape		: 3	Box
+0				!	objects(i)%Axis		: 0	No axi, dummy
+30.0,  32.0 			!	objects(i)%Dimensions(1:)	: (Lx,Ly) = Box Length in X direction, Box Length in Y direction 
+30.0, -16.0		    	!	objects(i)%Locations(1,:)	: (x_low, y_low) = Box Low Conner Coordinate
+60.0,  16.0			!	objects(i)%Locations(2,:)	: (x_hig, y_hig) = Box Hig Conner Coordinate
+-2, -1				!	objects(i)%Regions(1:2)	: in, out
+0.0				!	objects(i)%Phi 
+1.E6				!	objects(i)%Eps 
+
+
+
+
+
+
+

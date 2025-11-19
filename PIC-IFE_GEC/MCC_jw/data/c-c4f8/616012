@@ -1,0 +1,27 @@
+##eqation:     CF_2+CF_2->C_2F_4
+##type:        ion-ion neutralization
+##unit:        eV, cm2
+##date:        2008/01/09
+##method:      numerial table
+##
+##ref.auth:    Vasenkov et al.
+#
+##ref.title: 
+##ref.journal: J. Vac. Sci. Technol.A 22(3),May/Jun 2004
+##ref.table: Neutral heavy particle reactions.
+##ref.range: 
+##
+#   Estimated
+#
+616012
+CF_2+CF_2->C_2F_4
+0.0
+3
+ 616 616 625
+ -1  -1  +1
+255
+ 1
+ 0.00E-02 0.00E-16
+ 1
+7.21E-14  0.00E+00  0.00E+00
+

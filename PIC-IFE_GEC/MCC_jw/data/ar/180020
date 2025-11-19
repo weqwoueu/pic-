@@ -1,0 +1,19 @@
+##equation:    Ar(+)+Ar+Ar->Ar_2(+)+Ar
+##type:        formation of eximer ion
+##date:        2013/09/10
+#
+## Kannari F, Obara M and Fujioka T 1985
+## J. Appl. Phys. 57 4309
+#
+180020
+Ar(+)+Ar+Ar->Ar_2(+)+Ar
+ 0.0
+4
+181  180  180  188  
+-1  -1  0   +1    
+255
+ 1
+ 0.0 0.0
+ 1
+2.5E-31   0.0   0.0
+3

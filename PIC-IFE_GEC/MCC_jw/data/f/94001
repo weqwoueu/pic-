@@ -1,0 +1,36 @@
+##eqation:     e(-)+F_2>F(-)+F
+##type:        ???
+##unit:        eV, cm2
+##date:        2000/8/19
+##method:      digitalize from scanned figure
+##
+##ref.auth:    M. Hayashi and T. Nimura
+##ref.title:   Calculation of electron swarm parameters in fluorine
+##ref.journal: J. Appl. Phys. 54(9), September 1983 pp.4879
+##ref.table:   FIG.1.
+#
+#  this is dotted curve for Qa in  FIG.1. 
+#
+94001
+e(-)+F_2->F(-)+F
+0.0
+4
+ 94   1  91  90
+ -1  -1   1   1
+255
+13
+ 0.0097605 4.3957e-15
+  0.021081 2.2684e-15
+  0.034411 1.0646e-15
+   0.03967 8.5768e-16
+  0.055986 7.3619e-16
+  0.095252 6.5264e-16
+   0.21174 4.4531e-16
+    0.4578 2.0299e-16
+    0.7248 8.8143e-17
+    1.1521 2.4037e-17
+    1.6187 5.5227e-18
+    2.0025 1.7021e-18
+    2.0433 9.8936e-19
+-1
+0.00E+00  0.00E+00  0.00E+00

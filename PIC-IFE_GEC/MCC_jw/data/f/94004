@@ -1,0 +1,36 @@
+##eqation:     e(-)+F_2>e(-)+F_2(a^3\Piu)->e(-)+2F
+##type:        excitation
+##unit:        eV, cm2
+##date:        2000/8/19
+##method:      digitalize from scanned figure
+##
+##ref.auth:    M. Hayashi and T. Nimura
+##ref.title:   Calculation of electron swarm parameters in fluorine
+##ref.journal: J. Appl. Phys. 54(9), September 1983 pp.4879
+##ref.table:   FIG.1. ˜_•¶‚Åqe1‚Æ‹L‚µ‚Ä‚ ‚é
+#
+#   assumed curve in the paper
+#
+94004
+e(-)+F_2->e(-)+F_2(a3Piu)->e(-)+F+F
+3.16
+3
+ 94   1  90
+ -1   0   2
+100
+13
+   3.1623    1.0e-18
+   3.3197 3.8458e-18
+   4.0677 1.6243e-17
+    5.022 3.2635e-17
+   5.8572 3.8725e-17
+    6.529 3.9966e-17
+   8.1254 3.6464e-17
+   13.005 2.5606e-17
+   19.881 1.6638e-17
+   29.961 9.5508e-18
+   50.473 4.2823e-18
+   63.041 2.7368e-18
+   104.77 1.0034e-18
+-1
+0.00E+00  0.00E+00  0.00E+00

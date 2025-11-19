@@ -1,0 +1,16 @@
+##equation:     e(-)+CH_5(+)->CH_3+2H
+##type:         recombination
+##Ref:          A.I.Florescu-Mitchell, J.B.A. Mitchell
+##              ``Dissociative recombination ''
+##              Physics Reports 430 (2006)
+700100
+e(-)+CH_5(+)->CH_3+2H
+0.0
+4
+723  1  702  10
+-1  -1  +1   +2
+10
+   1
+   0.00    0.00
+1
+  1.523E-06    0.5    0.0

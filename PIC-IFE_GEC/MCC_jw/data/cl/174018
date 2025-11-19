@@ -1,0 +1,21 @@
+##equation: ClO+O->O_2+Cl
+##type:
+##unit:        eV, cm2
+##date:        2008/01/29
+##method:      
+#
+##ref.auth:    W.L. Morgan
+##Ref. title : Plasma Chemistry Model for HBr/Cl2/O2 Gas Mixture
+##ref.journal: Kinema Research & Software July 1996
+#
+174018
+ClO+O->O_2+Cl
+0.0
+4
+178  80 83 170
+ -1  -1  +1  +1
+255
+ 1
+ 0.00E-02 0.00E-16
+ 1
+4.80E-14  0.0  0.00E+00

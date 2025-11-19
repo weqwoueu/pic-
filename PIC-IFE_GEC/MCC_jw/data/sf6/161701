@@ -1,0 +1,26 @@
+##eqation:     SF+O->SOF
+##type:        ion-ion neutralization
+##unit:        eV, cm2
+##date:        2008/01/09
+##method:      numerial table
+##
+##ref.auth:    Rauf et al.
+#
+##ref.title:
+##ref.journal: J. Vac. Sci. Technol.A, Vol.20,No.4,Jul/Aug 2002
+##ref.table: The SF6/O2 plasuma chemical mechanism
+##ref.range: R39
+##
+#   Estimated
+#
+161701
+SF+O->SOF
+0.0
+3
+ 1617 3080   1623
+ -1   -1   +1  
+255
+ 1
+ 0.00E-02 0.00E-16
+ 1
+1.00E-10  0.00E+00  0.00E+00

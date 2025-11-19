@@ -1,0 +1,23 @@
+##eqation:     He+ + N2 --> He+N2+ 
+##type:        charge transfer
+##unit:        eV, cm2
+##date:        2006/1/31
+##method:      from NIFS database
+##             
+##ref.auth:    Gao, R.S.$Johanson, L.K.$Hakes, C.L.$Smith, K.A.$Stebbings, R.F.
+##ref.title:   Collisions of kilo-electron-volt H+ and He+ with
+##             molecules at small angles: Absolute differential cross sections for charge transfer 
+##ref.journal: Phys. Rev. A 41 (1990) 5929 (E) 
+75012
+He(+)+N_2->He+N_2(+)
+15.6
+4
+75  21  20  76
+-1  -1  +1  +1
+6
+ 3
+  5.000000e+03  3.700000e-16
+  6.000000e+03  3.700000e-16
+  7.000000e+03  3.700000e-16
+-1
+

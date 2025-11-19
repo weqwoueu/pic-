@@ -1,0 +1,17 @@
+#Ar(* 4s)+Cl_2->Cl_2(+)+Ar+e
+#Penning ionization cross section
+#J. Velazco, J. Holts, and D.W. Setzer, 
+#J. Chem. Phys. 65, 3468 (1976)
+##input date:  2003/03/18
+#
+174011
+Ar(*4s)+Cl_2->Cl_2(+)+Ar+e(-)
+0.0
+5
+174   185   1   176   180
+ -1    -1  +1    +1    +1
+255
+ 1
+ 0.00E-02 0.00E-16
+1
+7.10E-10  0.00E+00  0.00E+00

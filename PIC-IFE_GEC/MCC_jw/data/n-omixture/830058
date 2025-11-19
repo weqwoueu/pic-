@@ -1,0 +1,20 @@
+#  Reaction : NO(+)+e(-)->N(2D)+O
+#  Type : Recombination of electron and positive ion
+#  Ref : Kossyi et al
+#       <Kinetic scheme of the non-equilibrium discharge in
+#        nitrogen-oxygen mixtures>
+#        Plasma Sources Sci. Technol. 1 (1992)
+#        equation (42)
+#  Date : 2012/90/14
+#
+830058
+NO(+)+e(-)->N(2D)+O
+0.0
+4
+  3803     1  3071  3080
+  -1  -1   1   1
+10
+1
+0.0  0.0
+1
+  7.7584E-09 -1.0000E+00  0.0000E+00

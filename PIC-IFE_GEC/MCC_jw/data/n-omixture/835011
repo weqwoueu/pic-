@@ -1,0 +1,19 @@
+#  Reaction : NO(-)+N2O->NO+N2O+e
+#  Type : Electron impact dissociation with N2O 
+#  Ref : Analysis of the N2O dissociation in a RF discharge reactor,
+#        L Date, K Radouane, B Despax, M Yousfi, H Caquineau, and A Hennad,
+#        J. Phys. D: Appl. Phys. 32 (1999) 1478-1488
+#       
+#  Date : 2013/08/23
+#
+835011
+NO(-)+N_2O->NO+N_2O+e(-)
+0.0
+4
+ 3820 3702 3701 1
+  -1  0   1  1   
+255
+1
+0.0     0.0
+1
+1.0E-11  0.0  0.0

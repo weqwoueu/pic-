@@ -1,0 +1,32 @@
+# Reaction : 
+#    e + H_2(X^1\Sigma_g^+,vi=1) -> H_2(-) -> H + h(-) 
+# Dissociative electron attachment
+# Reference:
+#   R. Celiberto et al
+#   CROSS SECTION DATA FOR ELECTRON-IMPACT INELASTIC PROCESSES OF
+#   VIBRATIONALLY EXCITED MOLECULES OF HYDROGEN AND ITS ISOTOPES
+#   Atomic Data and Nuclear Data Tables 77, 161-213(2001)
+#   Referenced GRAPH XXI.
+#
+15301
+e(-)+H_2(v1)->H_2(-)->H+H(-)
+ 3.214
+4
+  3001   1   10   18
+   -1   -1   +1   +1
+255
+  12
+   3.214   5.387E-20
+   3.500   2.931E-20
+   4.000   1.012E-20
+   4.500   3.497E-21
+   5.000   1.208E-21
+   6.000   1.442E-22
+   7.000   1.720E-23
+   8.000   2.053E-24
+   9.000   2.449E-25
+  10.000   2.923E-26
+  14.837   1.000E-30
+  100.00   1.000E-30
+-1
+0.0  0.0  0.0

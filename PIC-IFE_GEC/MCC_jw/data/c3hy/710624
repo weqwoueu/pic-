@@ -1,0 +1,15 @@
+# equation:   C_3H_7+CH_2->C_3H_6+CH_3
+# type:       neutral-neutral reaction
+# Ref:        Wing Tsang
+#             J. Phys. Chem. Ref. Data, Vol.17, No.2, 1988
+710624
+C_3H_7+CH_2->C_3H_6+CH_3
+0.0
+4
+ 2103  704  2105  702
+   -1   -1   +1   +1
+255
+1
+  0.0      0.0
+1
+  2.18E-11   0.0   0.0

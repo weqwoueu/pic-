@@ -1,0 +1,348 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<VisualStudioProject ProjectCreator="Intel Fortran" Keyword="Console Application" Version="11.0" ProjectIdGuid="{BBAF51CE-27BF-46D8-95C0-F1A75D1C7FCD}">
+	<Platforms>
+		<Platform Name="Win32"/>
+		<Platform Name="x64"/>
+	</Platforms>
+	<Configurations>
+		<Configuration Name="Debug|Win32" UseCompiler="ifortCompiler">
+			<Tool Name="VFFortranCompilerTool" SuppressStartupBanner="true" DebugInformationFormat="debugEnabled" Optimization="optimizeDisabled" WarnInterfaces="true" Traceback="true" BoundsCheck="true" StackFrameCheck="true" RuntimeLibrary="rtMultiThreadedDebugDLL"/>
+			<Tool Name="VFLinkerTool" LinkIncremental="linkIncrementalNo" SuppressStartupBanner="true" GenerateDebugInformation="true" SubSystem="subSystemConsole" LargeAddressAware="addrAwareLarge"/>
+			<Tool Name="VFResourceCompilerTool"/>
+			<Tool Name="VFMidlTool" SuppressStartupBanner="true"/>
+			<Tool Name="VFCustomBuildTool"/>
+			<Tool Name="VFPreLinkEventTool"/>
+			<Tool Name="VFPreBuildEventTool"/>
+			<Tool Name="VFPostBuildEventTool" CommandLine="del /q &quot;$(ProjectDir)*.mod&quot; &#xA;del /q &quot;$(ProjectDir)*.obj&quot;" ExcludedFromBuild="true"/>
+			<Tool Name="VFManifestTool" SuppressStartupBanner="true"/>
+		</Configuration>
+		<Configuration Name="Release|Win32" UseCompiler="ifortCompiler">
+			<Tool Name="VFFortranCompilerTool" SuppressStartupBanner="true" RuntimeLibrary="rtMultiThreadedDLL"/>
+			<Tool Name="VFLinkerTool" LinkIncremental="linkIncrementalNo" SuppressStartupBanner="true" SubSystem="subSystemConsole" LargeAddressAware="addrAwareLarge"/>
+			<Tool Name="VFResourceCompilerTool"/>
+			<Tool Name="VFMidlTool" SuppressStartupBanner="true"/>
+			<Tool Name="VFCustomBuildTool"/>
+			<Tool Name="VFPreLinkEventTool"/>
+			<Tool Name="VFPreBuildEventTool"/>
+			<Tool Name="VFPostBuildEventTool" CommandLine="del /q &quot;$(ProjectDir)*.mod&quot; &#xA;del /q &quot;$(ProjectDir)*.obj&quot;"/>
+			<Tool Name="VFManifestTool" SuppressStartupBanner="true"/>
+		</Configuration>
+		<Configuration Name="Debug|x64" UseCompiler="ifortCompiler">
+			<Tool Name="VFFortranCompilerTool" SuppressStartupBanner="true" DebugInformationFormat="debugEnabled" Optimization="optimizeDisabled" WarnInterfaces="true" Traceback="true" BoundsCheck="true" StackFrameCheck="true" RuntimeLibrary="rtMultiThreadedDebugDLL"/>
+			<Tool Name="VFLinkerTool" LinkIncremental="linkIncrementalNo" SuppressStartupBanner="true" GenerateDebugInformation="true" SubSystem="subSystemConsole" LargeAddressAware="addrAwareLarge"/>
+			<Tool Name="VFResourceCompilerTool"/>
+			<Tool Name="VFMidlTool" SuppressStartupBanner="true" TargetEnvironment="midlTargetAMD64"/>
+			<Tool Name="VFCustomBuildTool"/>
+			<Tool Name="VFPreLinkEventTool"/>
+			<Tool Name="VFPreBuildEventTool"/>
+			<Tool Name="VFPostBuildEventTool" CommandLine="del /q &quot;$(ProjectDir)*.mod&quot; &#xA;del /q &quot;$(ProjectDir)*.obj&quot;" ExcludedFromBuild="true"/>
+			<Tool Name="VFManifestTool" SuppressStartupBanner="true"/>
+		</Configuration>
+		<Configuration Name="Release|x64" UseCompiler="ifortCompiler">
+			<Tool Name="VFFortranCompilerTool" SuppressStartupBanner="true" RuntimeLibrary="rtMultiThreadedDLL"/>
+			<Tool Name="VFLinkerTool" LinkIncremental="linkIncrementalNo" SuppressStartupBanner="true" SubSystem="subSystemConsole" StackReserveSize="1073741824" LargeAddressAware="addrAwareLarge"/>
+			<Tool Name="VFResourceCompilerTool"/>
+			<Tool Name="VFMidlTool" SuppressStartupBanner="true" TargetEnvironment="midlTargetAMD64"/>
+			<Tool Name="VFCustomBuildTool"/>
+			<Tool Name="VFPreLinkEventTool"/>
+			<Tool Name="VFPreBuildEventTool"/>
+			<Tool Name="VFPostBuildEventTool" CommandLine="del /q &quot;$(ProjectDir)*.mod&quot; &#xA;del /q &quot;$(ProjectDir)*.obj&quot;"/>
+			<Tool Name="VFManifestTool" SuppressStartupBanner="true"/>
+		</Configuration>
+	</Configurations>
+	<Files>
+		<Filter Name="Header Files" Filter="fi;fd;h;inc"/>
+		<Filter Name="Resource Files" Filter="rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe">
+			<Filter Name="Data">
+				<File RelativePath=".\code\Data\Boundary.f90"/>
+				<File RelativePath=".\code\Data\Boundary_Data_2D.f90"/>
+				<File RelativePath=".\code\Data\Cell_Volume_Data.f90"/>
+				<File RelativePath=".\code\Data\Constant_Variable_2D.f90"/>
+				<File RelativePath=".\code\Data\Domain_2D.f90"/>
+				<File RelativePath=".\code\Data\Field_2D.f90"/>
+				<File RelativePath=".\code\Data\FluxLine_2D.f90"/>
+				<File RelativePath=".\code\Data\Gauss_Data.f90"/>
+				<File RelativePath=".\code\Data\IFE_Boundary.f90"/>
+				<File RelativePath=".\code\Data\IFE_Data.f90"/>
+				<File RelativePath=".\code\Data\IFE_INTERFACE.f90"/>
+				<File RelativePath=".\code\Data\IFE_Interface_cell_volume.f90"/>
+				<File RelativePath=".\code\Data\IFE_MAIN_PARAM.f90"/>
+				<File RelativePath=".\code\Data\IFE_RHS_PARAM.f90"/>
+				<File RelativePath=".\code\Data\IMPIC_Data_2D.f90"/>
+				<File RelativePath=".\code\Data\Object_2D.f90"/>
+				<File RelativePath=".\code\Data\Object_Data_2D.f90"/>
+				<File RelativePath=".\code\Data\Particle_2D.f90"/>
+				<File RelativePath=".\code\Data\PIC_MAIN_PARAM_2D.f90"/>
+				<File RelativePath=".\code\Data\Shape.f90"/>
+				<File RelativePath=".\code\Data\TimeControl.f90"/>
+				<File RelativePath=".\code\Data\Wall_2D.f90"/>
+			</Filter>
+			<Filter Name="Debug_zwz">
+				<File RelativePath=".\code\Debug_zwz\CheckTrail.f90"/>
+				<File RelativePath=".\code\Debug_zwz\DiagMod.f90"/>
+				<File RelativePath=".\code\Debug_zwz\Diagnosis.f90"/>
+				<File RelativePath=".\code\Debug_zwz\LoadInject.f90"/>
+				<File RelativePath=".\code\Debug_zwz\PART_INJECTION_DIST.f90"/>
+			</Filter>
+			<Filter Name="DSMC">
+				<File RelativePath=".\code\DSMC\DSMC_Data_2D.f90"/>
+				<File RelativePath=".\code\DSMC\GAM.f90"/>
+				<File RelativePath=".\code\DSMC\Init_DSMC_2D.f90"/>
+			</Filter>
+			<Filter Name="Function">
+				<File RelativePath=".\code\Function\FUN_2D_One.f90"/>
+				<File RelativePath=".\code\Function\FUN_Density_Drhs_2D.f90"/>
+				<File RelativePath=".\code\Function\FUN_Density_rhs_2D.f90"/>
+				<File RelativePath=".\code\Function\FUN_Density_rhs_TRIANGLE_2D.f90"/>
+				<File RelativePath=".\code\Function\FUN_Random.f90"/>
+				<File RelativePath=".\code\Function\FUN_sphere_u_ErrAna.f90"/>
+				<File RelativePath=".\code\Function\Function_coefficient_2D.f90"/>
+				<File RelativePath=".\code\Function\NORM_2.f90"/>
+				<File RelativePath=".\code\Function\Userdef_EBC_Value.f90"/>
+				<File RelativePath=".\code\Function\Userdef_EBC_Value_bjw.f90"/>
+			</Filter>
+			<Filter Name="IFE-error">
+				<File RelativePath=".\code\IFE-error\Compute_IFE_Norm_error.f90"/>
+				<File RelativePath=".\code\IFE-error\Error_Analysis_2D.f90"/>
+				<File RelativePath=".\code\IFE-error\Function_True.f90"/>
+				<File RelativePath=".\code\IFE-error\Gauss_integration_local_error_IFE.f90"/>
+			</Filter>
+			<Filter Name="IFE-Rectangular">
+				<File RelativePath=".\code\IFE-Rectangular\AGAUS.f90"/>
+				<File RelativePath=".\code\IFE-Rectangular\Boundary_Condition_info_2D.f90"/>
+				<File RelativePath=".\code\IFE-Rectangular\Calculate_Cell_Volume_2D.f90"/>
+				<File RelativePath=".\code\IFE-Rectangular\Cell_Volume_FE_2D.f90"/>
+				<File RelativePath=".\code\IFE-Rectangular\Cell_Volume_IFE_2D.f90"/>
+				<File RelativePath=".\code\IFE-Rectangular\Check_Sub_Nodes_2D.f90"/>
+				<File RelativePath=".\code\IFE-Rectangular\Classify_Nodes_2D.f90"/>
+				<File RelativePath=".\code\IFE-Rectangular\Cubic_Partition_2D.f90"/>
+				<File RelativePath=".\code\IFE-Rectangular\Cubic_Partition_Cell_Volume_2D.f90"/>
+				<File RelativePath=".\code\IFE-Rectangular\Diagonal_Preconditioner.f90"/>
+				<File RelativePath=".\code\IFE-Rectangular\Edge_in_Boundary_2D.f90"/>
+				<File RelativePath=".\code\IFE-Rectangular\El_Curve_Intersection_info_2D_BL.f90"/>
+				<File RelativePath=".\code\IFE-Rectangular\El_Object_Intersection_info_2D_BL.f90"/>
+				<File RelativePath=".\code\IFE-Rectangular\FE_Interpol_HW_2D.f90"/>
+				<File RelativePath=".\code\IFE-Rectangular\FE_Mass.f90"/>
+				<File RelativePath=".\code\IFE-Rectangular\FE_RHS_Eval_2D.f90"/>
+				<File RelativePath=".\code\IFE-Rectangular\FE_RHS_HW_2D.f90"/>
+				<File RelativePath=".\code\IFE-Rectangular\FE_Stiff_Eval_2D.f90"/>
+				<File RelativePath=".\code\IFE-Rectangular\FE_Stiff_HW_2D.f90"/>
+				<File RelativePath=".\code\IFE-Rectangular\Gauss_integration_local_load_IFE_nonhomogeneous.f90"/>
+				<File RelativePath=".\code\IFE-Rectangular\Gauss_integration_local_load_IFE_on_interface.f90"/>
+				<File RelativePath=".\code\IFE-Rectangular\Gauss_integration_local_stiffness.f90"/>
+				<File RelativePath=".\code\IFE-Rectangular\Gauss_integration_local_stiffness_IFE.f90"/>
+				<File RelativePath=".\code\IFE-Rectangular\Gauss_integration_of_flux_jump_on_interface.f90"/>
+				<File RelativePath=".\code\IFE-Rectangular\Gauss_Nodes_2D.f90"/>
+				<File RelativePath=".\code\IFE-Rectangular\Gauss_Nodes_Edge_2D.f90"/>
+				<File RelativePath=".\code\IFE-Rectangular\Gauss_Nodes_Elem_2D.f90"/>
+				<File RelativePath=".\code\IFE-Rectangular\Generate_Gauss_local.f90"/>
+				<File RelativePath=".\code\IFE-Rectangular\generate_Gauss_local_1D.f90"/>
+				<File RelativePath=".\code\IFE-Rectangular\Generate_Gauss_local_triangle.f90"/>
+				<File RelativePath=".\code\IFE-Rectangular\Generate_Gauss_reference.f90"/>
+				<File RelativePath=".\code\IFE-Rectangular\generate_Gauss_reference_1D.f90"/>
+				<File RelativePath=".\code\IFE-Rectangular\Generate_Gauss_reference_triangle.f90"/>
+				<File RelativePath=".\code\IFE-Rectangular\generate_load_vector_local_IFE_nonhomogeneous.f90"/>
+				<File RelativePath=".\code\IFE-Rectangular\generate_load_vector_local_IFE_on_interface.f90"/>
+				<File RelativePath=".\code\IFE-Rectangular\Generate_stiffness_matrix_local_IFE.f90"/>
+				<File RelativePath=".\code\IFE-Rectangular\Get_Boundary_Elements_2D.f90"/>
+				<File RelativePath=".\code\IFE-Rectangular\GetFlux.f90"/>
+				<File RelativePath=".\code\IFE-Rectangular\Global_HardWire_2D.f90"/>
+				<File RelativePath=".\code\IFE-Rectangular\Global_Mass.f90"/>
+				<File RelativePath=".\code\IFE-Rectangular\Global_RHS_EBC_2D.f90"/>
+				<File RelativePath=".\code\IFE-Rectangular\Global_RHS_EBC_2D_bjw.f90"/>
+				<File RelativePath=".\code\IFE-Rectangular\Global_RHS_NBC_2D.f90"/>
+				<File RelativePath=".\code\IFE-Rectangular\Global_RHS_PDE_2D.f90"/>
+				<File RelativePath=".\code\IFE-Rectangular\IFE_Interpol_2D.f90"/>
+				<File RelativePath=".\code\IFE-Rectangular\IFE_Mass.f90"/>
+				<File RelativePath=".\code\IFE-Rectangular\IFE_RHS_2D.f90"/>
+				<File RelativePath=".\code\IFE-Rectangular\IFE_Solve_2D.f90"/>
+				<File RelativePath=".\code\IFE-Rectangular\IFE_Start_2D.f90"/>
+				<File RelativePath=".\code\IFE-Rectangular\IFE_Stiff_2D.f90"/>
+				<File RelativePath=".\code\IFE-Rectangular\Inter_Tetra_Partition_2D.f90"/>
+				<File RelativePath=".\code\IFE-Rectangular\Left_Divide.f90"/>
+				<File RelativePath=".\code\IFE-Rectangular\Line_Circle_Intersection_BL.f90"/>
+				<File RelativePath=".\code\IFE-Rectangular\Line_Ellipse_Intersection_BL.f90"/>
+				<File RelativePath=".\code\IFE-Rectangular\Line_Rectangular_Intersection_BL.f90"/>
+				<File RelativePath=".\code\IFE-Rectangular\Line_Twopoints_Intersection.f90"/>
+				<File RelativePath=".\code\IFE-Rectangular\Linear_FE_Basis_Coeff_2D.f90"/>
+				<File RelativePath=".\code\IFE-Rectangular\Linear_FE_Basis_Eval_2D.f90"/>
+				<File RelativePath=".\code\IFE-Rectangular\Linear_IFE_Basis_Coeff_2D.f90"/>
+				<File RelativePath=".\code\IFE-Rectangular\Linear_IFE_Basis_Eval_2D.f90"/>
+				<File RelativePath=".\code\IFE-Rectangular\Load_IFE_Mesh_2D.f90"/>
+				<File RelativePath=".\code\IFE-Rectangular\Locate_Node_2D.f90"/>
+				<File RelativePath=".\code\IFE-Rectangular\Mat_Det_2.f90"/>
+				<File RelativePath=".\code\IFE-Rectangular\Mesh_Objects_Intersection_info_2D_BL_cell_volume.f90"/>
+				<File RelativePath=".\code\IFE-Rectangular\modify_interface_elements.f90"/>
+				<File RelativePath=".\code\IFE-Rectangular\Node_in_Boundary_2D.f90"/>
+				<File RelativePath=".\code\IFE-Rectangular\Node_NBC_Eval_2D.f90"/>
+				<File RelativePath=".\code\IFE-Rectangular\Partition_Cube_2D.f90"/>
+				<File RelativePath=".\code\IFE-Rectangular\periodic_boundary_conditions.f90"/>
+				<File RelativePath=".\code\IFE-Rectangular\periodic_boundary_corresponding_nodes.f90"/>
+				<File RelativePath=".\code\IFE-Rectangular\Periodic_pair_boundary_nodes.f90"/>
+				<File RelativePath=".\code\IFE-Rectangular\Retangular_local_basis.f90"/>
+				<File RelativePath=".\code\IFE-Rectangular\retangular_local_basis_IFE.f90"/>
+				<File RelativePath=".\code\IFE-Rectangular\retangular_local_basis_IFE_nonhomogeneous.f90"/>
+				<File RelativePath=".\code\IFE-Rectangular\Retangular_reference_basis.f90"/>
+				<File RelativePath=".\code\IFE-Rectangular\Retangular_reference_basis_IFE.f90"/>
+				<File RelativePath=".\code\IFE-Rectangular\solve_periodic_boundary_conditions.f90"/>
+				<File RelativePath=".\code\IFE-Rectangular\Sparse_Structure.f90"/>
+				<File RelativePath=".\code\IFE-Rectangular\Tetra_Volume_2D.f90"/>
+				<File RelativePath=".\code\IFE-Rectangular\Update_Locate_Node_2D.f90"/>
+				<File RelativePath=".\code\IFE-Rectangular\Update_Mesh_Objects_Intersection_2D.f90"/>
+				<File RelativePath=".\code\IFE-Rectangular\Vec_Dot_3_2D.f90"/>
+			</Filter>
+			<Filter Name="IFE-Solver">
+				<File RelativePath=".\code\IFE-Solver\Error_Analysis.f90"/>
+				<File RelativePath=".\code\IFE-Solver\Matrix_Inverse.f90"/>
+				<File RelativePath=".\code\IFE-Solver\MATVEC_1.f90"/>
+				<File RelativePath=".\code\IFE-Solver\MSOLVE_1.f90"/>
+				<File RelativePath=".\code\IFE-Solver\MY_JPCG_Solver.f90"/>
+				<File RelativePath=".\code\IFE-Solver\MY_PCG.f90"/>
+				<File RelativePath=".\code\IFE-Solver\Sparse_Residue.f90"/>
+			</Filter>
+			<Filter Name="IMPIC">
+				<File RelativePath=".\code\IMPIC\AdjustBoundary_2D.f90"/>
+				<File RelativePath=".\Get_ParticleEField_PPR.f90"/>
+				<File RelativePath=".\code\IMPIC\InjectBeams_2D.f90"/>
+				<File RelativePath=".\code\IMPIC\Move_2D.f90"/>
+				<File RelativePath=".\code\IMPIC\MoveOne.f90"/>
+				<File RelativePath=".\code\IMPIC\OneAndChi_2D.f90"/>
+				<File RelativePath=".\code\IMPIC\PostPush.f90"/>
+				<File RelativePath=".\code\IMPIC\PostPushOne.f90"/>
+				<File RelativePath=".\code\IMPIC\PrePush.f90"/>
+				<File RelativePath=".\code\IMPIC\PrePushOne.f90"/>
+				<File RelativePath=".\code\IMPIC\Quasi_2D.f90"/>
+			</Filter>
+			<Filter Name="In-Ouput">
+				<File RelativePath=".\code\In-Output\Input_2D.f90"/>
+				<File RelativePath=".\code\In-Output\My_Label.f90"/>
+				<File RelativePath=".\Output_Energy.f90"/>
+				<File RelativePath=".\code\In-Output\Output_To_Tecplot_IJK_2D.f90"/>
+				<File RelativePath=".\code\In-Output\Output_To_Tecplot_IJK_2D_temp.f90"/>
+				<File RelativePath=".\OUTPUT_velocity.f90"/>
+			</Filter>
+			<Filter Name="MCC"/>
+			<Filter Name="MCC_jw">
+				<Filter Name="base">
+					<File RelativePath=".\MCC_jw\code\base\Constants.f90"/>
+					<File RelativePath=".\MCC_jw\code\base\ControlFlow.f90"/>
+					<File RelativePath=".\MCC_jw\code\base\Field.f90"/>
+					<File RelativePath=".\MCC_jw\code\base\Grid.f90"/>
+					<File RelativePath=".\MCC_jw\code\base\Numrical.F90"/>
+					<File RelativePath=".\MCC_jw\code\base\ParticleBoundary.f90"/>
+					<File RelativePath=".\MCC_jw\code\base\ParticleBundle.f90"/>
+					<File RelativePath=".\ParticleDistribution.f90"/>
+					<File RelativePath=".\MCC_jw\code\base\ParticleOne.f90"/>
+					<File RelativePath=".\MCC_jw\code\base\SEE.f90"/>
+					<File RelativePath=".\MCC_jw\code\base\SpecyOne.f90"/>
+				</Filter>
+				<Filter Name="diag">
+					<File RelativePath=".\MCC_jw\code\diagnostics\DiagCollisionRate.f90"/>
+					<File RelativePath=".\MCC_jw\code\diagnostics\DiagEEPF.f90"/>
+					<File RelativePath=".\MCC_jw\code\diagnostics\DiagElectrodeParticles.f90"/>
+					<File RelativePath=".\MCC_jw\code\diagnostics\DiagMomentum.f90"/>
+					<File RelativePath=".\MCC_jw\code\diagnostics\DiagOneStep.f90"/>
+					<File RelativePath=".\MCC_jw\code\diagnostics\DiagParticleBoundary.f90"/>
+					<File RelativePath=".\MCC_jw\code\diagnostics\DiagTestParticle.f90"/>
+					<File RelativePath=".\MCC_jw\code\diagnostics\DiagTrackingParticle.f90"/>
+				</Filter>
+				<Filter Name="Field"/>
+				<Filter Name="Interface_IFE">
+					<File RelativePath=".\MCC_jw\code\Interface_IFE\MCCInterface.f90"/>
+				</Filter>
+				<Filter Name="mc">
+					<File RelativePath=".\MCC_jw\code\mc\MCCChi.f90"/>
+					<File RelativePath=".\MCC_jw\code\mc\MCCElectron.F90"/>
+					<File RelativePath=".\MCC_jw\code\mc\MCCInit.F90"/>
+					<File RelativePath=".\MCC_jw\code\mc\MCCIon.F90"/>
+					<File RelativePath=".\MCC_jw\code\mc\MCCPublic.F90"/>
+					<File RelativePath=".\MCC_jw\code\mc\MCCSigma.f90"/>
+					<File RelativePath=".\MCC_jw\code\mc\ReactionOnePegasus.f90"/>
+					<File RelativePath=".\MCC_jw\code\mc\Recombination.F90"/>
+					<File RelativePath=".\MCC_jw\code\mc\TypeMCC.f90"/>
+				</Filter>
+			</Filter>
+			<Filter Name="PIC">
+				<File RelativePath=".\code\PIC\DRandom.f90"/>
+				<File RelativePath=".\code\PIC\Dump_2D.f90"/>
+				<File RelativePath=".\code\PIC\EFBC_2D.f90"/>
+				<File RelativePath=".\code\PIC\ERF.f90"/>
+				<File RelativePath=".\code\PIC\GetEField_2D.f90"/>
+				<File RelativePath=".\code\PIC\GetParChg_2D.f90"/>
+				<File RelativePath=".\code\PIC\GetParFlux_2D.f90"/>
+				<File RelativePath=".\code\PIC\GetParFlux_2D_Temp.f90"/>
+				<File RelativePath=".\code\PIC\INDEXM.f90"/>
+				<File RelativePath=".\code\PIC\InitialPhi_2D.f90"/>
+				<File RelativePath=".\InjectPositioning.f90"/>
+				<File RelativePath=".\code\PIC\Load_Charged_Particle.f90"/>
+				<File RelativePath=".\code\PIC\Loadv.f90"/>
+				<File RelativePath=".\code\PIC\Main_IFE_Test_2.f90"/>
+				<File RelativePath=".\ParticlePositioning.f90"/>
+				<File RelativePath=".\code\PIC\PhiBC_2D.f90"/>
+				<File RelativePath=".\code\PIC\Quasi.f90"/>
+				<File RelativePath=".\code\PIC\Restart_2D.f90"/>
+				<File RelativePath=".\code\PIC\RhoBC_2D.f90"/>
+				<File RelativePath=".\code\PIC\Start_2D.f90"/>
+				<File RelativePath=".\code\PIC\Weighting.f90"/>
+			</Filter>
+			<Filter Name="PPR">
+				<File RelativePath=".\code\PPR\BRINV.f90"/>
+				<File RelativePath=".\code\PPR\Bubble_Sort_new.f90"/>
+				<File RelativePath=".\code\PPR\Generate_Gauss_local_ppr.f90"/>
+				<File RelativePath=".\code\PPR\Get_PointPatch.f90"/>
+				<File RelativePath=".\code\PPR\GetEfield_SIDG_PPR.f90"/>
+				<File RelativePath=".\code\PPR\ParPosition_ppr_elem.f90"/>
+				<File RelativePath=".\code\PPR\qsort_c_module_2D.f90"/>
+			</Filter>
+			<Filter Name="Setup">
+				<File RelativePath=".\code\Setup\Set_PIC_Boundary_2D.f90"/>
+				<File RelativePath=".\code\Setup\SetBoundaryType_2D_QLL.f90"/>
+				<File RelativePath=".\code\Setup\SetEleRef_2D.f90"/>
+				<File RelativePath=".\code\Setup\SetMagFld_2D.f90"/>
+				<File RelativePath=".\code\Setup\SetObjects_2D.f90"/>
+				<File RelativePath=".\code\Setup\SetPhiOuterBC_2D.f90"/>
+				<File RelativePath=".\code\Setup\Setup_Cell_Volume_2D.f90"/>
+				<File RelativePath=".\code\Setup\Setup_IFE_Mesh_2D.f90"/>
+				<File RelativePath=".\code\Setup\Setup_IFE_Wall_Mesh_2D_NEW.f90"/>
+				<File RelativePath=".\code\Setup\SetupBfield_circle.f90"/>
+				<File RelativePath=".\code\Setup\SetupGrids_2D_QLL.f90"/>
+				<File RelativePath=".\code\Setup\SetupPartInject_QLL.f90"/>
+			</Filter>
+			<Filter Name="SIDG">
+				<File RelativePath=".\code\SIDG\Adaptive_interface_function.f90"/>
+				<File RelativePath=".\code\SIDG\Cell_Data_2D.f90"/>
+				<File RelativePath=".\code\SIDG\gauss_integration_local_stiffness_DG_FE_D.f90"/>
+				<File RelativePath=".\code\SIDG\gauss_integration_local_stiffness_DG_FE_O.f90"/>
+				<File RelativePath=".\code\SIDG\gauss_integration_local_stiffness_IDG_both_O.f90"/>
+				<File RelativePath=".\code\SIDG\gauss_integration_local_stiffness_IDG_D.f90"/>
+				<File RelativePath=".\code\SIDG\gauss_integration_local_stiffness_IDG_O.f90"/>
+				<File RelativePath=".\code\SIDG\gauss_integration_local_stiffness_Mixed_O.f90"/>
+				<File RelativePath=".\code\SIDG\gauss_integration_local_vector_DG_FE_D.f90"/>
+				<File RelativePath=".\code\SIDG\gauss_integration_local_vector_IDG_D.f90"/>
+				<File RelativePath=".\code\SIDG\generate_Adaptive_DG_P_average.f90"/>
+				<File RelativePath=".\code\SIDG\generate_Adaptive_DG_P_T_E.f90"/>
+				<File RelativePath=".\code\SIDG\generate_Adaptive_DG_P_T_E_repeat.f90"/>
+				<File RelativePath=".\code\SIDG\generate_Adaptive_DGT_IFE.f90"/>
+				<File RelativePath=".\code\SIDG\generate_DG_edge_flag.f90"/>
+				<File RelativePath=".\code\SIDG\generate_DG_node_flag.f90"/>
+				<File RelativePath=".\code\SIDG\generate_DGE_2D.f90"/>
+				<File RelativePath=".\code\SIDG\generate_DGP_DGT_2D.f90"/>
+				<File RelativePath=".\code\SIDG\generate_E_Dirichlet_2D.f90"/>
+				<File RelativePath=".\generate_Elementmap.f90"/>
+				<File RelativePath=".\code\SIDG\generate_Gauss_local_1D_Linear.f90"/>
+				<File RelativePath=".\code\SIDG\generate_HE_2D.f90"/>
+				<File RelativePath=".\code\SIDG\generate_HP_HT_2D.f90"/>
+				<File RelativePath=".\code\SIDG\generate_load_vector_local_IDG_D.f90"/>
+				<File RelativePath=".\code\SIDG\generate_stiffness_matrix_local_IDG_D.f90"/>
+				<File RelativePath=".\code\SIDG\generate_stiffness_matrix_local_IDG_O.f90"/>
+				<File RelativePath=".\code\SIDG\generate_Tier_initial_2D.f90"/>
+				<File RelativePath=".\code\SIDG\Improve_HT.f90"/>
+				<File RelativePath=".\code\SIDG\ShellSort_2D.f90"/>
+				<File RelativePath=".\code\SIDG\Sparse_Structure_xt.f90"/>
+				<File RelativePath=".\code\SIDG\Update_Edge_Objects_Intersection_2D.f90"/>
+			</Filter>
+		</Filter>
+		<Filter Name="Source Files" Filter="f90;for;f;fpp;ftn;def;odl;idl"/>
+	</Files>
+	<Globals/>
+</VisualStudioProject>

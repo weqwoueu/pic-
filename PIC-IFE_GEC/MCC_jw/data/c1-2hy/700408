@@ -1,0 +1,24 @@
+##equation:   H_2(+)+C_2H_6->C_2H_5(+)+H_2+H
+##type:       ion-neutral collision
+##unit:       cm^3/s
+##date:        2015/Nov/4
+##method:      numerical table
+##
+##            Christophe De Bie, Bert Verheyde, Tom Martens, Jan van Dijk,
+##            Sabine paulussen, Annemie Bogaerts,
+##            "Fluid modeling of the conversion of Methane into
+##            higher hydrocarbons in an atmospheric pressure dielectric barrier discharge",
+##            Plasma Process.(es) (and) Polym.(ers), 8, 1033-1058 (2011)
+##ref.range: temp.>100[K]
+#
+ 700408
+H_2(+)+C_2H_6->C_2H_5(+)+H_2+H
+ 0.0
+ 5
+    16  708  711   14   10
+   -1  -1   1   1   1
+ 255
+  1
+  0.00E-02 0.00E-16
+ 1
+ 1.370E-09  0.00E+00  0.00E+00

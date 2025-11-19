@@ -1,0 +1,17 @@
+#equation: e+HBr(+)->H+Br
+#type: dissociative recombination cross section 
+#Ref. Auth:  
+#Ref. Journal: 
+#input date: 2007/11/29
+#
+180060
+e(-)+HBr(+)->H+Br
+0.0
+4
+1803  1   1804  10   
+ -1  -1   +1   +1 
+10
+  1
+   0.0E+02  0.0E-19
+ 1
+1.0e-8 -0.5  0.00E+00

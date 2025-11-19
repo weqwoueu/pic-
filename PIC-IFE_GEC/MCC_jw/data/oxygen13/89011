@@ -1,0 +1,20 @@
+#  Reaction : O_2(+)+H_2O+N_2->O_2(+).H_2O+N_2
+#  Type : 
+#  Ref : Rajesh Dorai and Mark J Kushner
+#       <A model for plasma modification of polypropylene
+#        using atmospheric pressure discharges>
+#        J. Phys. D: Appl. Phys. 36(2003) 666-685
+#  Date : 2017/08/25
+#
+89011
+O_2(+)+H_2O+N_2->O_2(+).H_2O+N_2
+0.0
+4
+  89  3802  3073  1903
+  -1   -1   0     +1
+255
+1
+0.0  0.0
+1
+  2.5E-28  0.0  0.0
+3

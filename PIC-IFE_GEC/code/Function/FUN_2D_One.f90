@@ -1,0 +1,13 @@
+SUBROUTINE FUN_2D_One(x, y, f, n)
+
+USE IFE_MAIN_PARAM
+
+IMPLICIT NONE
+
+INTEGER									n
+REAL(8), DIMENSION(n), INTENT(IN)	::	x, y
+REAL(8), DIMENSION(n), INTENT(OUT)	::	f
+
+f = One
+
+END

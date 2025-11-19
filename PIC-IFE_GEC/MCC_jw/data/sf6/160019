@@ -1,0 +1,36 @@
+##equation:    e(-)+SF_4->SF_4(+)+2e(-)
+##type:        ionization
+##unit:        eV, cm2
+##input date:  2005/3/31
+##method:      digitize from scanned figure
+##
+##ref.auth:    L. G. Christophorou and J.K. Olthoff
+##ref.title:   Electron Interactions with SF6
+##ref.journal: J. Phys. Chem. Ref. Data Vol.29, No.3(2000) pp. 267-330
+##ref.table:   fig 16 (c)
+##ref.range:   10eV--1000eV
+#
+160019
+e(-)+SF_4->SF_4(+)+2e(-)
+13.0
+3
+1605  1   1606
+  -1  1      1
+2
+16
+    13.0   0.0
+    16.079 1.2514e-17
+    18.981  2.691e-17
+    21.862 6.4837e-17
+    28.138 1.5714e-16
+    48.212 3.9837e-16
+    67.393 5.0966e-16
+    93.818 5.6674e-16
+    119.61 5.8832e-16
+    162.98 5.7701e-16
+    240.21 5.2811e-16
+    352.26 4.5328e-16
+    495.45  3.831e-16
+    696.66 3.1998e-16
+    950.93 2.5683e-16
+    997.46 2.4983e-16

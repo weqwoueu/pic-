@@ -1,0 +1,45 @@
+##eqation:     e(-)+F_2>e(-)+F_2(+)+e(-)
+##type:        Ionization
+##unit:        eV, cm2
+##date:        2013/5/13
+##method:      digitalize from scanned figure
+##
+##ref.auth:    M. Hayashi and T. Nimura
+##ref.title:   Calculation of electron swarm parameters in fluorine
+##ref.journal: J. Appl. Phys. 54(9), September 1983 pp.4879
+##ref.table:   FIG.1.
+#
+#   assumed curve in the paper
+#
+94007
+e(-)+F_2->e(-)+F_2(+)+e(-)
+15.69
+3
+ 94   1  97
+ -1   1   1
+2
+22
+15.69   0.0
+15.90   1.0E-18
+15.95	1.541E-18
+18.82	8.319E-18
+22.2	1.731E-17
+26.19	2.892E-17
+36.45	5.804E-17
+50.73	7.781E-17
+59.85	9.01E-17
+70.6	1.006E-16
+83.29	1.082E-16
+98.25	1.123E-16
+115.9	1.165E-16
+136.7	1.208E-16
+161.3	1.165E-16
+264.8	1.043E-16
+312.4	9.346E-17
+368.6	8.686E-17
+512.9	7.231E-17
+605.1	6.478E-17
+713.8	5.804E-17
+842.1	5.012E-17
+-1
+0.00E+00  0.00E+00  0.00E+00

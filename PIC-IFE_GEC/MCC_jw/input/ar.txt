@@ -1,0 +1,4 @@
+# num       mass      charge    lj_sigma  lj_epsilon    name                         
+#          [a.m.u]               [\AA]     [K]                                       #                                                                                    
+  1     5.446e-4       -1.0          -1       -1        e(-)     
+181         39.95      +1.0       3.33        -1        Ar(+) 

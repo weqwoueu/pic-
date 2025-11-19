@@ -1,0 +1,15 @@
+# equation:   C_3H_6+CH_3->C_3H_5+CH_4
+# type:       neutral-neutral reaction
+# Ref:        Wing Tsang
+#             J. Phys. Chem. Ref. Data, Vol.20, No.2, 1991
+710628
+C_3H_6+CH_3->C_3H_5+CH_4
+0.0
+4
+ 2105  702  2107  700
+   -1   -1   +1   +1
+255
+1
+  0.0      0.0
+1
+  1.26E-19   0.0   0.0

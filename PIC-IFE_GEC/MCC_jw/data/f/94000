@@ -1,0 +1,42 @@
+##eqation:     e(-)+F_2>e(-)+F_2
+##type:        !!!! momentom transfer !! NOT converted to elastic!!!
+##unit:        eV, cm2
+##date:        2000/8/19
+##method:      digitalize from scanned figure
+##
+##ref.auth:    M. Hayashi and T. Nimura
+##ref.title:   Calculation of electron swarm parameters in fluorine
+##ref.journal: J. Appl. Phys. 54(9), September 1983 pp.4879
+##ref.table:   FIG.1.
+#
+94000
+e(-)+F_2->F_2+e(-)
+0.0
+2
+ 94   1
+  0   0
+1
+21
+  0.010233 1.0276e-15
+   0.17922 9.9618e-16
+   0.43475 1.0649e-15
+   0.83378 1.3272e-15
+    1.1358 1.6257e-15
+    1.3435 2.2177e-15
+    1.5643   3.12e-15
+    1.7413 3.7013e-15
+    1.9434  3.375e-15
+    2.3134 2.4787e-15
+    2.7943 1.9978e-15
+    4.2664 1.4692e-15
+    7.6093 1.0983e-15
+    16.104 8.2172e-16
+     24.95 6.6318e-16
+    43.198  4.312e-16
+     78.51  2.329e-16
+    218.44 7.1106e-17
+    430.68 2.6913e-17
+    810.41 1.0184e-17
+    979.66 7.5967e-18
+-1
+0.00E+00  0.00E+00  0.00E+00

@@ -1,0 +1,3 @@
+ Number of Element =           8
+ L2 ErrorH1 Error
+  1.759214407551161E-002  0.261434353934201     

@@ -1,0 +1,23 @@
+##equation:    CF_3(+)+C_2F_6->C_2F_5(+)+CF_4
+##type:        ion-ion neutralization
+##unit:        eV, cm2
+##date:        2008/01/16
+##method:      numerical table
+##
+##ref.auth:    Vasenkov et al.
+##ref.title:   
+##ref.journal: J. Vac. Sci. Technol.A 22(3),May/Jun 2004
+##ref.table:   Table IV
+##ref.range:   
+#
+622003
+CF_3(+)+C_2F_6->C_2F_5(+)+CF_4
+0.0
+4
+622 615  633 610
+ -1 -1   +1  +1
+255
+ 1
+ 0.00E-02 0.00E-16
+ 1
+2.5E-12  0.00E+00  0.00E+00

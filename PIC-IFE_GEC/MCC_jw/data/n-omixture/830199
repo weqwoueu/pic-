@@ -1,0 +1,20 @@
+#  Reaction : O_2(b)+N_2->O_2(a)+N_2
+#  Type : Neutral-Neutral
+#  Ref : Kossyi et al
+#       <Kinetic scheme of the non-equilibrium discharge in
+#        nitrogen-oxygen mixtures>
+#        Plasma Sources Sci. Technol. 1 (1992)
+#        equation (127)
+#  Date : 2012/90/14
+#
+830199
+O_2(b)+N_2->O_2(a)+N_2
+0.0
+3
+  3085  3073  3084
+  -1   0   1
+255
+1
+0.0  0.0
+1
+  4.9000E-15  0.0000E+00  2.1810E-02

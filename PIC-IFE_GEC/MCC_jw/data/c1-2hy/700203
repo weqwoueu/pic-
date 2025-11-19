@@ -1,0 +1,15 @@
+# equation:   CH_4+C_2H_3->C_2H_4+CH_3
+# type:       neutral-neutral reaction
+# Ref:        Christophe De Bie et al. (Bogaerts)
+#             Plasma Process. Polym. 2011, 8, 1033-1058  Table A.3
+700203
+CH_4+C_2H_3->C_2H_4+CH_3
+0.0
+4
+  700  714  712  702
+   -1   -1   +1   +1
+255
+1
+  0.0      0.0
+1
+  2.28E-18   0.0   0.0

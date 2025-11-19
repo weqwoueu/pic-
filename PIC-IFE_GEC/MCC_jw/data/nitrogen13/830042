@@ -1,0 +1,19 @@
+#  Reaction : N_2(a')+N_2(a')->N_4(+)+e(-)
+#  Type : Associative ionization
+#  Ref : M. Capitelli C.M. Ferreira B.F. Gordiets A.I. Osipov
+#       <Plasma Kinetics in Atmospheric Gases>
+#        Springer (2000)
+#        Table 9.3
+#  Date : 2012/11/14
+#
+830042
+N_2(a')+N_2(a')->N_4(+)+e(-)
+0.0
+4
+  3076  3076  3804     1
+  -1  -1   1   1
+255
+1
+0.0  0.0
+1
+  1.0000E-11  0.0000E+00  0.0000E+00

@@ -1,0 +1,24 @@
+#
+# Xe(*ex)+Xe->Xe(*res)+Xe
+#
+# Sakai Y, Sawada S and Tagashira H 1991 J.Phys.D:Appl.Phys. 27 2107-10
+#   refered by Akinori Oda et al J.Phys.D:32(1999) 2726-2736
+#
+543001
+Xe(*ex)+Xe->Xe(*res)+Xe
+0.0
+3
+ 543  540 544
+  -1  0    1
+255
+ 1
+    0.0e-01 0.0e-16
+ 1
+2.0e-11 0.0 0.0
+
+
+
+
+
+
+

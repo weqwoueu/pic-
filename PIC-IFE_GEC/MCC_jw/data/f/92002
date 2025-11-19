@@ -1,0 +1,25 @@
+##eqation:     Ar(+)+F(-)->Ar+F
+##type:        excitation
+##unit:        eV, cm2
+##date:        2001/04/27
+##method:      numerial table
+##
+##ref.auth:    R.E. Olson, J.R. Peterson, and J. Moseley
+##ref.title:
+##ref.journal: J. Chem. Phys. 53, 3391 (1970)
+##ref.table:
+##ref.range:
+##
+#   assumed curve in the paper
+#
+92002
+Ar(+)+F(-)->Ar+F
+0.0
+4
+ 91  181  180  90
+ -1   -1   +1  +1
+255
+ 1
+ 0.00E-02 0.00E-16
+1
+1.00E-07  0.00E+00  0.00E+00

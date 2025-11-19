@@ -1,0 +1,25 @@
+#
+# Xe(+)+Xe+Xe->Xe_2(+)+Xe
+#
+# Sakai Y, Sawada S and Tagashira H 1991 J.Phys.D:Appl.Phys. 27 2107-10
+#   refered by Akinori Oda et al J.Phys.D:32(1999) 2726-2736
+#
+541001
+Xe(+)+2Xe->Xe_2(+)+Xe
+0.0
+4
+ 541  540 540 549
+  -1  -1   0   +1
+255
+ 1
+    0.0e-01 0.0e-16
+ 1
+8.0e-32 0.0 0.0
+ 3
+
+
+
+
+
+
+

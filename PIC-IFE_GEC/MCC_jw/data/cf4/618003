@@ -1,0 +1,27 @@
+##eqation:     e+CF_2(+)->CF+F
+##type:        ion-ion neutralization
+##unit:        eV, cm2
+##date:        2008/01/17
+##method:      numerial table
+##
+##ref.auth:    Vasenkov et al.
+#
+##ref.title: 
+##ref.journal: J. Vac. Sci. Technol.A 22(3),May/Jun 2004
+##ref.table: TABLE V
+##ref.range: 
+##
+#   Estimated
+#
+618003
+e(-)+CF_2(+)->CF+F
+0.0
+4
+618  1 619 90
+ -1 -1 +1 +1
+255
+ 1
+ 0.00E-02 0.00E-16
+ 1
+8.5E-08  0.50E+00  0.00E+00
+

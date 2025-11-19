@@ -1,0 +1,18 @@
+##equation:    e(-)+Ar_2->Ar_2(+)+e(-)+e(-) 
+##type:        Ionization of eximer 
+##date:        2013/09/10
+#
+## Kannari F, Obara M and Fujioka T 1985
+## J. Appl. Phys. 57 4309
+#
+180015
+e(-)+Ar_2->Ar_2(+)+e(-)+e(-) 
+ 0.0
+3
+187  1  188
+-1  +1  +1   
+2
+ 1
+ 0.0 0.0
+ 1
+9.0E-8   0.7  3.66

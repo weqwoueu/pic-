@@ -1,0 +1,34 @@
+##eqation:     e(-)+CF_3->CF_2+F(-)
+##type:        
+##unit:        eV, cm2
+##date:        2000/8/16
+##method:      numerial table
+##
+##             Estimated by analogy to CF_4
+##see          S. Rauf and M.J. Kushner,
+##             J. Appl. Phys. 82, 2805 (1997)
+##
+##ref.auth:    Russell A.Bonham
+##ref.title:   Electron Impact Cross Section Data for Carbon Tetrafluoride
+##ref.journal: Jpn. J. Appl. Phys. Vol. 33 (1994) pp. 4157--4164
+##             Part I, No. 7B, July 1994
+##ref.table:   Table X
+##ref.range:   13.0eV - 35.0 eV
+#
+613005
+e(-)+CF_3->CF_2+F(-)
+5.0
+4
+613   1   616  91
+ -1  -1   +1   +1
+255
+7
+5.0     0.0008e-16
+6.0     0.0060e-16
+7.0     0.0110e-16
+8.0     0.0110e-16
+9.0     0.0040e-16
+10.0    0.0008e-16
+11.0    0.0004e-16
+-1
+0.00E+00  0.00E+00  0.00E+00

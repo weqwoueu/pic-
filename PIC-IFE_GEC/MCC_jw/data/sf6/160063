@@ -1,0 +1,26 @@
+##eqation:     SF_6(-)+SF_3(+)->SF_6+SF_3
+##type:        ion-ion neutralization
+##unit:        eV, cm2
+##date:        2005/04/14
+##method:      numerial table
+##
+##ref.auth:    Shahid Raul and Peter L.G. Ventzek
+#              (A.P.Hickman, J.Chem. Phys. 70,4872(1979))
+##ref.title:
+##ref.journal: J. Appl. Phys. Vol92, No.12,6998 (2002)
+##ref.table:
+##ref.range:
+##
+#   Estimated
+#
+160063
+SF_6(-)+SF_3(+)->SF_6+SF_3
+0.0
+4
+ 1601  1610  1600  1609
+ -1   -1   +1  +1
+255
+ 1
+ 0.00E-02 0.00E-16
+1
+5.00E-08  0.00E+00  0.00E+00

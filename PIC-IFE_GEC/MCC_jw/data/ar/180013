@@ -1,0 +1,17 @@
+##equation:    e(-)+Ar(+)->Ar(*4s) 
+##type:        recombination
+##date:        2013/09/10
+#
+## Biondi M A 1976 Principles of Laser Plasmas ed G Bekefi (New York: Wily) ch.4
+#
+180013
+e(-)+Ar(+)->Ar(*4s) 
+ 0.0
+3
+181   1   185  
+-1  -1  +1   
+10
+ 1
+ 0.0 0.0
+ 1
+4.0E-13  -0.5   0.0

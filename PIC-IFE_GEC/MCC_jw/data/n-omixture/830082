@@ -1,0 +1,21 @@
+#  Reaction : e(-)+O_2+N_2->O_2(-)+N_2
+#  Type : Electron attachment
+#  Ref : Kossyi et al
+#       <Kinetic scheme of the non-equilibrium discharge in
+#        nitrogen-oxygen mixtures>
+#        Plasma Sources Sci. Technol. 1 (1992)
+#        equation (46)
+#  Date : 2012/90/14
+#
+830082
+e(-)+O_2+N_2->O_2(-)+N_2
+0.0
+4
+  3083     1  3073  3815
+  -1  -1   0   1
+3
+1
+0.0  0.0
+1
+  8.4106E-33 -2.0000E+00  1.2931E-01
+3

@@ -1,0 +1,26 @@
+##eqation:     F_2(+)+CF_3->CF_3(+)+F+F
+##type:        ion-ion neutralization
+##unit:        eV, cm2
+##date:        2008/01/16
+##method:      numerial table
+##
+##ref.auth:    Vasenkov et al.
+#
+##ref.title: 
+##ref.journal: J. Vac. Sci. Technol.A 22(3),May/Jun 2004
+##ref.table: TABLE IV
+##ref.range: 
+##
+#   Estimated
+#
+613031
+F_2(+)+CF_3->CF_3(+)+F+F
+0.0
+4
+613 97 615 90
+ -1  -1  +1 +2
+255
+ 1
+ 0.00E-02 0.00E-16
+ 1
+1.60E-09  0.00E+00  0.00E+00

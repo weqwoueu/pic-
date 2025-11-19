@@ -1,0 +1,24 @@
+##equation:     F(-)+F->2F+e
+##type:        
+##unit:        eV, cm2
+##date:        2003/3/5
+##method:      numerical table
+##
+##ref.auth:    Paulin Ho,J.E. Johannes,R.J.Buss,and E.Meeks
+##ref.title:   Modeling the plasma chemistry of C2F6 and CHF3 etching of silicon
+##             dioxide, with comparisons to etch rate and diagnostic data
+##ref.journal: J. Vac. Sci. Technol. A 19(5), 2344 (2001)
+##ref.table:   Table I
+##ref.range:
+#
+90010
+F(-)+F->2F+e(-)
+0.0
+3
+90  91    1
+ +1  -1   +1 
+255
+ 1
+ 0.00E-02 0.00E-16
+1
+5.27E-14  0.00E+00  0.00E+00

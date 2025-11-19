@@ -1,0 +1,48 @@
+##eqation:     O(-)+O_2(+)->O+O_2
+##type:        Mutual Neutralization
+##unit:        eV, cm2
+##date:        2001/1/12
+##method:      digitalize from scanned figure
+##
+##
+##ref.auth:    V. Vahedi and M. Surendra
+##ref.title:   A Monte Carlo collision model for the particle-in-cell
+##             method:  applications to argon and oxgen discharges 
+##ref.journal: Computer Physics Communications 87, 179 (1995)
+##
+85000
+O(-)+O_2(+)->O+O_2
+0.0
+4
+ 85  82  80  83
+ -1  -1   1   1
+255
+     26
+0.0       1.9255e-12 
+0.010214  1.9255e-12
+0.037309  1.9638e-12
+0.11826  1.9229e-12
+0.57369  1.9267e-12
+1.1883  1.8805e-12
+1.8533  1.8497e-12
+3.2999  1.716e-12
+5.196  1.5904e-12
+8.1052  1.4026e-12
+12.407  1.1887e-12
+15.868  1.0364e-12
+21.28  8.2669e-13
+25.961  6.8565e-13
+31.376  5.4109e-13
+35.49  4.4852e-13
+39.763  3.8299e-13
+45.838  2.962e-13
+49.923  2.4545e-13
+57.554  1.8426e-13
+62.685  1.4821e-13
+71.592  1.0482e-13
+78.729  7.4854e-14
+84.943  5.9022e-14
+92.527  4.3852e-14
+100.79  3.2259e-14
+1
+1.00E-07  0.00E+00  0.00E+00

@@ -1,0 +1,53 @@
+##equation:     e(-)+CF_2->2e(-)+CF(+)+F
+##type:        ionization
+##unit:        eV, cm2
+##date:        2003/3/4
+##method:      numerical table
+##
+##ref.auth:    V. Tarnovsky,P.Kurunczi,D.Rogozhnikov,K.Becker
+##ref.title:   Absolute cross sections for the dissociative electron impact
+##             ionization of the CFx(x=1-3) free radicals
+##ref.journal: Int. J. Mass. Spectrom. Ion processes 128(1993)pp. 181--194
+##ref.table:   Table 3
+##ref.range:   15V - 200.0 eV
+#
+616003
+e(-)+CF_2->CF(+)+F+e(-)+e(-)
+15
+4
+616   1   621  90
+ -1  +1   +1   +1
+2
+     30
+15.0    0.04e-16
+16.0    0.09e-16
+17.0    0.13e-16
+18.0    0.18e-16
+19.0    0.20e-16
+20.0    0.23e-16
+22.0    0.31e-16
+24.0    0.36e-16
+26.0    0.40e-16
+28.0    0.43e-16
+30.0    0.48e-16
+32.0    0.62e-16
+34.0    0.74e-16
+36.0    0.80e-16
+38.0    0.84e-16
+40.0    0.88e-16
+45.0    0.97e-16
+50.0    1.02e-16
+55.0    1.08e-16
+60.0    1.11e-16
+65.0    1.16e-16
+70.0    1.19e-16
+80.0    1.22e-16
+90.0    1.25e-16
+100.0   1.28e-16
+120.0   1.24e-16
+140.0   1.18e-16
+160.0   1.12e-16
+180.0   1.05e-16
+200.0   0.93e-16
+-1
+0.00E+00  0.00E+00  0.00E+00

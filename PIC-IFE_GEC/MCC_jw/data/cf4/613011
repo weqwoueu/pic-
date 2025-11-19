@@ -1,0 +1,22 @@
+##eqation:     F_2+CF_3->CF_4+F
+##type:        
+##unit:        eV, cm2
+##date:        2001/04/27
+##method:      numerical table
+##
+##             E.L. Keating and R.A. Matula
+#              J. Chem. Phys. 66, 1237 (1977)
+##ref.table:
+##ref.range:
+#
+613011
+F_2+CF_3->CF_4+F
+0.0
+4
+613  94  610    90
+ -1  -1   +1    +1
+255
+ 1
+ 0.00E-02 0.00E-16
+1
+1.88E-14  0.00E+00  0.00E+00

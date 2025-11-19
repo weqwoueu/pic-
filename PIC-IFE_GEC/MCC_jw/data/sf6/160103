@@ -1,0 +1,22 @@
+##eqation:     F(-)+SF_4->F+SF_4+e(-)
+##type:        detachment
+##unit:        eV, cm2
+##date:        2014/11/28
+##
+##ref.auth:    M Mao, YN Wang and A Bogaerds
+##ref.title:   Numerical study of the plasma chemistry in inductively coupled
+##             SF6/Ar plasmas used for deep silicon etching applications
+##ref.journal: J. Phys. D: Appl. Phys. 44 (2011) 435202
+##             Table 3.
+#
+160103
+F(-)+SF_4->F+SF_4+e(-)
+0.0
+4
+ 1605  91  90  1
+ 0   -1   +1  +1
+255
+ 1
+ 0.00E-02 0.00E-16
+1
+5.27E-14  0.00E+00  0.00E+00

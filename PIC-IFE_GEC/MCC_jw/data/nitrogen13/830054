@@ -1,0 +1,20 @@
+#  Reaction : N_2(+)+e(-)->N+N
+#  Type : Recombination of electron and positive ion
+#  Ref : Kossyi et al
+#       <Kinetic scheme of the non-equilibrium discharge in
+#        nitrogen-oxygen mixtures>
+#        Plasma Sources Sci. Technol. 1 (1992)
+#        equation (38)
+#  Date : 2012/90/14
+#
+830054
+N_2(+)+e(-)->N+N
+0.0
+3
+  3801     1  3070
+  -1  -1   2
+10
+1
+0.0  0.0
+1
+  4.5028E-08 -5.0000E-01  0.0000E+00

@@ -1,0 +1,23 @@
+##eqation:     Ar(+)+CF_4->CF_3(+)+F+Ar
+##type:        
+##unit:        eV, cm2
+##date:        2001/04/27
+##method:      numerial table
+##
+##ref.auth:    E. Fisher, M.E. Weber, and P.B. Armentrout
+##ref.title:
+##ref.journal: J. Chem. Phys. 76, 4932 (1982)
+##ref.table:
+##ref.range:
+#
+614018
+Ar(+)+CF_4->CF_3(+)+F+Ar
+0.0
+5
+610 181  615    90  180
+ -1  -1   +1    +1   +1
+255
+ 1
+ 0.00E-02 0.00E-16
+1
+9.58E-10  0.00E+00  0.00E+00

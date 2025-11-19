@@ -1,0 +1,22 @@
+##equation:    F_2+SF_3->SF_4+F
+##type:        Neutral-neutral reaction
+##unit:        eV, cm2
+##date:        2014/11/28
+##
+##ref.auth:    M Mao, YN Wang and A Bogaerds
+##ref.title:   Numerical study of the plasma chemistry in inductively coupled
+##             SF6/Ar plasmas used for deep silicon etching applications
+##ref.journal: J. Phys. D: Appl. Phys. 44 (2011) 435202
+##             Table 4.
+#
+160093
+F_2+SF_3->SF_4+F
+0.0
+4
+94  1609  1605  90
+ -1  -1  +1  +1
+255
+ 1
+ 0.00E-02 0.00E-16
+1
+2.62E-11  0.00E+00  0.6336

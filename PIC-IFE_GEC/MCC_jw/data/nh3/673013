@@ -1,0 +1,21 @@
+##equation:   NH_2+SiH_4->NH_3+SiH_3
+##type:       neutral-neutral collision
+##unit:       cm^3/s
+##date:        2017/Apr/8
+##method:      numerical table
+##
+##      M. J. Kushner, "Simulation of the Gas Phase Processes in Remote Plasma Activated Chemical Vapor Deposition
+##                 of Silicon Dielectrics Using Rare Gas-Silane-Ammonia Mixtures", J. Appl. Phys. 71, 4173 (1992).
+#
+ 673013
+NH_2+SiH_4->NH_3+SiH_3
+ 0.0
+ 4
+   673  510  670  514
+   -1  -1   1   1
+ 255
+  1
+  0.00E-02 0.00E-16
+ 1
+ 8.00E-14  0.00E+00  0.00E+00
+

@@ -1,0 +1,24 @@
+20		! IDG_con_penalty
+0			! repeat time
+0           ! number of designated area
+2			! area_flag : 1-interface element; 2-designated area; 3-interface element and neighbor element
+0.0, 0.0					! left_flag for area_flag==2
+64.0, 0.0						! right_flag for area_flag==2
+0.0, 0.0					! bottom_flag for area_flag==2
+2, 0.0						! top_flag for area_flag==
+2			! area_flag : 1-interface element; 2-designated area; 3-interface element and neighbor element
+0.0, 0.0					! left_flag for area_flag==2
+64.0, 0.0						! right_flag for area_flag==2
+0.0, 0.0					! bottom_flag for area_flag==2
+64, 0.0		
+
+2			! area_flag : 1-interface element; 2-designated area; 3-interface element and neighbor element
+110.0, 0.0					! left_flag for area_flag==2
+220, 0.0						! right_flag for area_flag==2
+0.0, 0.0					! bottom_flag for area_flag==2
+15.0, 0.0						! top_flag for area_flag==
+
+1			! area_flag : 1-interface element; 2-designated area; 3-interface element and neighbor element
+
+1.25					! h_partition for area_flag==3
+0.0, 0.0, 1.2, 1.4		!xc, yc, r1 and r2 for area_flag==4

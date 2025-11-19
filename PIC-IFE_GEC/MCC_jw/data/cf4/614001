@@ -1,0 +1,24 @@
+##equation:     F+CF_3(-)->CF_3+F(-)
+##type:        charge exchange        
+##unit:        eV, cm2
+##date:        2003/3/5
+##method:      numerical table
+##
+##ref.auth:    G.K. Vinogradov, P.I. Verzorov, L.S. Polak, 
+##             and K.I. Slovetsky
+##ref.title:
+##ref.journal: Vacuum 32, 592 (1982)
+##ref.table:
+##ref.range:
+#
+614001
+F+CF_3(-)->CF_3+F(-)
+0.0
+4
+614  90   613  91
+ -1  -1   +1   +1
+255
+ 1
+ 0.00E-02 0.00E-16
+1
+5.00E-08  0.00E+00  0.00E+00

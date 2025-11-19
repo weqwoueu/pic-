@@ -1,0 +1,22 @@
+##eqation:     CF_2+CF_2->C_2F_4
+##type:        
+##unit:        eV, cm2
+##date:        2001/04/27
+##method:      numerical table
+##
+##             K.R. Ryan and J.C. Plumb
+#              Plasma Chem. Plasma Process. 6, 231 (1986)
+##ref.table:
+##ref.range:
+#
+612006
+CF_2+CF_2->C_2F_4
+0.0
+2
+616   625
+ -2    +1
+255
+ 1
+ 0.00E-02 0.00E-16
+1
+5.00E-14  0.00E+00  0.00E+00

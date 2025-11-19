@@ -1,0 +1,16 @@
+#Ar(+)+Cl_2->Ar+Cl(+)+Cl
+#Other cross section
+#P.L.G. Ventzek, M. Grapperhaus, and M.J. Kushner, 
+#J. Vac. Sci. Technol. B 12, 3118 (1994)
+#
+174013
+Ar(+)+Cl_2->Ar+Cl(+)+Cl
+0.0
+5
+174   181   180   172   170
+ -1    -1    +1    +1    +1
+255
+ 1
+ 0.00E-02 0.00E-16
+1
+6.40E-11  0.00E+00  0.00E+00

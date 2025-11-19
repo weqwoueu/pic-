@@ -1,0 +1,22 @@
+##equation:    Ar(*4s)+C_2F_4->CF_2+CF_2+Ar 
+##type:        other reaction
+##date:        2008/09/05
+#
+##ref.auth:    Vasenkov et al.
+#
+##ref.title: 
+##ref.journal: J. Vac. Sci. Technol.A 22(3),May/Jun 2004
+##ref.table: TABLE V
+##ref.range: 
+#
+185006
+Ar(*4s)+C_2F_4->CF_2+CF_2+Ar 
+ 0.0
+4
+185 625 616 180  
+-1  -1  +2  +1   
+255
+ 1
+ 0.0 0.0
+ 1
+4.00E-11  0.00E+00  0.00E+00

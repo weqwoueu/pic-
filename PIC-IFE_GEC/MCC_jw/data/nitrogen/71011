@@ -1,0 +1,19 @@
+##equation:    e(-)+NF->NF(+)+2e(-) 
+##type:        ionization
+##date:        2008/07/24
+#
+# Modeling chemical downstream etch systems for NF3/O2 Mixtures,
+# E.Meeks, R.S.Larson,S.R.Vosen,and J.W.Shon,
+# J.Electrochem.Soc., Vol.144, No.1357-366(1997)
+#
+71011
+e(-)+NF->NF(+)+2e(-) 
+13.00
+3
+1108  1 1109  
+-1   +1 +1    
+2
+ 1
+ 0.0 0.0
+ 1
+8.44E-15   6.80   2.895

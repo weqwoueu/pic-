@@ -1,0 +1,22 @@
+##equation:    e(-)+CHF_2->CF_2+H+e(-)
+##type:        dissociation
+##unit:        eV, cm2
+##input date:  2008/01/17
+##method:      numerical table
+##
+##ref.auth:    M. J. Kushner and D. Zhang
+##ref.title:   An electron impact cross section set for CHF3 
+##ref.journal: Journal of Applied Physics, Vol.88, No.6 pp.3231-3234(2000)
+##ref.range:   0.0eV - 200 eV
+#
+170604
+e(-)+CHF_2->CF_2+H+e(-)
+2.71
+4
+1706  1  616 10
+  -1  0  +1 +1
+4
+ 1
+ 0.00E-02 0.00E-16
+ 1
+1.86E-10  1.64E+00  9.0

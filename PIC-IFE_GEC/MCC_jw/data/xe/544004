@@ -1,0 +1,21 @@
+#
+# Xe(*res)+Xe(*met)->Xe(+)+Xe+e(-)
+#
+# Sakai Y, Sawada S and Tagashira H 1991 J.Phys.D:Appl.Phys. 27 2107-10
+#   refered by Akinori Oda et al J.Phys.D:32(1999) 2726-2736
+#
+544004
+Xe(*res)+Xe(*met)->Xe(+)+Xe+e(-)
+0.0
+5
+ 544  545 541 540 1
+  -1  -1  +1   +1 +1
+255
+ 1
+    0.0e-01 0.0e-16
+ 1
+5.0e-10 0.0 0.0
+
+
+
+

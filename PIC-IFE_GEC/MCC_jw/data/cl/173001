@@ -1,0 +1,23 @@
+##equation: Cl+Cl+Cl->Cl_2+Cl
+##type:        
+##unit:        eV, cm2
+##date:        2014/06/17
+##method:
+#
+##ref.auth:    S Tinck, W Boullart and A Bogaerts
+##Ref. title : Simulation of Ar/Cl2 inductively coupled plasma: study of the effect of
+##             bias, power and pressure and comparison with experiments
+##ref.journal: J.Phys. D: Appl. Phys. 41 (2008) 065207
+#
+173001
+Cl+Cl+Cl->Cl_2+Cl
+0.0
+4
+170  170  170  174
+ -1 -1  0  +1 
+255
+ 1
+ 0.00E-02 0.00E-16
+ 1
+1.28E-32  0.0  0.0
+ 3

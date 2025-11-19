@@ -1,0 +1,18 @@
+##equation:    e(-)+Ar_2->Ar+Ar+e(-) 
+##type:        dissociation of eximer 
+##date:        2013/09/10
+#
+## Kannari F, Obara M and Fujioka T 1985
+## J. Appl. Phys. 57 4309
+#
+180016
+e(-)+Ar_2->Ar+Ar+e(-) 
+ 0.0
+3
+187  1  180
+-1  0  +2   
+4
+ 1
+ 0.0 0.0
+ 1
+1.0E-7   0.0  0.0

@@ -1,0 +1,51 @@
+SUBROUTINE MY_JPCG_Solver(matrix, R, X, M, NZ, N, ITER)
+
+USE IFE_MAIN_PARAM
+USE IFE_INTERFACE, ONLY: MY_PCG
+
+IMPLICIT NONE
+
+INTEGER										NZ, N
+TYPE(SPARSE), DIMENSION(NZ), TARGET		::	matrix
+REAL(8), DIMENSION(N)					::	X
+REAL(8), DIMENSION(N)					::	R
+REAL(8), DIMENSION(N), TARGET			::	M
+INTEGER, INTENT(OUT)					::	ITER
+
+INTEGER	i, IERR
+EXTERNAL MATVEC_1, MSOLVE_1
+REAL(8), DIMENSION(:), ALLOCATABLE	::	X_IO, R_IO
+INTEGER, DIMENSION(:), ALLOCATABLE	::	KI
+
+PRINT*, "Conjugate Gradient Solver: MY_PCG"
+
+ALLOCATE(X_IO(N), R_IO(N), KI(N), STAT=IERR)
+IF (IERR.NE.0) THEN
+	WRITE(*,*) "ERROR!: MEMORY ALLOCATION"
+	STOP
+END IF
+
+
+DO i=1,N
+	X_IO(i) = X(i)
+	R_IO(i) = R(i)
+	KI(i) = i
+END DO
+
+! X_IO : Initial guess
+! R_IO : RHS vector
+  
+CALL MY_PCG(NZ, matrix%K, matrix%SROW, matrix%JCOL, N, M, KI, KI, N, R_IO, X_IO, PCG_Tol, PCG_MaxIT, ITER, IERR, MATVEC_1, MSOLVE_1)
+
+! X_IO : Solution
+! R_IO : Residual
+
+DO i=1,N
+	X(i) = X_IO(i)
+	R(i) = R_IO(i)
+END DO
+
+DEALLOCATE(X_IO,R_IO, KI)
+
+END
+

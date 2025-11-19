@@ -1,0 +1,25 @@
+##eqation:     Ar(*4s)+Ar(*4s)->Ar(+)+Ar+e
+##type:        
+##unit:        eV, cm2
+##date:        2008/09/05
+##method:      numerical table
+##
+##ref.auth:    Vasenkov et al.
+##ref.title: 
+##ref.journal: J. Vac. Sci. Technol.A 22(3),May/Jun 2004
+##ref.table: TABLE IV
+##ref.range: 
+##
+#   Estimated
+#
+180010
+Ar(*4s)+Ar(*4s)->Ar(+)+Ar+e(-)
+0.00
+5
+185 185 181   180   1
+ -1  -1  +1    +1  +1
+255
+ 1
+ 0.00E-02 0.00E-16
+ 1
+1.200E-9  0.00E+00  0.00E+00

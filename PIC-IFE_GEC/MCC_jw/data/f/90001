@@ -1,0 +1,43 @@
+##eqation:     e(-)+F->e(-)+e(-)+F(+)
+##type:        ionization
+##unit:        eV, cm2
+##date:        2000/7/18
+##method:      numerial table
+##
+##ref.auth:    Russell A.Bonham
+##ref.title:   Electron Impact Cross Section Data for Carbon Tetrafluoride
+##ref.journal: Jpn. J. Appl. Phys. Vol. 33(1994)pp. 4157--4164
+##             Part I, No. 7B, July 1994
+##ref.table:   Table VIII
+##ref.range:   12V - 200.0 eV
+#
+90001
+e(-)+F->e(-)+e(-)+F(+)
+16.0
+3
+ 90   1    92
+ -1  +1    +1
+2
+     20
+16.0    0.04e-16
+18.0    0.03e-16
+20.0    0.07e-16
+25.0    0.19e-16
+30.0    0.34e-16
+35.0    0.43e-16
+40.0    0.48e-16
+45.0    0.61e-16
+50.0    0.68e-16
+55.0    0.72e-16
+60.0    0.78e-16
+65.0    0.83e-16
+70.0    0.87e-16
+80.0    0.90e-16
+90.0    0.95e-16
+100.0   0.98e-16
+120.0   0.98e-16
+140.0   0.96e-16
+160.0   0.96e-16
+180.0   0.92e-16
+-1
+0.00E+00  0.00E+00  0.00E+00

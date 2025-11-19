@@ -1,0 +1,25 @@
+#
+# Xe_2(*O)->Xe+Xe+h*nyu(152nm)
+#
+# Sakai Y, Sawada S and Tagashira H 1991 J.Phys.D:Appl.Phys. 27 2107-10
+#   refered by Akinori Oda et al J.Phys.D:32(1999) 2726-2736
+#
+550003
+Xe_2(*O)->Xe+Xe
+0.0
+2
+ 546  540
+  -1  +2 
+255
+ 1
+    0.0e-01 0.0e-16
+ 1
+9.0e6 0.0 0.0
+ 1
+
+
+
+
+
+
+

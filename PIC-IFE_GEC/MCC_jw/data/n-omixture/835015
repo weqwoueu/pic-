@@ -1,0 +1,51 @@
+#  Reaction : e(-)+NO->N+O(+)+e(-)+e(-)
+#  Type : Electron impact ionization with N2O 
+#  Ref : Absolute Electron Impact Ionization Cross Section for N20
+#        and NO from Threshold up to 1000 eV.,
+#        I. Iga, M. V. V. S. Rae and S. K. Srivastava,
+#        Jet Propulsion Laboratory
+#        California Institute of Technology
+#       
+#  Date : 2013/08/23
+#
+835015
+e(-)+NO->N+O(+)+e(-)+e(-)
+23.5
+4
+  3701  1  3070  3812
+  -1     1  1     1
+2
+31
+23.5    1.0E-30
+30	2.74E-18 
+40	7.67E-18
+50	11.00E-18
+60	13.70E-18 
+70	16.40E-18 
+80	17.50E-18 
+90	18.40E-18 
+100	18.90E-18 
+110	18.90E-18 
+120	19.50E-18 
+130	19.80E-18 
+140	19.70E-18 
+150	19.70E-18 
+160	19.20E-18 
+170	19.20E-18 
+180	18.60E-18 
+190	18.50E-18 
+200	18.30E-18 
+225	17.70E-18 
+250	17.00E-18 
+275	16.40E-18 
+300	15.70E-18 
+350	13.40E-18 
+400	10.50E-18 
+500	12.20E-18 
+600	10.50E-18 
+700	9.42E-18 
+800	8.37E-18 
+900	7.67E-18 
+1000	7.67E-18 
+-1
+0.0  0.0  0.0

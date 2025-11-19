@@ -1,0 +1,23 @@
+##eqation:     F(-)+H_3(+)->F+H_2+H
+##type:        ion-ion neutralization
+##unit:        eV, cm2
+##date:        2013/03/20
+##method:      numerial table
+##
+#
+##ref.range: 
+##
+#   Estimated
+#
+91019
+F(-)+H_3(+)->F+H_2+H
+0.0
+5
+ 91 19 90 14 10
+ -1  -1  +1 +1 +1 
+255
+ 1
+ 0.00E-02 0.00E-16
+ 1
+1.0E-06  0.00E+00  0.00E+00
+

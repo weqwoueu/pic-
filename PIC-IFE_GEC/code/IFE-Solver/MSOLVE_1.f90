@@ -1,0 +1,18 @@
+SUBROUTINE MSOLVE_1(NEL, A, AI, AJ, N, Y, X)
+
+! PURPOSE:	Linear Solver: A * X = Y -> X
+
+IMPLICIT NONE
+
+INTEGER						NEL, N
+REAL(8), DIMENSION(:)	::	A
+INTEGER, DIMENSION(:)	::	AI, AJ
+REAL(8), DIMENSION(:)	::	X, Y
+
+INTEGER	i, j
+
+DO i = 1, N
+	X(i) = Y(i)/A(i)
+END DO
+
+END SUBROUTINE

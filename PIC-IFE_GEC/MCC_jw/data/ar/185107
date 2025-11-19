@@ -1,0 +1,22 @@
+##equation:    H+H+Ar->H2+Ar
+##type:        
+##date:        2016/04/18
+#
+##ref.auth:    R. A. Arakoni, A. N. Bhoj and M. J. Kushner
+#
+##ref.title:  H2 generation in Ar/NH3 microdischarges
+##ref.journal: J. Phys. D: Appl. Phys. 40 (2007) 2476-2490
+##ref.table: TABLE I
+#
+185107
+H+H+Ar->H_2+Ar
+ 0.0
+4
+10  10  180  14
+-1  -1   0  +1  
+255
+ 1
+ 0.0 0.0
+ 1
+1.655E-34  -1.0  0.0
+3

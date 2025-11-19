@@ -1,0 +1,19 @@
+##equation:    Ar(*4s)+Ar+Ar->Ar_2+Ar
+##type:        formation of eximer
+##date:        2013/09/10
+#
+## Kannari F, Obara M and Fujioka T 1985
+## J. Appl. Phys. 57 4309
+#
+180019
+Ar(*4s)+Ar+Ar->Ar_2+Ar
+ 0.0
+4
+185  180  180  187  
+-1  -1  0   +1    
+255
+ 1
+ 0.0 0.0
+ 1
+1.14E-32   0.0   0.0
+3

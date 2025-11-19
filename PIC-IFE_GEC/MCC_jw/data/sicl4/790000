@@ -1,0 +1,41 @@
+#
+#  CCl4     M. Hayashi, "Electron collision cross sections for molecules
+#           determined from beam and swarm data," in "Swarm Studies and
+#           Inelastic Electron-Molecule Collisions," eds. L.C. Pitchford,
+#           B.V. McKoy, A. Chutjian, and S. Trajmar, (Springer-Verlag,
+#           New York, 1987)
+#  
+#  電子とSiCl4 の運動量移行衝突断面積のデータが無いので、 CCl4 
+#  で代用する。（2011.1.19)
+#
+790000
+e(-)+SiCl_4->e(-)+SiCl_4
+0.0
+2
+1201  1  
+ 0  0
+1
+    21
+2.80E-2        975.56E-16
+8.98E-2        268.48E-16
+19.75E-2       120.29E-16
+37.55E-2       63.53E-16
+48.62E-2       48.70E-16
+62.69E-2       39.65E-16
+77.80E-2       35.12E-16
+109.50E-2      32.96E-16
+193.25E-2      31.30E-16
+300.43E-2      31.06E-16
+412.66E-2      32.80E-16
+579.69E-2      37.06E-16
+710.71E-2      40.68E-16
+849.53E-2      41.30E-16
+1039.26E-2     40.20E-16
+1456.92E-2     34.97E-16
+2318.10E-2     24.83E-16
+7048.20E-2     10.64E-16
+19279.46E-2    4.71E-16
+53195.10E-2    1.61E-16
+99040.50E-2    0.75E-16
+-1
+0.00E+00  0.00E+00  0.00E+00

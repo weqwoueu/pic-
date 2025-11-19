@@ -1,0 +1,23 @@
+##eqation:     He(+)+N_2->He 
+##type:        ionization
+##unit:        eV, cm2
+##date:        2006/1/31
+##method:      from NIFS database
+##
+##ref.auth:     Itoh,A. Asari,M. Fukuzawa,F.
+##ref.title:    Charge-changing collisions of 0.7-2.0 MeV helium beams invarious gases. I. electron capture 
+##ref.journal:  J.Phys.Soc.Japan 48 (1980) 943 (E) 
+75011
+He(+)+N_2->He+others
+7.0e+5
+3
+75  21  20
+-1  -1  +1
+255
+4 
+  7.440000e+05  1.770000e-17
+  1.020000e+06  3.970000e-18
+  1.556000e+06  1.000000e-18
+  2.032000e+06  2.630000e-19
+-1
+

@@ -1,0 +1,19 @@
+##equation:    NF_3(+)+F(-)->NF_2+F_2 
+##type:        other reaction
+##date:        2008/07/24
+#
+# Modeling chemical downstream etch systems for NF3/O2 Mixtures,
+# E.Meeks, R.S.Larson,S.R.Vosen,and J.W.Shon,
+# J.Electrochem.Soc., Vol.144, No.1357-366(1997)
+#
+71046
+NF_3(+)+F(-)->NF_2+F_2 
+ 0.0
+4
+1113 91 1110 94  
+-1   -1 +1   +1  
+255
+ 1
+ 0.0 0.0
+ 1
+1.00E-17  0.00E+00  0.00E+00

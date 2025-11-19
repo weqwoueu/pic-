@@ -1,0 +1,15 @@
+# equation:   C_3H_5+C_3H_8->C_3H_6+C_3H_7
+# type:       neutral-neutral reaction
+# Ref:        Wing Tsang
+#             J. Phys. Chem. Ref. Data, Vol.20, No.2, 1991
+710649
+C_3H_5+C_3H_8->C_3H_6+C_3H_7
+0.0
+4
+ 2107  7101  2105  2103
+   -1  -1    +1   +1
+255
+1
+  0.0      0.0
+1
+  1.33E-27   0.0   0.0

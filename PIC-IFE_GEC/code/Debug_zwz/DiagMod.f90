@@ -1,0 +1,41 @@
+MODULE MDL_DIAG
+    IMPLICIT NONE
+    
+    INTEGER, PARAMETER :: DF_SIZE = 101
+    
+    
+END MODULE MDL_DIAG
+    
+MODULE MDL_DEBUG
+    USE MDL_DIAG
+    IMPLICIT NONE
+
+    INTEGER, PARAMETER :: DEBUG = 0
+    
+    !INTEGER, PARAMETER :: PART_STAT_NUM = 100000
+    INTEGER, PARAMETER :: PART_STAT_NUM = 2000*48
+    INTEGER :: PART_STAT_COUNT = 0
+    
+!$------------------ position ---------------------
+    REAL(4) :: PART_STAT_XP(PART_STAT_NUM) = 0
+    REAL(4) :: PART_STAT_YP(PART_STAT_NUM) = 0
+    REAL(4) :: PART_STAT_ZP(PART_STAT_NUM) = 0
+    
+    REAL(4) :: DIST_PAX(DF_SIZE) = 0.
+    REAL(4) :: DIST_PAY(DF_SIZE) = 0.
+    REAL(4) :: DIST_FPAX(DF_SIZE) = 0.
+    REAL(4) :: DIST_FPAY(DF_SIZE) = 0.
+    
+!$------------------- velocity --------------------   
+    REAL(4) :: PART_STAT_VX(PART_STAT_NUM) = 0.
+    REAL(4) :: PART_STAT_VY(PART_STAT_NUM) = 0.
+    REAL(4) :: PART_STAT_VZ(PART_STAT_NUM) = 0.
+    
+    REAL(4) :: DIST_VAX(DF_SIZE) = 0.
+    REAL(4) :: DIST_VAY(DF_SIZE) = 0.
+    REAL(4) :: DIST_VAZ(DF_SIZE) = 0.
+    REAL(4) :: DIST_FVAX(DF_SIZE) = 0.
+    REAL(4) :: DIST_FVAY(DF_SIZE) = 0.
+    REAL(4) :: DIST_FVAZ(DF_SIZE) = 0.
+    
+END MODULE MDL_DEBUG

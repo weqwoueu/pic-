@@ -1,0 +1,21 @@
+#  Reaction : NO(+)+O_2+N_2->NO(+).O_2+N_2
+#  Type : Ion conversion
+#  Ref : Kossyi et al
+#       <Kinetic scheme of the non-equilibrium discharge in
+#        nitrogen-oxygen mixtures>
+#        Plasma Sources Sci. Technol. 1 (1992)
+#        equation (170)
+#  Date : 2012/90/14
+#
+830266
+NO(+)+O_2+N_2->NO(+).O_2+N_2
+0.0
+4
+  3803  3083  3073  3822
+  -1  -1   0   1
+255
+1
+0.0  0.0
+1
+  3.0000E-31  0.0000E+00  0.0000E+00
+3

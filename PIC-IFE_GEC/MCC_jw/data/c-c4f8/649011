@@ -1,0 +1,26 @@
+##equation:    C_4F_8(-*)+C_3F_6(+)->C_4F_8+C_3F_6
+##type:        ion-ion neutralization
+##unit:        eV, cm2
+##date:        2008/01/16
+##method:      numerial table
+##
+##ref.auth:    Vasenkov et al.
+#
+##ref.title: 
+##ref.journal: J. Vac. Sci. Technol.A 22(3),May/Jun 2004
+##ref.table: TABLE V
+##ref.range: 
+##
+#   Estimated
+#
+649011
+C_4F_8(-*)+C_3F_6(+)->C_4F_8+C_3F_6
+0.
+4
+649 642 646 640
+ -1 -1  +1  +1
+255
+ 1
+ 0.00E-02 0.00E-16
+ 1
+9.0E-08  0.0E+00  0.0

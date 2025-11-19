@@ -1,0 +1,22 @@
+##equation:    e(-)+CHF_2->CHF(+)+F+2e(-)
+##type:        ionization
+##unit:        eV, cm2
+##input date:  2008/01/17
+##method:      numerical table
+##
+##ref.auth:    M. J. Kushner and D. Zhang
+##ref.title:   An electron impact cross section set for CHF3 
+##ref.journal: Journal of Applied Physics, Vol.88, No.6 pp.3231-3234(2000)
+##ref.range:   0.0eV - 200 eV
+#
+170602
+e(-)+CHF_2->CHF(+)+F+2e(-)
+14.3
+4
+1706  1 1709 90 
+  -1 +1  +1 +1 
+2
+ 1
+ 0.00E-02 0.00E-16
+ 1
+3.84E-10  1.29E+00  16.43

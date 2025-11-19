@@ -1,0 +1,20 @@
+#  Reaction : O(-)+O_2(b)->O+O_2+e(-)
+#  Type : Electron detachment
+#  Ref : Kossyi et al
+#       <Kinetic scheme of the non-equilibrium discharge in
+#        nitrogen-oxygen mixtures>
+#        Plasma Sources Sci. Technol. 1 (1992)
+#        equation (63)
+#  Date : 2012/90/14
+#
+830100
+O(-)+O_2(b)->O+O_2+e(-)
+0.0
+5
+  3085  3814  3080  3083     1
+  -1  -1   1   1   1
+255
+1
+0.0  0.0
+1
+  6.9000E-10  0.0000E+00  0.0000E+00

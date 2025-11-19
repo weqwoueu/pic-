@@ -1,0 +1,16 @@
+# Equation:    e(-)+C_3H_6(+)->C_3H_5+H
+# Type:         Recombination
+# Reference:    R. K. Janev and D. Reiter
+#               Phys. Plasmas, Vol.11, No.2, February 2004
+#
+710515
+e(-)+C_3H_6(+)->C_3H_5+H
+0.0
+ 4
+  2106     1  2107    10
+    -1    -1     1     1
+10
+1
+0.0  0.0
+2
+3.379E-08    0.27    0.55

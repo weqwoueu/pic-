@@ -1,0 +1,41 @@
+##eqation:     e+O(-)->O+e+e
+##type:        electron inpact detachment
+##unit:        eV, cm2
+##date:        2001/1/12
+##method:      digitalize from scanned figure
+##
+##ref.auth:    V. Vahedi and M. Surendra
+##ref.title:   A Monte Carlo collision model for the particle-in-cell
+##             method:  applications to argon and oxgen discharges 
+##ref.journal: Computer Physics Communications 87, 179 (1995)
+##
+82001
+e(-)+O(-)->O+e(-)+e(-)
+1.4653
+3
+ 3814    1  3080
+ -1  +1  +1
+255
+     20
+1.4652  1.0000e-30
+1.4663  1.0446e-19
+1.4705  4.3478e-16
+2.0187  4.4209e-16
+2.4781  4.4896e-16
+3.1579  4.4435e-16
+4.7582  4.704e-16
+6.9069  4.9778e-16
+9.1351  5.0594e-16
+12.193  5.3487e-16
+15.972  5.8797e-16
+20.925  6.2147e-16
+27.67   6.6559e-16
+36.253  6.9436e-16
+50.234  7.1541e-16
+59.964  7.2629e-16
+70.276  6.9051e-16
+80.839  6.5634e-16
+90.436  6.0757e-16
+97.474  5.5487e-16
+-1
+0.00E+00  0.00E+00  0.00E+00

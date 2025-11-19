@@ -1,0 +1,24 @@
+#equation: e+HBr->Br+H+e 
+#type: dissociation cross section 
+#Ref. Auth: T. Rescigno
+#Ref. Journal:  May 1995 
+#input date: 2007/11/20
+#
+180057
+e(-)+HBr->Br+H+e(-)
+9.3
+4
+1800 1 1804 10  
+ -1  0  +1  +1
+4
+8
+9.3         0.
+13.5        0.0850e-16
+14.         0.0823e-16
+15.         0.0989e-16
+17.5        0.345e-16
+20.         0.261e-16
+25.         0.218e-16
+1000.0      1.0e-21
+-1
+0.00E+00  0.00E+00  0.00E+00

@@ -1,0 +1,40 @@
+1.cmake-3.24
+  source /opt/software/cmake-3.24/env.sh 
+
+  [customer@node01 soft-test]$ cmake --version
+  cmake version 3.24.0-rc4
+
+  CMake suite maintained and supported by Kitware (kitware.com/cmake)
+
+2.oneapi
+  source /opt/oneapi/setvars.sh 
+
+eg:[customer@node01 soft-test]$ source /opt/oneapi/setvars.sh
+
+ 
+:: initializing oneAPI environment ...
+   -bash: BASH_VERSION = 4.2.46(2)-release
+   args: Using "$@" for setvars.sh arguments: 
+:: clck -- latest
+:: compiler -- latest
+:: debugger -- latest
+:: dev-utilities -- latest
+:: inspector -- latest
+:: itac -- latest
+:: mpi -- latest
+:: tbb -- latest
+:: oneAPI environment initialized ::
+ 
+[customer@node01 soft-test]$ icc -v
+icc version 2021.6.0 (gcc version 4.8.5 compatibility)
+[customer@node01 soft-test]$ ifort -v
+ifort version 2021.6.0
+[customer@node01 soft-test]$ which mpirun 
+/opt/oneapi/mpi/2021.6.0/bin/mpirun
+[customer@node01 soft-test]$ which mpiifort
+/opt/oneapi/mpi/2021.6.0/bin/mpiifort
+[customer@node01 soft-test]$ which mpiicc
+/opt/oneapi/mpi/2021.6.0/bin/mpiicc
+[customer@node01 soft-test]$ which mpiicpc
+/opt/oneapi/mpi/2021.6.0/bin/mpiicpc
+

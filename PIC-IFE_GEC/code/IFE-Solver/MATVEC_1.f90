@@ -1,0 +1,25 @@
+SUBROUTINE MATVEC_1(NEL, A, AI, AJ, N, X, Y)
+
+! PURPOSE:	Matrix-Vector Multiplication: Y = A * X -> Y
+
+IMPLICIT NONE
+
+INTEGER		NEL, N
+REAL(8), DIMENSION(:)	::	A
+INTEGER, DIMENSION(:)	::	AI, AJ
+REAL(8), DIMENSION(:)	::	X, Y
+
+
+INTEGER	i, j
+REAL(8)	ROW_SUM
+
+DO i = 1, N
+	ROW_SUM = 0
+	DO j = AI(i), AI(i+1)-1
+		ROW_SUM = ROW_SUM + A(j)*X(AJ(j))
+	END DO
+	Y(i) = ROW_SUM
+END DO
+
+
+END SUBROUTINE

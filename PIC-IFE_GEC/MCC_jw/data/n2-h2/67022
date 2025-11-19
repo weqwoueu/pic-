@@ -1,0 +1,52 @@
+##equation:   e+NH->e+e+NH(+)
+##type:       dissociation,ionization,recombination
+##unit:       cm^2
+##date:        2016/Feb/2
+##method:      numerical table
+##
+##            K Van Laer, S Tinck, V Samara, J F de Marneffe, and A Bogaerts
+##            "Etching of low-k materials for microelectronics applications by
+##            means of a N2/H2 plasma: modeling and experimental investigation",
+##            Plasma Sources Sci. Tecjnol. 22 (2013) 025011(19pp)
+#
+ 67022
+e+NH->e+e+NH(+)
+14.18
+ 3
+     1 675 676
+     1 -1   1 
+ 2
+  31
+14.18	2.154E-18
+15.5	1.396E-17
+17.7	3.131E-17
+19.9	4.932E-17
+22.1	6.677E-17
+24.31	7.022E-17
+26.51	9.508E-17
+30.91	1.224E-16
+33.11	1.287E-16
+41.92	1.287E-16
+46.32	1.424E-16
+81.55	1.424E-16
+83.75	1.424E-16
+85.95	1.424E-16
+88.15	1.424E-16
+90.35	1.424E-16
+92.55	1.424E-16
+94.76	1.424E-16
+96.96	1.424E-16
+99.16	1.424E-16
+103.6	1.424E-16
+105.8	1.424E-16
+112.4	1.424E-16
+114.6	1.424E-16
+116.8	1.424E-16
+119	1.424E-16
+127.8	1.424E-16
+130	1.424E-16
+132.2	1.424E-16
+134.4	1.424E-16
+136.6	1.424E-16
+ 0
+ 0.000E-08  0.00E+00  0.00E+00

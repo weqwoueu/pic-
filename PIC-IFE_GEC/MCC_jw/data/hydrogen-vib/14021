@@ -1,0 +1,29 @@
+#
+# e + H_2 -> e + H_2(v=3 vibration)
+#
+# TAWARA et al. 
+# Cross Sections and Related Data for Electron Collisions with
+# Hydrogen Molecules and Molecular Ions
+# J. Phys. Chem. Ref. Data, Vol. 19, No.3, 1990
+# Fig.5
+#
+14021
+e(-)+H_2->e(-)+H_2(v3)
+2.048
+3
+ 14   1  3003
+ -1   0  +1
+100
+10
+2.048   0.01259e-17
+2.292   0.02135e-17
+2.779   0.03218e-17
+3.061   0.03514e-17
+3.425   0.03727e-17
+4.221   0.03413e-17
+4.957   0.02947e-17
+5.821   0.02472e-17
+6.947   0.02073e-17
+100.0   1.8e-20
+-1
+0.00E+00  0.00E+00  0.00E+00

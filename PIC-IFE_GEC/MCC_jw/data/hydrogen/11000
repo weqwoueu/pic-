@@ -1,0 +1,40 @@
+#
+# recombination  H(-)+H(+) -> 2H
+#
+##equation:   H(-)+H(+) -> 2H
+##type:       recombination
+##method:     digitalize from scanned figure
+##ref.auth:   Ronald E. Olson, James R. Peterson, and John Moseley
+##ref.title:  Ion=Ion Recombination Total Cross Sections -- Atomic Species
+##ref.journal: The Journal of Chemical Physics
+##ref.fig:    Fig.2
+11000
+H(-)+H(+)->2H
+0.0
+3
+ 11  18  10
+ -1  -1  +2
+10
+19
+   0.10585 2.8715e-13
+      0.35 1.1525e-13
+    0.6927 6.9472e-14
+    1.9495 3.5687e-14
+    3.0102  2.586e-14
+    5.4789 1.8909e-14
+    11.396 1.4278e-14
+    16.939 1.2362e-14
+    33.439 1.5206e-14
+    73.289 1.8866e-14
+    124.64 2.2822e-14
+    181.99  2.102e-14
+    303.61 1.4436e-14
+    477.46 1.3513e-14
+    761.39 1.2947e-14
+      1615 8.8402e-15
+      2798 5.1208e-15
+    4719.3 2.7657e-15
+    6188.3 1.9403e-15
+ 1
+5.0e-8 0.0 0.0
+

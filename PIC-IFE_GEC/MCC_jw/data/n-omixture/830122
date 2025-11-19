@@ -1,0 +1,20 @@
+#  Reaction : N+O_3->NO+O_2
+#  Type : Neutral-Neutral
+#  Ref : Kossyi et al
+#       <Kinetic scheme of the non-equilibrium discharge in
+#        nitrogen-oxygen mixtures>
+#        Plasma Sources Sci. Technol. 1 (1992)
+#        equation (75)
+#  Date : 2012/90/14
+#
+830122
+N+O_3->NO+O_2
+0.0
+4
+  3070  3086  3701  3083
+  -1  -1   1   1
+255
+1
+0.0  0.0
+1
+  2.0000E-16  0.0000E+00  0.0000E+00

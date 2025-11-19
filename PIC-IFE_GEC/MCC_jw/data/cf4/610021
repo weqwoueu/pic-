@@ -1,0 +1,22 @@
+##equation:     Ar(*4s)+CF_4->CF_2+2F+Ar
+##type:        
+##unit:        eV, cm2
+##date:        2003/3/5
+##method:      numerical table
+##
+##             J.E. Velazco, J.H. Koltz, and D.W. Sester, 
+#              J. Chem. Phys. 65, 3468 (1976)
+##ref.table:
+##ref.range:
+#
+610021
+Ar(*4s)+CF_4->CF_2+2F+Ar
+0.0
+5
+610 185  616    90  180
+ -1  -1   +1    +2   +1
+255
+ 1
+ 0.00E-02 0.00E-16
+1
+6.00E-11  0.00E+00  0.00E+00
