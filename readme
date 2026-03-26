@@ -1,3 +1,7 @@
+【新人：先根目录 README「第一次运行」→ docs/USAGE.md §0～§5。】
+
+以下为历史环境记录（其它集群 / 本地路径示例）：
+
 1.cmake-3.24
   source /opt/software/cmake-3.24/env.sh 
 
