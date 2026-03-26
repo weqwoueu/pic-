@@ -1,3 +1,0 @@
-/data/zhanzj/codeTest/build/CMakeFiles/1DPIC.dir
-/data/zhanzj/codeTest/build/CMakeFiles/edit_cache.dir
-/data/zhanzj/codeTest/build/CMakeFiles/rebuild_cache.dir

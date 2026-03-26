@@ -1,0 +1,4 @@
+西北一区 login01 上默认没有 ifort，需要先加载模块：
+module load compiler/intel/2021.3.0 和 module load compiler/cmake/3.23.3。
+加载后 ifort 是 2021.3.0，cmake 是 3.23.3，满足编译要求。
+
