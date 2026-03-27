@@ -4,34 +4,52 @@
 
 ---
 
+## 本 README 定位（项目总览）
+
+本文件主打三件事：**项目结构**、**功能边界**、**输出结果怎么读**。  
+部署与代码使用细节请以 **[docs/DEPLOY.md](docs/DEPLOY.md)** 为主（本文件仍保留完整历史流程，便于追溯）。
+
+### 你先看哪一段
+
+- 想知道项目是做什么的：看「**功能与能力边界**」。
+- 想知道目录怎么分工：看「**仓库结构总览**」。
+- 想知道跑完会产出什么：看「**输出与重启总览**」。
+- 想直接在西北一区跑最小算例：看「**西北一区最小算例（推荐，直接复制）**」。
+
+---
+
+## 功能与能力边界
+
+- **问题类型：** 2D IFE-PIC 等离子体数值模拟（平面/轴对称）。  
+- **核心流程：** 粒子推进（PIC）+ 场求解（IFE/SIDG/PPR）+ 碰撞（MCC_jw）。  
+- **工程形态：** 单机可执行 `1DPIC`，默认无 MPI、无 GPU。  
+- **当前阶段：** 探索/排坑中，优先保证“可编译、可运行、可复现”。
+
+---
+
+## 仓库结构总览
+
+| 路径 | 作用 |
+|------|------|
+| `PIC-IFE_GEC/` | 主工程根目录（`CMakeLists.txt`、`1DPIC`、`INPUT/`、`OUTPUT/`、`DUMP/`） |
+| `docs/` | 文档目录：`README.md` 讲文档关系，`DEPLOY.md` 讲部署与使用 |
+| `readme` | 历史环境笔记（oneAPI 等） |
+| `lzj_doc` | 旧文档指针 |
+
+---
+
 ## 当前阶段（探索 / 排坑中）
 
 本仓库目前处于**探索与排坑阶段**，文档和构建脚本会继续迭代。阅读和使用时请按下面原则：
 
 - 以“**先能编译、再能运行、再改算例**”为顺序，不要一次改太多参数。  
-- 若文档和实际行为冲突，以**当前代码与编译日志**为准，并把差异记录到 `docs/USAGE.md`。  
+- 若文档和实际行为冲突，以**当前代码与编译日志**为准，并把差异记录到 `docs/DEPLOY.md`。  
 - 集群无法直连 GitHub 时，优先用 `git archive + scp` 同步文件内容。  
 - 旧目录可能混有历史文件；遇到异常建议在**新目录解包重编译**。
 
 ---
 
-## 后人接手：请先读这两份
-
-| 顺序 | 文档 | 你用它做什么 |
-|------|------|----------------|
-| 1 | **本文（README）** | 克隆、装环境、**编译出 `1DPIC`**、在集群上**运行** |
-| 2 | **[docs/USAGE.md](docs/USAGE.md)** | **第一次跑通**的逐步说明、**改算例**先改谁、`INPUT` **参数表**、输出说明、排错 |
-
-**最短路径：** 先按下面 **[第一次运行：复制粘贴](#第一次运行复制粘贴)** 做一遍；跑通后再打开 `docs/USAGE.md` 改参数。
-
----
-
-## 文档分工
-
-| 文档 | 内容 |
-|------|------|
-| **[docs/USAGE.md](docs/USAGE.md)** | 上手流程、能力说明、源码树、`INPUT` 与**参数表**、输出、常见问题 |
-| **[docs/README.md](docs/README.md)** | 文档索引 |
+**最短路径：** 先看 **[docs/README.md](docs/README.md)** 的文档关系，再按下面 **[第一次运行：复制粘贴](#第一次运行复制粘贴)** 或“西北一区最小算例”执行。
 
 ---
 
@@ -61,7 +79,7 @@ ls -la CMakeLists.txt INPUT/pic.inp INPUT/object.inp INPUT/ife.inp
 
 以下以 **西北一区（西安）** 为例；其它机器只要有 **`ifort` + `cmake`**，删掉 `module` 两行即可。
 
-> 提示：当前为排坑阶段，若编译失败请优先看报错末尾文件名；常见是历史源码被误编译，按 `CMakeLists.txt` 与 `docs/USAGE.md` 的最新说明处理。
+> 提示：当前为排坑阶段，若编译失败请优先看报错末尾文件名；常见是历史源码被误编译，按 `CMakeLists.txt` 与 `docs/DEPLOY.md` 的最新说明处理。
 
 ```bash
 # 0) 加载编译器（每开一个新终端都要做，或写入 ~/.bashrc）
@@ -106,7 +124,7 @@ bash ./run_min_case.sh
 - 正常结束标志是日志出现 `run finish at after it= 1000`（或你设定的 `NT`）。
 
 跑起来后，标准输出里会出现读取 `INPUT` 文件的提示；结果在 **`OUTPUT/`**，重启数据在 **`DUMP/`**。  
-**改时间步长、网格、边界** 等：见 **[docs/USAGE.md](docs/USAGE.md)** 中的「第一次改算例」与参数表。
+**改时间步长、网格、边界** 等：见 **[docs/DEPLOY.md](docs/DEPLOY.md)** 中的部署与排错说明。
 
 若报错类似 `./OUTPUT/Field/*.dat` 或 `./OUTPUT/Velocity/*.dat` 不存在，说明输出子目录未创建；先执行上面的 `mkdir -p` 再运行。
 
@@ -241,15 +259,4 @@ mkdir -p OUTPUT/Field OUTPUT/Velocity OUTPUT/Particle OUTPUT/Global OUTPUT/Phase
 
 ---
 
-## 仓库根目录
-
-| 路径 | 说明 |
-|------|------|
-| **`PIC-IFE_GEC/`** | 唯一 CMake 工程与 **`1DPIC`**；内有 **[PIC-IFE_GEC/README.md](PIC-IFE_GEC/README.md)**（说明文档分工与本目录含义） |
-| **`docs/`** | **[USAGE.md](docs/USAGE.md)** 使用说明与参数表 |
-| **`readme`** | 历史环境笔记 |
-| **`lzj_doc`** | 文档指针 |
-
----
-
-**一句话：** 进 **`PIC-IFE_GEC`** → **`module load`（若需要）** → **`cmake` + `cmake --build`** → 同目录先建 **`OUTPUT/*`** 与 **`DUMP`** → **`./1DPIC`**；算例怎么改只看 **[docs/USAGE.md](docs/USAGE.md)**。
+**一句话：** 进 **`PIC-IFE_GEC`** → **`module load`（若需要）** → **`cmake` + `cmake --build`** → 同目录先建 **`OUTPUT/*`** 与 **`DUMP`** → **`./1DPIC`**；部署与使用只看 **[docs/DEPLOY.md](docs/DEPLOY.md)**。
