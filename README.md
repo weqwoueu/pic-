@@ -83,12 +83,96 @@ cmake --build build -j"$(nproc)"
 test -x ./1DPIC && echo "OK: 1DPIC exists" || echo "FAIL: 未生成 1DPIC"
 
 # 5) 运行（工作目录必须是 PIC-IFE_GEC，程序读 ./INPUT/）
-mkdir -p OUTPUT DUMP
+#    先补齐常用输出子目录，避免首次输出时报 "No such file or directory"
+mkdir -p OUTPUT/Field OUTPUT/Velocity OUTPUT/Particle OUTPUT/Global OUTPUT/Phase OUTPUT/Energy OUTPUT/History DUMP
 ./1DPIC
 ```
 
+### 西北一区最小算例（推荐，直接复制）
+
+> 目标：克隆后尽快验证“能编译 + 能运行 + 能输出 + 能正常结束”。
+
+```bash
+module load compiler/intel/2021.3.0
+module load compiler/cmake/3.23.3
+cd /work/home/$USER/pic-/PIC-IFE_GEC
+bash ./run_min_case.sh
+```
+
+说明：
+- `run_min_case.sh` 会先备份 `INPUT/pic.inp` 到 `INPUT/pic.inp.bak`。
+- 默认把首个有效 `nt,dt` 改成 `1000, 0.05`（小算例快测）。
+- 也可临时改参数：`NT=2000 DT=0.05 bash ./run_min_case.sh`。
+- 正常结束标志是日志出现 `run finish at after it= 1000`（或你设定的 `NT`）。
+
 跑起来后，标准输出里会出现读取 `INPUT` 文件的提示；结果在 **`OUTPUT/`**，重启数据在 **`DUMP/`**。  
 **改时间步长、网格、边界** 等：见 **[docs/USAGE.md](docs/USAGE.md)** 中的「第一次改算例」与参数表。
+
+若报错类似 `./OUTPUT/Field/*.dat` 或 `./OUTPUT/Velocity/*.dat` 不存在，说明输出子目录未创建；先执行上面的 `mkdir -p` 再运行。
+
+### 输出文件速查（汇报常用）
+
+| 路径/文件 | 含义（简要） | 用途 |
+|------|------|------|
+| `OUTPUT/Field/field_IJ_*.dat` | 二维网格场量（电势/电场/密度等） | 主结果可视化（Tecplot 等） |
+| `OUTPUT/Field/Average_x_*.dat` | 沿 `x` 的平均/剖面量 | 一维趋势图、对比工况 |
+| `OUTPUT/Velocity/velocity_IJ_*.dat` | 速度相关网格输出 | 速度场诊断 |
+| `OUTPUT/Particle/` | 粒子统计/分布输出 | 粒子行为分析 |
+| `OUTPUT/Global/` | 全局守恒与总量统计 | 稳定性/收敛性检查 |
+| `OUTPUT/Energy/` | 能量相关诊断 | 能量闭合检查 |
+| `DUMP/` | 重启快照（checkpoint） | 中断续算、复现实验状态 |
+
+> 小算例验证建议：先把 `nt` 调小（如 1000），确认能完整输出并出现 `run finish`，再回到长步数工况。
+
+### 最小算例跑完后的标准文件结构（`nt=1000` 示例）
+
+若你按本文最小算例流程运行并清理过中间步，常见保留结果如下：
+
+```text
+PIC-IFE_GEC/
+├─ OUTPUT/
+│  ├─ Field/
+│  │  ├─ field_IJ_001000.dat
+│  │  └─ Average_x_001000.dat
+│  ├─ Velocity/
+│  │  └─ velocity_IJ_3001000.dat
+│  ├─ Energy/                  # 可能为空（取决于输出步长）
+│  ├─ Particle/                # 可能为空（取决于输出开关）
+│  ├─ Global/                  # 可能为空（取决于输出开关）
+│  ├─ Phase/                   # 可能为空（取决于输出开关）
+│  ├─ History/                 # 可能为空（取决于输出开关）
+│  ├─ CellVolume.dat
+│  ├─ physics_parameter.inp
+│  ├─ normalize.inp
+│  ├─ PartcountReal.dat
+│  ├─ ElectronChange.dat
+│  └─ IonChange.dat
+└─ DUMP/
+   ├─ var0001000dump
+   ├─ phi0001000dump
+   └─ par0001000dump
+```
+
+说明：
+- `OUTPUT/Field/*001000.dat` 是第 1000 步主要场结果，可直接用于汇报绘图。
+- `DUMP/*0001000dump` 是第 1000 步重启快照，可用于续算。
+- 目录为空不代表错误，通常由输出步长和开关控制。
+
+### 根目录杂项文件清理（可选）
+
+历史运行可能在 `PIC-IFE_GEC/` 根目录留下 `SR *.dat`、`SN *.dat`、`MCCB *.dat`、`Norm_Error_*.txt`、`ife.msh` 等杂项文件。  
+建议先备份再删除（在 `PIC-IFE_GEC/` 目录执行）：
+
+```bash
+# 1) 备份杂项文件（若没有匹配文件，命令会跳过）
+JUNK_LIST="$(ls -1 | grep -E '^(10000 .*\.dat|MCCB +[0-9]+ +\.dat|SN +[0-9]+ +\.dat|SR +[0-9]+ +\.dat|Norm_Error_.*\.txt|ife\.msh)$' || true)"
+if [ -n "$JUNK_LIST" ]; then
+  echo "$JUNK_LIST" | tar -czf root_junk_backup_$(date +%Y%m%d_%H%M%S).tar.gz -T -
+  echo "$JUNK_LIST" | sed 's/.*/"&"/' | xargs rm -f
+fi
+```
+
+清理后建议再执行一次 `ls -a`，确认仅保留源码、构建目录与 `OUTPUT/`、`DUMP/` 等必要内容。
 
 ---
 
@@ -145,7 +229,7 @@ module load compiler/intel/2021.3.0
 module load compiler/cmake/3.23.3
 
 cd /work/home/$USER/pic-/PIC-IFE_GEC
-mkdir -p OUTPUT DUMP
+mkdir -p OUTPUT/Field OUTPUT/Velocity OUTPUT/Particle OUTPUT/Global OUTPUT/Phase OUTPUT/Energy OUTPUT/History DUMP
 ./1DPIC
 ```
 
@@ -168,4 +252,4 @@ mkdir -p OUTPUT DUMP
 
 ---
 
-**一句话：** 进 **`PIC-IFE_GEC`** → **`module load`（若需要）** → **`cmake` + `cmake --build`** → 同目录 **`mkdir -p OUTPUT DUMP`** → **`./1DPIC`**；算例怎么改只看 **[docs/USAGE.md](docs/USAGE.md)**。
+**一句话：** 进 **`PIC-IFE_GEC`** → **`module load`（若需要）** → **`cmake` + `cmake --build`** → 同目录先建 **`OUTPUT/*`** 与 **`DUMP`** → **`./1DPIC`**；算例怎么改只看 **[docs/USAGE.md](docs/USAGE.md)**。

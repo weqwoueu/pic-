@@ -25,8 +25,34 @@ module load compiler/cmake/3.23.3
 rm -rf build
 cmake -S . -B build -DCMAKE_Fortran_COMPILER="$(which ifort)"
 cmake --build build -j"$(nproc)"
-mkdir -p OUTPUT DUMP
+mkdir -p OUTPUT/Field OUTPUT/Velocity OUTPUT/Particle OUTPUT/Global OUTPUT/Phase OUTPUT/Energy OUTPUT/History DUMP
 ./1DPIC
 ```
+
+## 最小算例一键跑通（推荐）
+
+在本目录直接执行：
+
+```bash
+bash ./run_min_case.sh
+```
+
+脚本会自动：
+- 备份 `INPUT/pic.inp` 到 `INPUT/pic.inp.bak`
+- 将首个有效 `nt,dt` 调整为小算例默认值（`1000, 0.05`）
+- 创建常用输出目录
+- 重新编译并运行 `./1DPIC`
+
+也可覆盖默认值：
+
+```bash
+NT=2000 DT=0.05 bash ./run_min_case.sh
+```
+
+跑通最小算例后，重点核对：
+- `OUTPUT/Field/field_IJ_001000.dat`
+- `OUTPUT/Field/Average_x_001000.dat`
+- `OUTPUT/Velocity/velocity_IJ_3001000.dat`
+- `DUMP/var0001000dump`、`DUMP/phi0001000dump`、`DUMP/par0001000dump`
 
 完整说明与排错仍以 **[../README.md](../README.md)**、**[../docs/USAGE.md](../docs/USAGE.md)** 为准。

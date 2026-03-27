@@ -22,6 +22,18 @@
    若你的程序日志明确提示还需要 `INPUT/mesh.inp`，请按课题组样例补齐（当前仓库未自带该文件）。
 3. 需要 **Tecplot** 或同类软件查看 **`OUTPUT/`** 里生成的 `.plt` / 数据文件（具体扩展名以运行结果为准）。
 
+若你只想先“马上跑通最小算例”，可直接在 `PIC-IFE_GEC/` 执行：
+
+```bash
+bash ./run_min_case.sh
+```
+
+可选自定义步数与步长：
+
+```bash
+NT=2000 DT=0.05 bash ./run_min_case.sh
+```
+
 ---
 
 ## 0.1 运行目录约定（必看）
@@ -64,6 +76,7 @@ ls -la INPUT/pic.inp INPUT/object.inp INPUT/ife.inp ./1DPIC
 | 现象 | 可能原因 | 处理 |
 |------|----------|------|
 | `cannot open ./INPUT/mesh.inp` | 工作目录不对，或算例依赖该文件但仓库未提供 | 先确认在 `PIC-IFE_GEC` 目录，再从课题组样例补齐 |
+| `./OUTPUT/Field/*.dat` 或 `./OUTPUT/Velocity/*.dat` not found | `OUTPUT` 子目录没提前创建 | 运行前执行 `mkdir -p OUTPUT/Field OUTPUT/Velocity OUTPUT/Particle OUTPUT/Global OUTPUT/Phase OUTPUT/Energy OUTPUT/History DUMP` |
 | `cmake` 报找不到 `ifort` | 未 `module load` Intel | 见根目录 README |
 | 链接错误 / 缺 `ModuleMCCInterface` | 用了不完整的老 CMake | 使用本仓库 **`PIC-IFE_GEC/CMakeLists.txt`**（已包含 `MCC_jw`） |
 | `pic.inp` 读崩 | 增删了行，**读入顺序**乱了 | 对照本文 **§5 参数表** 逐行核对 |
@@ -219,6 +232,52 @@ ls -la INPUT/pic.inp INPUT/object.inp INPUT/ife.inp ./1DPIC
 |------|------|
 | **`OUTPUT/`** | **`physics_parameter.inp`**、**`normalize.inp`**、**`PartcountReal.dat`**、**`ElectronChange.dat`** / **`IonChange.dat`**、Tecplot 等 |
 | **`DUMP/`** | 重启用；**`pic.inp`** 里 **`irestart`** |
+
+首次运行前建议：
+
+```bash
+mkdir -p OUTPUT/Field OUTPUT/Velocity OUTPUT/Particle OUTPUT/Global OUTPUT/Phase OUTPUT/Energy OUTPUT/History DUMP
+```
+
+### 6.1 输出文件与物理含义（速查）
+
+| 文件/目录 | 物理含义（简要） | 常见展示方式 |
+|------|------|------|
+| `OUTPUT/Field/field_IJ_*.dat` | 网格场量快照（电势、场、密度等） | 2D 云图/等值线 |
+| `OUTPUT/Field/Average_x_*.dat` | 轴向平均后的剖面信息 | 1D 曲线 |
+| `OUTPUT/Velocity/velocity_IJ_*.dat` | 速度场/速度相关量 | 2D 云图或截线 |
+| `OUTPUT/Global/` | 全局统计量（总粒子数、总量等） | 时间历程曲线 |
+| `OUTPUT/Energy/` | 能量相关诊断 | 能量随时间曲线 |
+| `DUMP/` | 某时刻完整状态快照 | 断点续算与复现实验 |
+
+### 6.2 最小算例完成后的核对清单
+
+当你设置 `nt=1000` 并正常结束时，建议至少核对以下文件存在：
+
+- `OUTPUT/Field/field_IJ_001000.dat`
+- `OUTPUT/Field/Average_x_001000.dat`
+- `OUTPUT/Velocity/velocity_IJ_3001000.dat`
+- `OUTPUT/PartcountReal.dat`
+- `DUMP/var0001000dump`
+- `DUMP/phi0001000dump`
+- `DUMP/par0001000dump`
+
+若日志包含 `run finish at after it= 1000` 且上述文件存在，可判定“最小算例跑通”。
+
+### 6.3 清理根目录历史杂项（可选）
+
+若 `PIC-IFE_GEC/` 根目录出现 `SR *.dat`、`SN *.dat`、`MCCB *.dat`、`Norm_Error_*.txt`、`ife.msh` 等文件，可按下列流程清理：
+
+```bash
+cd /path/to/PIC-IFE_GEC
+JUNK_LIST="$(ls -1 | grep -E '^(10000 .*\.dat|MCCB +[0-9]+ +\.dat|SN +[0-9]+ +\.dat|SR +[0-9]+ +\.dat|Norm_Error_.*\.txt|ife\.msh)$' || true)"
+if [ -n "$JUNK_LIST" ]; then
+  echo "$JUNK_LIST" | tar -czf root_junk_backup_$(date +%Y%m%d_%H%M%S).tar.gz -T -
+  echo "$JUNK_LIST" | sed 's/.*/"&"/' | xargs rm -f
+fi
+```
+
+该步骤不会删除源码目录（如 `code/`、`INPUT/`、`MCC_jw/`）和标准输出目录（`OUTPUT/`、`DUMP/`）。
 
 ---
 
