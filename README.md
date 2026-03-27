@@ -32,6 +32,20 @@
 
 ---
 
+## 运行前快速自检（建议先做）
+
+进入 **`PIC-IFE_GEC/`** 后先检查：
+
+```bash
+ls -la CMakeLists.txt INPUT/pic.inp INPUT/object.inp INPUT/ife.inp
+```
+
+说明：
+- `INPUT/pic.inp`、`INPUT/object.inp`、`INPUT/ife.inp` 是当前仓库可见的基础输入文件。  
+- 部分历史分支/算例会额外使用 `INPUT/mesh.inp`；若你的程序日志提示缺少它，请按课题组样例补齐。
+
+---
+
 ## 第一次运行：复制粘贴
 
 以下以 **西北一区（西安）** 为例；其它机器只要有 **`ifort` + `cmake`**，删掉 `module` 两行即可。
@@ -44,8 +58,8 @@ module load compiler/cmake/3.23.3
 # 1) 进入你的家目录并进入仓库（按你实际路径改 pic-）
 cd /work/home/$USER/pic-/PIC-IFE_GEC
 
-# 2) 确认输入文件在「运行目录」下（本仓库已带 INPUT/；若没有，从 code/INPUT 拷贝一份）
-#    ls INPUT/mesh.inp INPUT/pic.inp INPUT/object.inp INPUT/ife.inp
+# 2) 确认输入文件在「运行目录」下（至少应有 pic/object/ife 三个输入）
+#    ls INPUT/pic.inp INPUT/object.inp INPUT/ife.inp
 
 # 3) 编译
 rm -rf build
@@ -60,7 +74,7 @@ mkdir -p OUTPUT DUMP
 ./1DPIC
 ```
 
-跑起来后，标准输出里会出现读 **`mesh.inp` / `object.inp` / `pic.inp`** 的提示；结果在 **`OUTPUT/`**，重启数据在 **`DUMP/`**。  
+跑起来后，标准输出里会出现读取 `INPUT` 文件的提示；结果在 **`OUTPUT/`**，重启数据在 **`DUMP/`**。  
 **改时间步长、网格、边界** 等：见 **[docs/USAGE.md](docs/USAGE.md)** 中的「第一次改算例」与参数表。
 
 ---

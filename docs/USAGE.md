@@ -8,7 +8,8 @@
 ## 0. 第一次用：按顺序做
 
 1. 读完根目录 **[README.md](../README.md)** 里的 **「第一次运行：复制粘贴」**，在 **`PIC-IFE_GEC/`** 下编出 **`./1DPIC`** 并成功执行一次。
-2. 确认当前目录是 **`PIC-IFE_GEC`**，且存在 **`INPUT/mesh.inp`**、**`INPUT/pic.inp`**、**`INPUT/object.inp`**、**`INPUT/ife.inp`**（本仓库通常已自带；若缺失，把 **`code/INPUT/`** 里同名文件拷到 **`INPUT/`**）。
+2. 确认当前目录是 **`PIC-IFE_GEC`**，且存在 **`INPUT/pic.inp`**、**`INPUT/object.inp`**、**`INPUT/ife.inp`**。  
+   若你的程序日志明确提示还需要 `INPUT/mesh.inp`，请按课题组样例补齐（当前仓库未自带该文件）。
 3. 需要 **Tecplot** 或同类软件查看 **`OUTPUT/`** 里生成的 `.plt` / 数据文件（具体扩展名以运行结果为准）。
 
 ---
@@ -27,7 +28,7 @@
 ```bash
 cd /path/to/PIC-IFE_GEC
 pwd
-ls -la INPUT/mesh.inp INPUT/pic.inp ./1DPIC
+ls -la INPUT/pic.inp INPUT/object.inp INPUT/ife.inp ./1DPIC
 ```
 
 ---
@@ -39,7 +40,7 @@ ls -la INPUT/mesh.inp INPUT/pic.inp ./1DPIC
 | 优先级 | 文件 | 建议 |
 |--------|------|------|
 | 1 | **`INPUT/pic.inp`** | 先把 **`nt, dt`** 改小做短测试（例如几千步），确认能跑完再看物理 |
-| 2 | **`INPUT/mesh.inp`** | 改计算域和网格分辨率；与 `object.inp` 几何一致 |
+| 2 | **`INPUT/mesh.inp`**（若算例使用） | 改计算域和网格分辨率；与 `object.inp` 几何一致 |
 | 3 | **`INPUT/object.inp`** | 边界与物体；**`N_Objects=0`** 时也要满足文件格式（见参数表） |
 | 4 | **`INPUT/ife.inp`** | IFE 求解与 **`delta`**（平面 / 轴对称） |
 | 5 | **`INPUT/IDG_inf*.inp`** | 仅在用到自适应 DG/IFE 时改 |
@@ -52,7 +53,7 @@ ls -la INPUT/mesh.inp INPUT/pic.inp ./1DPIC
 
 | 现象 | 可能原因 | 处理 |
 |------|----------|------|
-| `cannot open ./INPUT/mesh.inp` | 工作目录不对或没有 `INPUT/` | `cd` 到 `PIC-IFE_GEC`，或从 `code/INPUT` 拷贝 |
+| `cannot open ./INPUT/mesh.inp` | 工作目录不对，或算例依赖该文件但仓库未提供 | 先确认在 `PIC-IFE_GEC` 目录，再从课题组样例补齐 |
 | `cmake` 报找不到 `ifort` | 未 `module load` Intel | 见根目录 README |
 | 链接错误 / 缺 `ModuleMCCInterface` | 用了不完整的老 CMake | 使用本仓库 **`PIC-IFE_GEC/CMakeLists.txt`**（已包含 `MCC_jw`） |
 | `pic.inp` 读崩 | 增删了行，**读入顺序**乱了 | 对照本文 **§5 参数表** 逐行核对 |
@@ -80,7 +81,7 @@ ls -la INPUT/mesh.inp INPUT/pic.inp ./1DPIC
 
 | 产物 | 说明 |
 |------|------|
-| **`PIC-IFE_GEC/1DPIC`** | 主程序；入口 **`code/PIC/Main_IFE_Test_2.f90`** |
+| **`PIC-IFE_GEC/1DPIC`** | 主程序可执行文件（由 `CMakeLists.txt` 构建） |
 | **`MCC_jw/code/Main.F90`** | 独立程序；**不参与** `1DPIC` |
 
 **链接进 `1DPIC`：** `code/**/*.f90` + `MCC_jw/code/**/*.f90`（排除 `Main.F90`）+ 根目录 **`OUTPUT_velocity.f90`**、**`Output_Energy.f90`**、**`generate_Elementmap.f90`**。见 **`CMakeLists.txt`**。
@@ -91,14 +92,14 @@ ls -la INPUT/mesh.inp INPUT/pic.inp ./1DPIC
 
 | 目录 | 角色（简要） |
 |------|----------------|
-| **`PIC/`** | 主循环、**`Main_IFE_Test_2.f90`**、**`Dump_2D`**、**`Restart_2D`** |
+| **`PIC/`** | 主循环相关、**`Dump_2D`**、**`Restart_2D`** |
 | **`Data/`** | `Domain_2D`、`Field_2D`、`Particle_2D`、`IFE_Data`、`IFE_INTERFACE`、`IMPIC_Data_2D` |
 | **`IFE-Rectangular/`**、`IFE-Solver/`、`IFE-error/` | IFE 网格、求解、误差 |
 | **`SIDG/`** | 自适应 DG/IFE |
 | **`Setup/`** | **`mesh.inp` / `ife.inp`**、**`Setup_IFE_Mesh_2D`**、**`SetupGrids_2D_QLL`** |
 | **`IMPIC/`** | PrePush / PostPush / Move |
 | **`PPR/`** | **`GetEfield_SIDG_PPR`** |
-| **`In-Output/`** | **`Input_2D`**、Tecplot 输出 |
+| **`In-Output/`** | 输入解析与 Tecplot 输出相关代码 |
 | **`MCC/`** | 旧版 MCC |
 | **`MCC_jw/`**（与 `code/` 并列） | **`data/`** 截面；**`code/`** JW 实现 |
 
@@ -110,7 +111,7 @@ ls -la INPUT/mesh.inp INPUT/pic.inp ./1DPIC
 
 | 文件 | 作用 |
 |------|------|
-| **`INPUT/mesh.inp`** | 域与网格 |
+| **`INPUT/mesh.inp`**（可选） | 域与网格（部分历史算例使用） |
 | **`INPUT/object.inp`** | 物体与边界 |
 | **`INPUT/pic.inp`** | PIC 主控、restart、IMPIC、步长、物种与注入 |
 | **`INPUT/ife.inp`** | IFE 与 `delta`（平面/轴对称） |
@@ -120,11 +121,11 @@ ls -la INPUT/mesh.inp INPUT/pic.inp ./1DPIC
 
 ---
 
-## 5. 输入文件参数表（与 `Input_2D.f90` 读入顺序一致）
+## 5. 输入文件参数表（按当前实现与样例整理）
 
 增删行会导致读错或崩溃。首行可空以吞掉标题；**整行** `!` 注释在自由格式下通常可忽略。
 
-### 5.1 `INPUT/mesh.inp`（`Input_2D` 首读）
+### 5.1 `INPUT/mesh.inp`（可选，部分算例使用）
 
 | 顺序 | 变量 | 含义 |
 |------|------|------|
@@ -181,7 +182,7 @@ ls -la INPUT/mesh.inp INPUT/pic.inp ./1DPIC
 | 31 | `ispe_inject` 及循环 | 注入块 |
 | 32 | `Te_Sec` | 二次电子能量等 |
 
-读完 **`Te_Sec`** 后 **`CLOSE(5)`**。若样例在 **`Te_Sec` 之后**还有外场、`Lz` 等行，**当前 `Input_2D.f90` 不读取**。
+读完 **`Te_Sec`** 后会关闭输入。若样例在 **`Te_Sec` 之后**还有外场、`Lz` 等行，当前版本通常不读取这些尾部行。
 
 ### 5.4 `INPUT/ife.inp`
 
@@ -218,7 +219,7 @@ ls -la INPUT/mesh.inp INPUT/pic.inp ./1DPIC
 | 改算例 | **`INPUT/*.inp`** |
 | 改代码 | **`PIC-IFE_GEC/code/`**、**`MCC_jw/`** |
 | 改构建 | **`PIC-IFE_GEC/CMakeLists.txt`**（**`1DPIC`**） |
-| 主程序 | **`code/PIC/Main_IFE_Test_2.f90`** |
+| 主程序入口定位 | 在 `code/` 与 `MCC_jw/code/` 中按 `program` 关键字检索（不同历史版本可能不同） |
 | JW 接口 | **`MCC_jw/code/Interface_IFE/MCCInterface.f90`** |
 
 ---
