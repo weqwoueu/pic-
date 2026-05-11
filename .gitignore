@@ -268,3 +268,7 @@ __pycache__/
 
 # Mesh files
 *.msh
+
+# Local research handoff/cache files
+.tmp*
+pic-latest.tar.gz

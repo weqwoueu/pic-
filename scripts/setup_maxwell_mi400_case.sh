@@ -67,9 +67,13 @@ perl -0pi -e 's/          WRITE\(1,50\) HP\(1:2,i\), radius\(i\),Phi\(i,1\), Rho
 
 perl -0pi -e 's/        do num=1,N\n            !WRITE\(544, '\''\(A150\)'\''\) [^\n]*\n            WRITE\(544, 18\) driftVelocity\(1,num, 1\), driftVelocity\(2,num, 1\), driftVelocity\(3,num, 1\), thermalVelocity\(1,num, 1\), thermalVelocity\(2,num, 1\), thermalVelocity\(3,num, 1\),x_num\(1,num\),x_num\(2,num\),x_num\(3,num\),num\n        end do\n    \n        \n18      FORMAT[^\n]*\n/        WRITE(544, '\''(A)'\'') '\''# drift_e drift_i thermal_e thermal_i count_e count_i cell'\''\n        do num=1,N\n            WRITE(544, *) driftVelocity(1,num,1), driftVelocity(2,num,1), thermalVelocity(1,num,1), \&\n                          thermalVelocity(2,num,1), x_num(1,num), x_num(2,num), num\n        end do\n    \n        \n/s' "$app_dir/OUTPUT_velocity.f90"
 perl -0pi -e 's/    If \(Mod\(it,1000\)\.eq\.0 \.Or\. it == 1\) Then/    If (Mod(it,1000).eq.0 .Or. it == 1 .Or. it == nt) Then/' "$app_dir/OUTPUT_velocity.f90"
+if ! grep -q 'Use TimeControl, Only: nt' "$app_dir/OUTPUT_velocity.f90"; then
+  perl -0pi -e 's/(Use Constant_Variable_2D\r?\n)/$1Use TimeControl, Only: nt\n/' "$app_dir/OUTPUT_velocity.f90"
+fi
 
 perl -0pi -e 's/        WRITE\(543, 17\) \&\n            dN_dE\(1, i\), dN_dE\(2, i\),dN_dE\(3, i\), Ek_per\(1, i\), Vk_per\(1, i\), Vk_per\(2, i\), Vk_per\(3, i\), dN_dV\(1, i\), dN_dV\(2, i\),dN_dV\(3, i\)/        WRITE(543, *) dN_dE(1,i), dN_dE(2,i), Ek_per(1,i), Vk_per(1,i), Vk_per(2,i), dN_dV(1,i), dN_dV(2,i)/' "$app_dir/Output_Energy.f90"
 perl -0pi -e 's/\n    17 FORMAT[^\n]*\n/\n/' "$app_dir/Output_Energy.f90"
+perl -0pi -e 's/WRITE\(543,\s*17\)/WRITE(543, *)/g; s/\r?\n\s*17 FORMAT[^\r\n]*(\r?\n)/$1/g' "$app_dir/Output_Energy.f90"
 
 cat > "$app_dir/INPUT/mesh.inp" <<'EOF_MESH'
 0., 0., 0.

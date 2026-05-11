@@ -61,3 +61,9 @@
 #*.PDF   diff=astextplain
 #*.rtf   diff=astextplain
 #*.RTF   diff=astextplain
+
+###############################################################################
+# Unix scripts must keep LF endings for Linux/HPC shells.
+###############################################################################
+*.sh text eol=lf
+*.slurm text eol=lf

@@ -1,0 +1,119 @@
+你这篇论文要复现的不是 README 里的“最小算例”，而是 **laser-plasma expansion 的 1D 主导、2D PIC 算例**。
+
+我读 PDF 后，论文核心工况是：
+
+- 区域：`[0, 1024 λD0] x [0, 4 λD0]`
+- 初始等离子体：`[0, 128 λD0] x [0, 4 λD0]`
+- 网格：`dx = dy = 1 λD0`
+- 时间步：`dt = 0.05 / ωpe`
+- 温度比：`Te0 / Ti0 = 100`
+- 基准质量比：`mi/me = 400`
+- 图 3 / 表 I：跑 5 种电子分布，输出 `ωpi t = 50`
+- 图 5-9：质量比扫 `mi/me = 100, 400, 900, 1600`
+- 图 10-13：比较左边界 `isothermal` 和 `adiabatic`
+
+当前仓库里已经有一部分对应痕迹：
+[PIC-IFE_GEC/INPUT/mesh.inp](/e:/pic-/PIC-IFE_GEC/INPUT/mesh.inp:1) 已经是 `1024 x 4`；[PIC-IFE_GEC/INPUT/pic.inp](/e:/pic-/PIC-IFE_GEC/INPUT/pic.inp:12) 也是 `80000, 0.05`；[MCCInterface.f90](/e:/pic-/PIC-IFE_GEC/MCC_jw/code/Interface_IFE/MCCInterface.f90:72) 甚至写了 `for wsy paper case`。但当前代码不是论文精确版：现在粒子数被降到 `5000 * 200 * 4`，分布和边界是硬编码，离子质量也和论文 `mi/me=400, Z=1` 不完全一致。
+
+**先跑什么**
+第一步只验证环境，不用它做论文图：
+
+```bash
+module load compiler/intel/2021.3.0
+module load compiler/cmake/3.23.3
+cd /work/home/$USER/pic-/PIC-IFE_GEC
+NT=2000 DT=0.05 bash ./run_min_case.sh
+```
+
+第二步复现论文 Figure 3 / Table I，优先跑这 5 个 case：
+
+```text
+1. Maxwellian, mi/me=400, isothermal boundary
+2. Kappa κ=2, mi/me=400, isothermal boundary
+3. Kappa κ=6, mi/me=400, isothermal boundary
+4. Polytropic γ=2, mi/me=400, isothermal boundary
+5. Polytropic γ=3, mi/me=400, isothermal boundary
+```
+
+因为 `ωpi/ωpe = sqrt(me/mi)`，所以 `mi/me=400` 时，论文的 `ωpi t=50` 对应：
+
+```text
+it = 50 * sqrt(400) / 0.05 = 20000
+```
+
+也就是说不要只跑 `NT=1000`，至少跑到 `nt=20000`。对应输出看：
+
+```text
+OUTPUT/Field/field_IJ_020000.dat
+OUTPUT/Velocity/velocity_IJ_3020000.dat
+```
+
+**怎么改分布**
+分布选择在 [MCCInterface.f90](/e:/pic-/PIC-IFE_GEC/MCC_jw/code/Interface_IFE/MCCInterface.f90:57)：
+
+```fortran
+Integer(4) :: MaxKappa=2   !1:maxwell, 0:kappa 2:poly
+```
+
+- Maxwellian：`MaxKappa=1`
+- Kappa：`MaxKappa=0`
+- Polytropic：`MaxKappa=2`
+
+Kappa 值在 [ParticleOne.f90](/e:/pic-/PIC-IFE_GEC/MCC_jw/code/base/ParticleOne.f90:162)：
+
+```fortran
+Kappa=2.0
+```
+
+Polytropic 的 γ 在 [ParticleOne.f90](/e:/pic-/PIC-IFE_GEC/MCC_jw/code/base/ParticleOne.f90:213)：
+
+```fortran
+gama=3
+```
+
+左边界也要同步改，否则初始分布和边界热库不一致。左边界在 [MCCInterface.f90](/e:/pic-/PIC-IFE_GEC/MCC_jw/code/Interface_IFE/MCCInterface.f90:358) 附近，现在实际启用的是 kappa 漫反射块。复现 isothermal 时，要启用对应分布的 diffuse reflection；复现 adiabatic 时，启用镜面反射：
+
+```fortran
+PO%Vx = -PO%Vx
+```
+
+**正式跑法**
+每个 case 单独一个目录，避免输出互相覆盖：
+
+```bash
+cd /work/home/$USER/pic-
+cp -a PIC-IFE_GEC run_kappa2_m400_iso
+cd run_kappa2_m400_iso
+
+# 改源码里的 MaxKappa/Kappa/gama/边界
+# 改 INPUT/pic.inp 的 nt, dt，例如 20000, 0.05
+
+rm -rf build
+cmake -S . -B build -DCMAKE_Fortran_COMPILER="$(which ifort)"
+cmake --build build -j"$(nproc)"
+
+mkdir -p OUTPUT/Field OUTPUT/Velocity OUTPUT/Particle OUTPUT/Global OUTPUT/Phase OUTPUT/Energy OUTPUT/History DUMP
+./1DPIC > run.log 2>&1
+```
+
+**后续要扫的矩阵**
+复现图 5-9：
+
+```text
+分布：Maxwellian, κ=2, κ=6, γ=2, γ=3
+质量比：100, 400, 900, 1600
+边界：isothermal
+```
+
+`ωpi t=50` 对应步数：
+
+```text
+mi/me=100   -> it=10000
+mi/me=400   -> it=20000
+mi/me=900   -> it=30000
+mi/me=1600  -> it=40000
+```
+
+图 10-13 再跑边界比较：同一分布下跑 `isothermal` 和 `adiabatic` 两套，取 `ωpi t=30` 和 `50`。
+
+关键提醒：现在仓库还差一步“参数配置化”。分布、κ、γ、边界、质量比有些是硬编码的，直接跑当前版本只能算“师兄论文方向的缩减算例”，还不能当最终复现。下一步最该做的是把这些硬编码整理成 case 配置，至少让一个 case 目录清楚写明：分布、质量比、边界、nt、输出步。
