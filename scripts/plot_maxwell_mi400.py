@@ -8,8 +8,6 @@ If step is omitted, the latest available Average_x/velocity_IJ output is used.
 The figure is written to PIC-IFE_GEC/figures/.
 """
 
-from __future__ import annotations
-
 import math
 import re
 import sys
@@ -31,8 +29,8 @@ except Exception as exc:
 FLOAT_RE = re.compile(r"[-+]?\d*\.?\d+(?:[EeDd][-+]?\d+)?")
 
 
-def read_numeric_table(path: Path, min_cols: int) -> np.ndarray:
-    rows: list[list[float]] = []
+def read_numeric_table(path, min_cols):
+    rows = []
     with path.open("r", errors="replace") as handle:
         for raw in handle:
             line = raw.strip()
@@ -52,7 +50,7 @@ def read_numeric_table(path: Path, min_cols: int) -> np.ndarray:
     return np.asarray(rows, dtype=float)
 
 
-def parse_ref_value(path: Path, name: str, default: float) -> float:
+def parse_ref_value(path, name, default):
     if not path.exists():
         return default
     for line in path.read_text(errors="replace").splitlines():
@@ -63,14 +61,14 @@ def parse_ref_value(path: Path, name: str, default: float) -> float:
     return default
 
 
-def parse_step(path: Path, pattern: re.Pattern[str]) -> int | None:
+def parse_step(path, pattern):
     match = pattern.search(path.name)
     if not match:
         return None
     return int(match.group(1))
 
 
-def choose_file(paths: list[Path], pattern: re.Pattern[str], requested: int | None) -> tuple[Path, int]:
+def choose_file(paths, pattern, requested):
     if not paths:
         raise SystemExit("No matching output files found. Did the simulation finish and write diagnostics?")
     indexed = []
@@ -94,6 +92,7 @@ def choose_file(paths: list[Path], pattern: re.Pattern[str], requested: int | No
 def main() -> int:
     case_dir = Path(sys.argv[1]) if len(sys.argv) > 1 else Path("PIC-IFE_GEC")
     requested_step = int(sys.argv[2]) if len(sys.argv) > 2 else None
+    boundary_label = sys.argv[3] if len(sys.argv) > 3 else "specular reflection"
 
     field_pattern = re.compile(r"Average_x_(\d{6})\.dat$")
     velocity_pattern = re.compile(r"velocity_IJ_3(\d{6})\.dat$")
@@ -116,15 +115,28 @@ def main() -> int:
     lambda_d0 = parse_ref_value(physics_file, "length ref", 1.0)
     n0 = parse_ref_value(physics_file, "density ref", 1.0e21)
 
+    if lambda_d0 <= 0 or (lambda_d0 == 1.0 and np.nanmax(field[:, 0]) < 1.0):
+        dx_values = np.diff(field[:, 0])
+        dx_values = dx_values[np.isfinite(dx_values) & (dx_values > 0)]
+        if dx_values.size:
+            lambda_d0 = float(np.nanmedian(dx_values))
+
     x_lambda = field[:, 0] / lambda_d0
     ne = np.abs(field[:, 3]) / n0
     ni = np.abs(field[:, 4]) / n0
 
-    cells = velocity[:, 6]
-    x_vel = cells - 0.5
-    thermal_e = velocity[:, 2]
-    count_e = velocity[:, 4]
+    if velocity.shape[1] >= 10:
+        x_vel = velocity[:, 9] - 0.5
+        thermal_e = velocity[:, 3]
+        count_e = velocity[:, 6]
+    else:
+        x_vel = velocity[:, 6] - 0.5
+        thermal_e = velocity[:, 2]
+        count_e = velocity[:, 4]
     thermal_e = np.where(count_e > 0, thermal_e, np.nan)
+    order = np.argsort(x_vel)
+    x_vel = x_vel[order]
+    thermal_e = thermal_e[order]
 
     front_mask = ni > 1.0e-3
     front_x = float(np.nanmax(x_lambda[front_mask])) if np.any(front_mask) else math.nan
@@ -134,15 +146,24 @@ def main() -> int:
     out_dir.mkdir(parents=True, exist_ok=True)
     out_file = out_dir / f"maxwell_mi400_t{field_step:06d}.png"
 
-    fig, axes = plt.subplots(1, 2, figsize=(11.0, 4.2), constrained_layout=True)
+    plt.rcParams.update(
+        {
+            "font.size": 10,
+            "axes.titlesize": 13,
+            "axes.labelsize": 11,
+            "legend.fontsize": 10,
+        }
+    )
+    fig, axes = plt.subplots(1, 2, figsize=(8.6, 3.8), constrained_layout=False)
 
     ax = axes[0]
     ax.plot(x_lambda, ne, label="electron", lw=1.8)
     ax.plot(x_lambda, ni, label="ion", lw=1.8)
-    if math.isfinite(front_x):
+    x_plot_max = min(350.0, float(np.nanmax(x_lambda)))
+    if math.isfinite(front_x) and front_x <= x_plot_max:
         ax.axvline(front_x, color="0.35", lw=1.0, ls="--")
-        ax.text(front_x, 0.04, f"front {front_x:.1f}", rotation=90, va="bottom", ha="right")
-    ax.set_xlim(0, min(350.0, float(np.nanmax(x_lambda))))
+        ax.text(front_x, 0.04, f"front {front_x:.1f}", rotation=90, va="bottom", ha="right", fontsize=8)
+    ax.set_xlim(0, x_plot_max)
     ax.set_ylim(bottom=0)
     ax.set_xlabel("x / lambda_D0")
     ax.set_ylabel("n / n0")
@@ -152,12 +173,17 @@ def main() -> int:
     ax = axes[1]
     ax.plot(x_vel, thermal_e, color="tab:red", lw=1.8)
     ax.set_xlim(0, min(350.0, float(np.nanmax(x_vel))))
-    ax.set_ylim(bottom=0)
+    visible = thermal_e[(x_vel >= 0) & (x_vel <= 350.0) & np.isfinite(thermal_e)]
+    if visible.size:
+        ax.set_ylim(0, max(1.0, float(np.nanpercentile(visible, 99.0)) * 1.15))
+    else:
+        ax.set_ylim(bottom=0)
     ax.set_xlabel("x / lambda_D0")
     ax.set_ylabel("v_th,e / v_th,e0")
     ax.set_title("Electron thermal velocity")
 
-    fig.suptitle(f"Maxwellian, specular reflection, mi/me=400, step={field_step}, omega_pi t={omega_pi_t:.1f}")
+    fig.suptitle(f"Maxwellian, {boundary_label}, mi/me=400, step={field_step}, omega_pi t={omega_pi_t:.1f}", fontsize=13)
+    fig.subplots_adjust(left=0.08, right=0.985, bottom=0.16, top=0.82, wspace=0.24)
     fig.savefig(out_file, dpi=220)
     print(f"field:    {field_file}")
     print(f"velocity: {velocity_file}")

@@ -4,9 +4,9 @@ set(CMAKE_BUILD_TYPE release)
 project(1DPIC LANGUAGES C Fortran)
 
 if(CMAKE_Fortran_COMPILER_ID MATCHES "Intel")
-  set(CMAKE_Fortran_FLAGS "-g -O0 -extend-source 132")
+  set(CMAKE_Fortran_FLAGS "-O3 -xHost -ipo -extend-source 132")
 else()
-  set(CMAKE_Fortran_FLAGS "-g -O0 -ffree-line-length-none")
+  set(CMAKE_Fortran_FLAGS "-O3 -march=native -ffree-line-length-none")
 endif()
 
 # 主程序在 code/PIC/Main_IFE_Test_2.f90；另需 MCC_jw（JW 的 Monte Carlo 碰撞接口 ModuleMCCInterface 等）
