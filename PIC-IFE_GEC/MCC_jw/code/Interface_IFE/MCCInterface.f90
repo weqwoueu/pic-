@@ -11,7 +11,7 @@ Module ModuleMCCInterface
     USE TimeControl, ONLY:dt, irestart
     USE Domain_2D
     Use Field_2D, Only:dens0
-    Use ModuleGlobalDiagnostics, Only: RecordParticleLost
+    Use ModuleDiagCounters
     Use Object_2D
     Use Object_Data_2D
     Implicit none
@@ -582,6 +582,7 @@ Module ModuleMCCInterface
         integer(4), intent(in) :: delta
         integer(4), intent(in) :: PushFlag
         Integer(4) :: i,isp
+        Real(8) :: ek_lost
         Integer(4) :: IvelFlag = 0, IposFlag = 0
         Real(8) :: TimeMove
         Real(8) :: OriPosi(3)
@@ -617,8 +618,15 @@ Module ModuleMCCInterface
         
         Do i=PB%NPar,1,-1
             If (PB%PO(i)%X<=dxmin) then
-                Call RecordParticleLost(isp, PB%Mass, PB%VFactor, &
-                    PB%PO(i)%Vx, PB%PO(i)%Vy, PB%PO(i)%Vz, PB%Weight)
+                ek_lost = 0.5d0 * PB%Mass * &
+                    (PB%PO(i)%Vx*PB%PO(i)%Vx + PB%PO(i)%Vy*PB%PO(i)%Vy + &
+                     PB%PO(i)%Vz*PB%PO(i)%Vz) * PB%VFactor * PB%VFactor
+                E_lost_cum = E_lost_cum + ek_lost * PB%Weight
+                If (isp == 0) Then
+                    Ne_lost_cum = Ne_lost_cum + PB%Weight
+                Else
+                    Ni_lost_cum = Ni_lost_cum + PB%Weight
+                End If
                 Call PB%DelOne(i)
             End if
             
