@@ -25,6 +25,7 @@ USE IFE_INTERFACE, ONLY: IFE_START_2D, Input_2D, Setup_IFE_Mesh_2D, &
                         AdjustBoundary_2D, CheckTrail, InjectBeams_2D   !$ ab.ZWZ 2021/7/9
 USE ModuleMCCInterface   !$ ab.ZWZ 2021/12/19 for JW's MCC
 Use ModuleDiagOneStep
+Use ModuleGlobalDiagnostics
 IMPLICIT NONE
 
 !? ------------------- what are they used for? -------------------------
@@ -84,7 +85,7 @@ CALL Setup_IFE_Mesh_2D(delta, xmin, xmax, ymin, ymax, nnx, nny, N_Objects, N_Bou
 
 !$ ab.ZWZ 2021/7/9 for passing value to Domain module
 delta_global = delta 
-region_type=0      !0--³õÊ¼·Ö²¼Îª¾ØÐÎ£¬1--ÉÈÐÎ
+region_type=0      !0--ï¿½ï¿½Ê¼ï¿½Ö²ï¿½Îªï¿½ï¿½ï¿½Î£ï¿½1--ï¿½ï¿½ï¿½ï¿½
 dxmin = xmin
 dxminmin = 0        !zzj for initialization
 dxmax = xmax
@@ -150,8 +151,9 @@ CALL SetupPartInject_QLL(Ndisf)     !? used in DSMC, retain?
 !CALL Init_MCC_2D       !? the original MCC(not JW's) init, delete?
 
 !$ ========= ab.ZWZ 2021/12/19 for JW's MCC =========== \\
-CALL AllInitialization() 
+CALL AllInitialization()
 Call DiagInitilalization(ControlFlowGlobal)
+Call InitGlobalDiagnostics()
 !$ ========= ab.ZWZ 2021/12/19 for JW's MCC =========== //
 
 !---- Comment this IF you wanna start from scratch
@@ -306,7 +308,7 @@ DO it = ilap+1, nt
     !                        VertX, phi, rho, rho_s, efx, efy, part, 1, P_average, HP, HT, SIZE(HP,2), SIZE(HT,2), SIZE(P_average,2))
     !pause
     
-    IF (IMPIC_index) THEN   !!!! ÒþÊ½
+    IF (IMPIC_index) THEN   !!!! ï¿½ï¿½Ê½
        
       Do i=0,ControlFlowGlobal%Ns
         Call MoveAll(ParticleGlobal(i), ControlFlowGlobal,N_objects,objects,delta,1)
@@ -326,7 +328,7 @@ DO it = ilap+1, nt
         Call MoveAll(ParticleGlobal(i), ControlFlowGlobal,N_objects,objects,delta,2)
       End Do
         
-    ELSE  !!!! ÏÔÊ½
+    ELSE  !!!! ï¿½ï¿½Ê½
          !write(*,*) 'move'
       Do i=0,ControlFlowGlobal%Ns
         Call MoveAll(ParticleGlobal(i), ControlFlowGlobal,N_objects,objects,delta,0)
@@ -498,6 +500,10 @@ DO it = ilap+1, nt
     OPEN(540,FILE='./OUTPUT/PartcountReal.dat',POSITION='APPEND')
         WRITE(540,*) it, ntot, (ns(isp+1),isp=0,ControlFlowGlobal%Ns)
     CLOSE(540)
+
+    ! ---- global energy/particle diagnostics ----
+    Call WriteGlobalDiagnostics(it, xt)
+
     !If (ParticleGlobal(0)%UnequalWeightFlag) Then
     !    Do isp=0,ControlFlowGlobal%Ns
     !        Do i = 1,ParticleGlobal(isp)%Npar

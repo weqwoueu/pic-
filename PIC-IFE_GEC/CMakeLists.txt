@@ -29,6 +29,7 @@ list(REMOVE_ITEM MCC_JW_SRCS "${CMAKE_CURRENT_SOURCE_DIR}/MCC_jw/code/Main.F90")
 set(ROOT_FORTRAN_SRCS
   "${CMAKE_CURRENT_SOURCE_DIR}/OUTPUT_velocity.f90"
   "${CMAKE_CURRENT_SOURCE_DIR}/Output_Energy.f90"
+  "${CMAKE_CURRENT_SOURCE_DIR}/GlobalDiagnostics.f90"
   "${CMAKE_CURRENT_SOURCE_DIR}/generate_Elementmap.f90"
   "${CMAKE_CURRENT_SOURCE_DIR}/InjectPositioning.f90"
   "${CMAKE_CURRENT_SOURCE_DIR}/ParticlePositioning.f90"

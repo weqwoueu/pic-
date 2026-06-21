@@ -11,6 +11,7 @@ Module ModuleMCCInterface
     USE TimeControl, ONLY:dt, irestart
     USE Domain_2D
     Use Field_2D, Only:dens0
+    Use ModuleGlobalDiagnostics, Only: RecordParticleLost
     Use Object_2D
     Use Object_Data_2D
     Implicit none
@@ -35,7 +36,7 @@ Module ModuleMCCInterface
             ControlFlowGlobal%ReStartParticles = .TRUE.
         End If
         Call GasInitPegasus(ControlFlowGlobal)      !$ SpecyGlobal and GasGlobal is initialized in the subroutine
-        print *, "Á£×ÓÖÖÀàÊýÁ¿ Ns = ", ControlFlowGlobal%Ns
+        print *, "ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ Ns = ", ControlFlowGlobal%Ns
         Allocate(ParticleGlobal(0:ControlFlowGlobal%Ns))
         !Allocate(ParticleEPFGlobal(0:ControlFlowGlobal%Ns))
         DO i=0,ControlFlowGlobal%Ns
@@ -166,7 +167,7 @@ Module ModuleMCCInterface
                 Do i=1,PB%Npar
                     PB%LXScaled = .True.
                     !Call PB%PO(i)%PosInit(Dble(CF%NxL),Dble(CF%NxU))
-                    Call PB%PO(i)%PosInit(dxminmin,dxmaxmax,dyminmin,dymaxmax) !¸Ä³õÊ¼ÇøÓò¸ÄÕâ
+                    Call PB%PO(i)%PosInit(dxminmin,dxmaxmax,dyminmin,dymaxmax) !ï¿½Ä³ï¿½Ê¼ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
                     
                     If (PB%PO(i)%x>dxmax) then
                        Call PB%DelOne(i)
@@ -370,7 +371,7 @@ Module ModuleMCCInterface
                 !PO%Y = PO%Y - PO%Vy * TimeRemain
                 !PO%Vx = -PO%Vx
                 !PO%X = dxmin + 10E-6
-            !diffuse reflection zzj24/10/15 ÉòÇà Ï¡±¡ÆøÌå¶¯Á¦Ñ§3.2 Maxwellian
+            !diffuse reflection zzj24/10/15 ï¿½ï¿½ï¿½ï¿½ Ï¡ï¿½ï¿½ï¿½ï¿½ï¿½å¶¯ï¿½ï¿½Ñ§3.2 Maxwellian
             !Iposflag = 1
             !TimeRemain = (PO%X - dxmin)/PO%Vx
             !TimeMove = TimeRemain
@@ -387,7 +388,7 @@ Module ModuleMCCInterface
             !VFactor = 1.0 / PB%VFactor
             !call PO%VelRes(VFactor)
             
-            !kappaÂþ·´Éä
+            !kappaï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
             Iposflag = 1
             TimeRemain = (PO%X - dxmin)/PO%Vx
             TimeMove = TimeRemain
@@ -399,7 +400,7 @@ Module ModuleMCCInterface
             PO%Vx =SQRT ((1.d0*Kappa-1.5)/beta*((ranf1)**(-1/(Kappa-1))-1))
             VFactor = 1.0 / PB%VFactor
             call PO%VelRes(VFactor)
-            !polyÂþ·´Éä
+            !polyï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
             !Iposflag = 1
             !TimeRemain = (PO%X - dxmin)/PO%Vx
             !TimeMove = TimeRemain
@@ -616,6 +617,8 @@ Module ModuleMCCInterface
         
         Do i=PB%NPar,1,-1
             If (PB%PO(i)%X<=dxmin) then
+                Call RecordParticleLost(isp, PB%Mass, PB%VFactor, &
+                    PB%PO(i)%Vx, PB%PO(i)%Vy, PB%PO(i)%Vz, PB%Weight)
                 Call PB%DelOne(i)
             End if
             
@@ -676,28 +679,28 @@ Module ModuleMCCInterface
         print*,'ns(1)=',ns(1)
         print*,'ns(2)=',ns(2)
 
-        !!! ******************************* ·½·¨Ò»£¨bjw 2019-5-7£©: ¸÷¸öÍø¸ñ×¼ÖÐÐÔÌõ¼þ ***********************************************
+        !!! ******************************* ï¿½ï¿½ï¿½ï¿½Ò»ï¿½ï¿½bjw 2019-5-7ï¿½ï¿½: ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½×¼ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ***********************************************
         ne_old = ns(1) 
 
-        !n_cell_in = 10 / hx(2)  !!! ×¼ÖÐÐÔÇøÓòµÄÍø¸ñºñ¶È
-        n_cell_in = 10 / hx(1)  !!! ×¼ÖÐÐÔÇøÓòµÄÍø¸ñºñ¶È
+        !n_cell_in = 10 / hx(2)  !!! ×¼ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+        n_cell_in = 10 / hx(1)  !!! ×¼ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 
         nnx = nx - 1
         nny = ny - 1
 
         DO insp = 1, 2
-	        CALL INDEXM_cdp(PB_e,PB_i,insp, IC, nnx, nny)  !!! nnx, nnyÍø¸ñÊý
-	        ic1(insp,:) = IC(2,:)       !$ Ã¿¸öÍø¸ñµÄÁ£×ÓÊý
+	        CALL INDEXM_cdp(PB_e,PB_i,insp, IC, nnx, nny)  !!! nnx, nnyï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+	        ic1(insp,:) = IC(2,:)       !$ Ã¿ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
         ENDDO
         !write(*,*) ic1
         !print*,'before quasi11111111111111:'
-        DO ipre=1, 1 + n_cell_in  !!!x·½ÏòÈëÉä(x×îÐ¡Î»ÖÃ´¦)
+        DO ipre=1, 1 + n_cell_in  !!!xï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½(xï¿½ï¿½Ð¡Î»ï¿½Ã´ï¿½)
 	        net_at_cell = 0
 	        net_at_boundary = 0
 	        pro_at_cell = 0
 	        DO jpre = 1, nny
 		        mc = (ipre - 1) * nny + jpre
-		        net_at_cell(ipre,jpre) = ic1(2,mc) - ic1(1,mc)          !$ Àë×ÓÊý-µç×ÓÊý
+		        net_at_cell(ipre,jpre) = ic1(2,mc) - ic1(1,mc)          !$ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½-ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
                 !print*,'mc = ',mc
                 !print*,'ic1(2,mc)=',ic1(2,mc)
                 !print*,'ic1(1,mc)=',ic1(1,mc)
@@ -736,13 +739,13 @@ Module ModuleMCCInterface
 
 			        CALL DRandom(ranum)
 			        !part(num+1,1) = 0. + (ipre - ranum) * hx(1)			
-			        PB_e%PO(num_elec+1)%X = f_left_wall(1) + (ipre - ranum) * hx(1)			                !$ xÎ»ÖÃ
+			        PB_e%PO(num_elec+1)%X = f_left_wall(1) + (ipre - ranum) * hx(1)			                !$ xÎ»ï¿½ï¿½
 			        CALL DRandom(ranum)
 			        !part(num+1,2) = 0. + (jpre - ranum) * hx(2)
 			        !part(num+1,2) = f_left_wall(2) + (jpre - ranum) * hx(2)
                    !$ ========================= mb.ZWZ ================================= \\
                     IF(delta == 0) THEN
-                        PB_e%PO(num_elec+1)%Y= f_left_wall(2) + (jpre - ranum) * hx(2)                      !$ yÎ»ÖÃ
+                        PB_e%PO(num_elec+1)%Y= f_left_wall(2) + (jpre - ranum) * hx(2)                      !$ yÎ»ï¿½ï¿½
                         PB_e%PO(num_elec+1)%Z= 0.
                     ELSEIF(delta == 1) THEN
                         PB_e%PO(num_elec+1)%Y= f_left_wall(2) + SQRT(hx(2)**2*((jpre -1)*(jpre -1) &
@@ -760,7 +763,7 @@ Module ModuleMCCInterface
                     !$ ========================= mb.ZWZ ================================= //
 			
 
-        1000        CALL Loadv(V_x, tmpj(ipf(1)), 1)   !!! Ö»²¹µç×Ó£¬ËùÒÔÓÃ temp0(ipf(1))
+        1000        CALL Loadv(V_x, tmpj(ipf(1)), 1)   !!! Ö»ï¿½ï¿½ï¿½ï¿½ï¿½Ó£ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ temp0(ipf(1))
 		            CALL Loadv(V_y, tmpj(ipf(1)), 1)
 		            CALL Loadv(V_z, tmpj(ipf(1)), 1)
 			        IF(V_x <= 0) THEN
@@ -801,7 +804,7 @@ Module ModuleMCCInterface
 	        ENDIF
         ENDDO
         WRITE(6,*) '# Quasi1: to inject on one side',ns(1)-ne_old
-        DO ipre=nnx - n_cell_in, nnx  !!!x·½ÏòÈëÉä(x×î´óÎ»ÖÃ´¦)
+        DO ipre=nnx - n_cell_in, nnx  !!!xï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½(xï¿½ï¿½ï¿½Î»ï¿½Ã´ï¿½)
 	        net_at_cell = 0
 	        net_at_boundary = 0
 	        pro_at_cell = 0
@@ -848,7 +851,7 @@ Module ModuleMCCInterface
                     IF(delta == 0) THEN
                         PB_e%PO(num_elec+1)%Y=f_left_wall(2) + (jpre - ranum) * hx(2)
                         PB_e%PO(num_elec+1)%Z=0.
-                        !part(num+1,2)= f_left_wall(2) + (jpre - ranum) * hx(2)                      !$ yÎ»ÖÃ
+                        !part(num+1,2)= f_left_wall(2) + (jpre - ranum) * hx(2)                      !$ yÎ»ï¿½ï¿½
                         !part(num+1,3) = 0.
                     ELSEIF(delta == 1) THEN
                 
@@ -863,7 +866,7 @@ Module ModuleMCCInterface
                     ENDIF
                     !$ ========================= mb.ZWZ ================================= //
 
-        2000        CALL Loadv(V_x, tmpj(ipf(1)), 1)   !!! Ö»²¹µç×Ó£¬ËùÒÔÓÃ temp0(ipf(1))
+        2000        CALL Loadv(V_x, tmpj(ipf(1)), 1)   !!! Ö»ï¿½ï¿½ï¿½ï¿½ï¿½Ó£ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ temp0(ipf(1))
 		            CALL Loadv(V_y, tmpj(ipf(1)), 1)
                     CALL Loadv(V_z, tmpj(ipf(1)), 1)
 			        IF(V_x >= 0) THEN
