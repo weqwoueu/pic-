@@ -78,8 +78,8 @@ Contains
         Ne_inj_cum  = 0.0d0
         Ni_inj_cum  = 0.0d0
 
-        ! Write initial row (t=0)
-        Call AppendRow(0.0d0, Ne_0, Ni_0, 0.0d0, 0.0d0, 0.0d0, 0.0d0, E_dom_0)
+        ! Write initial row (t=0); Ke+Ki lumped into Efield for display
+        Call AppendRow(0.0d0, Ne_0, Ni_0, 0.0d0, 0.0d0, E_dom_0, 0.0d0)
     End Subroutine InitGlobalDiagnostics
 
     !---------------------------------------------------------------------------
