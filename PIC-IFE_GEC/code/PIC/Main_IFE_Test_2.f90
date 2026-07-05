@@ -153,7 +153,6 @@ CALL SetupPartInject_QLL(Ndisf)     !? used in DSMC, retain?
 !$ ========= ab.ZWZ 2021/12/19 for JW's MCC =========== \\
 CALL AllInitialization()
 Call DiagInitilalization(ControlFlowGlobal)
-Call InitGlobalDiagnostics()
 !$ ========= ab.ZWZ 2021/12/19 for JW's MCC =========== //
 
 !---- Comment this IF you wanna start from scratch
@@ -233,6 +232,7 @@ IF (irestart/=1) THEN
     
 	!CALL GetEfield_2D
    Call GetEField_SIDG_PPR
+   Call InitGlobalDiagnostics(xt)
     
     CALL Output_To_Tecplot_IJK_2D(	0, nx, ny, ispe_tot, ntot, SIZE(part,1), SIZE(part,2), n_stride, &
 								    VertX, phi, rho, rho_s, efx, efy, part, 1, P_average, HP, HT, SIZE(HP,2), SIZE(HT,2), SIZE(P_average,2))
@@ -272,6 +272,7 @@ ELSE
   
 !***start
 	xt=ilap*dt
+    Call InitGlobalDiagnostics(xt)
     
 END IF
 
@@ -502,7 +503,9 @@ DO it = ilap+1, nt
     CLOSE(540)
 
     ! ---- global energy/particle diagnostics ----
-    Call WriteGlobalDiagnostics(it, xt)
+    If (it == 1 .Or. it == nt .Or. (n_gdiag > 0 .And. Mod(it, n_gdiag) == 0)) Then
+        Call WriteGlobalDiagnostics(it, xt)
+    End If
 
     !If (ParticleGlobal(0)%UnequalWeightFlag) Then
     !    Do isp=0,ControlFlowGlobal%Ns

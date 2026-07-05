@@ -245,6 +245,7 @@ Module ModuleMCCInterface
         REAL(8) :: beta, velocity_tangential,theta_v,VFactor,Kappa,gama
         Real(8) :: KB=1.3807d-23
         REAL(8), PARAMETER	::	pii	= 3.14159265358979D0
+        Real(8) :: ek_before, ek_after, diag_weight
 
         Trail_2D(1,:) = (/OriPosi(1),OriPosi(2)/)
         Trail_2D(2,:) = (/PO%X,PO%Y/)
@@ -389,6 +390,7 @@ Module ModuleMCCInterface
             !call PO%VelRes(VFactor)
             
             !kappa������
+            ek_before = PO%Energy(PB%Mass, PB%VFactor)
             Iposflag = 1
             TimeRemain = (PO%X - dxmin)/PO%Vx
             TimeMove = TimeRemain
@@ -400,6 +402,13 @@ Module ModuleMCCInterface
             PO%Vx =SQRT ((1.d0*Kappa-1.5)/beta*((ranf1)**(-1/(Kappa-1))-1))
             VFactor = 1.0 / PB%VFactor
             call PO%VelRes(VFactor)
+            ek_after = PO%Energy(PB%Mass, PB%VFactor)
+            If (PB%UnequalWeightFlag) Then
+                diag_weight = PO%WQ
+            Else
+                diag_weight = PB%Weight
+            End If
+            Call AddDiagThermalExchange(diag_weight, ek_before, ek_after)
             !poly������
             !Iposflag = 1
             !TimeRemain = (PO%X - dxmin)/PO%Vx
@@ -583,6 +592,7 @@ Module ModuleMCCInterface
         integer(4), intent(in) :: PushFlag
         Integer(4) :: i,isp
         Real(8) :: ek_lost
+        Real(8) :: weight_lost
         Integer(4) :: IvelFlag = 0, IposFlag = 0
         Real(8) :: TimeMove
         Real(8) :: OriPosi(3)
@@ -621,12 +631,12 @@ Module ModuleMCCInterface
                 ek_lost = 0.5d0 * PB%Mass * &
                     (PB%PO(i)%Vx*PB%PO(i)%Vx + PB%PO(i)%Vy*PB%PO(i)%Vy + &
                      PB%PO(i)%Vz*PB%PO(i)%Vz) * PB%VFactor * PB%VFactor
-                E_lost_cum = E_lost_cum + ek_lost * PB%Weight
-                If (isp == 0) Then
-                    Ne_lost_cum = Ne_lost_cum + PB%Weight
+                If (PB%UnequalWeightFlag) Then
+                    weight_lost = PB%PO(i)%WQ
                 Else
-                    Ni_lost_cum = Ni_lost_cum + PB%Weight
+                    weight_lost = PB%Weight
                 End If
+                Call AddDiagLost(isp, weight_lost, ek_lost)
                 Call PB%DelOne(i)
             End if
             
