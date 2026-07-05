@@ -1,20 +1,49 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-# Prepare the collisionless plasma-expansion case from the paper:
-# Maxwellian initial velocity, specular/full reflection on the left x boundary,
-# outflow on the right x boundary, y-periodic particles, and mi/me = 400.
+# Prepare the paper baseline plasma-expansion case:
+#   distribution  : Maxwellian
+#   species       : electron + one ion species
+#   mass ratio    : mi/me = 400, Z = 1
+#   domain        : [0, 1024 lambda_D0] x [0, 4 lambda_D0]
+#   initial slab  : [0, 128 lambda_D0] x [0, 4 lambda_D0]
+#   mesh          : dx = dy = lambda_D0
+#   time step     : dt = 0.05 / omega_pe
 #
 # Usage:
-#   bash scripts/setup_maxwell_mi400_case.sh [particles_per_cell] [nt]
+#   bash scripts/setup_maxwell_mi400_case.sh [particles_per_cell] [nt] [thermal|specular]
 #
-# For a quick proof run, use 200-1000 particles/cell. The paper value is 80000.
+# Examples:
+#   bash scripts/setup_maxwell_mi400_case.sh 1000 20000 thermal
+#   bash scripts/setup_maxwell_mi400_case.sh 80000 20000 thermal
+#
+# The paper-level ppc=80000 case is large. Use 1000 first as a standard
+# configuration smoke test, then increase to 80000 for production.
 
 ppg="${1:-1000}"
 nt="${2:-20000}"
+left_boundary="${3:-thermal}"
+
+case "$left_boundary" in
+  thermal|specular) ;;
+  *)
+    echo "left boundary must be 'thermal' or 'specular'" >&2
+    exit 2
+    ;;
+esac
 
 repo_root="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 app_dir="$repo_root/PIC-IFE_GEC"
+mcc_file="$app_dir/MCC_jw/code/Interface_IFE/MCCInterface.f90"
+
+slab_x=128
+slab_y=4
+species_count=2
+initial_particles=$((ppg * slab_x * slab_y * species_count))
+particle_capacity=$(((initial_particles * 12 + 9) / 10))
+if (( particle_capacity < 10000000 )); then
+  particle_capacity=10000000
+fi
 
 backup_once() {
   local f="$1"
@@ -23,8 +52,18 @@ backup_once() {
   fi
 }
 
+replace_block() {
+  local file="$1"
+  local perl_expr="$2"
+  local tmp
+  tmp="$(mktemp)"
+  perl -0pe "$perl_expr" "$file" > "$tmp"
+  mv "$tmp" "$file"
+}
+
 backup_once "$app_dir/code/PIC/Main_IFE_Test_2.f90"
-backup_once "$app_dir/MCC_jw/code/Interface_IFE/MCCInterface.f90"
+backup_once "$mcc_file"
+backup_once "$app_dir/code/Data/PIC_MAIN_PARAM_2D.f90"
 backup_once "$app_dir/code/In-Output/Output_To_Tecplot_IJK_2D.f90"
 backup_once "$app_dir/OUTPUT_velocity.f90"
 backup_once "$app_dir/Output_Energy.f90"
@@ -34,34 +73,96 @@ backup_once "$app_dir/INPUT/pic.inp"
 backup_once "$app_dir/MCC_jw/input/gas.txt"
 backup_once "$app_dir/MCC_jw/input/controlflow.txt"
 
-# Initial slab [0,128] x [0,4], embedded in the full [0,1024] x [0,4] domain.
-perl -0pi -e 's/dxmaxmax = 200\.0/dxmaxmax = 128.0/' "$app_dir/code/PIC/Main_IFE_Test_2.f90"
-perl -0pi -e 's/dymaxmax = 4\.0/dymaxmax = ymax/' "$app_dir/code/PIC/Main_IFE_Test_2.f90"
+# Initial slab [0,128] x [0,4], embedded in full [0,1024] x [0,4] domain.
+perl -0pi -e 's/dxmaxmax = [0-9.]+/dxmaxmax = 128.0/' "$app_dir/code/PIC/Main_IFE_Test_2.f90"
+perl -0pi -e 's/dymaxmax = [0-9.]+/dymaxmax = ymax/' "$app_dir/code/PIC/Main_IFE_Test_2.f90"
 perl -0pi -e 's/    call OUTPUT_velocity\(it\)\n    call Output_Energy\(it\)/    If (Mod(it,1000).eq.0 .Or. it == 1 .Or. it == nt) Then\n        call OUTPUT_velocity(it)\n        call Output_Energy(it)\n    Endif/' "$app_dir/code/PIC/Main_IFE_Test_2.f90"
 perl -0pi -e 's/    If \(Mod\(it,1000\)\.eq\.0 \.Or\. it == 1\) Then/    If (Mod(it,1000).eq.0 .Or. it == 1 .Or. it == nt) Then/' "$app_dir/code/PIC/Main_IFE_Test_2.f90"
 
-# Maxwellian initialization.
-perl -0pi -e 's/Integer\(4\) :: MaxKappa=2/Integer(4) :: MaxKappa=1/' "$app_dir/MCC_jw/code/Interface_IFE/MCCInterface.f90"
+# Keep the global particle sanity check consistent with the selected ppc.
+perl -0pi -e "s/N_part_max = [0-9]+/N_part_max = $particle_capacity/" "$app_dir/code/Data/PIC_MAIN_PARAM_2D.f90"
 
-# Make the MCC/JW particle bundle use the species data read from pic.inp.
-perl -0pi -e 's/    Use Field_2D, Only:dens0/    Use Field_2D, Only: dens0/' "$app_dir/MCC_jw/code/Interface_IFE/MCCInterface.f90"
-perl -0pi -e 's/\n    Use Particle_2D, Only: qs, xm, tmpj, ispe_tot//' "$app_dir/MCC_jw/code/Interface_IFE/MCCInterface.f90"
-if ! grep -q 'PIC_EXPANSION_MI400' "$app_dir/MCC_jw/code/Interface_IFE/MCCInterface.f90"; then
-  perl -0pi -e 's/(        Call GasInitPegasus\(ControlFlowGlobal\).*\n)/$1        ! PIC_EXPANSION_MI400: use pic.inp masses, charges, and temperatures.\n        Do i = 0, Min(ControlFlowGlobal%Ns, ispe_tot - 1)\n            SpecyGlobal(i)%Charge = qs(i+1) * q_ref\n            SpecyGlobal(i)%Mass = xm(i+1) * m_ref\n            If (Allocated(tmpj)) Then\n                SpecyGlobal(i)%InitTemperature = tmpj(i+1) * T_ref\n                SpecyGlobal(i)%Temperature = SpecyGlobal(i)%InitTemperature\n            End If\n            If (Allocated(dens0)) Then\n                SpecyGlobal(i)%InitDensity = dens0(i+1)\n                SpecyGlobal(i)%Density = SpecyGlobal(i)%InitDensity\n            End If\n        End Do\n/' "$app_dir/MCC_jw/code/Interface_IFE/MCCInterface.f90"
+# Maxwellian initialization.
+perl -0pi -e 's/Integer\(4\) :: MaxKappa=[0-9]+/Integer(4) :: MaxKappa=1/' "$mcc_file"
+
+# Force the MCC/JW particle bundle to use species data read from INPUT/pic.inp.
+perl -0pi -e 's/    Use Field_2D, Only:dens0/    Use Field_2D, Only: dens0/' "$mcc_file"
+if ! grep -q 'PIC_EXPANSION_MI400' "$mcc_file"; then
+  perl -0pi -e 's/(        Call GasInitPegasus\(ControlFlowGlobal\).*\n)/$1        ! PIC_EXPANSION_MI400: use the two species read from INPUT\/pic.inp.\n        ControlFlowGlobal%Ns = Min(ControlFlowGlobal%Ns, ispe_tot - 1)\n        Do i = 0, ControlFlowGlobal%Ns\n            SpecyGlobal(i)%Charge = qs(i+1) * q_ref\n            SpecyGlobal(i)%Mass = xm(i+1) * m_ref\n            If (Allocated(tmpj)) Then\n                SpecyGlobal(i)%InitTemperature = tmpj(i+1) * T_ref\n                SpecyGlobal(i)%Temperature = SpecyGlobal(i)%InitTemperature\n            End If\n            If (Allocated(dens0)) Then\n                SpecyGlobal(i)%InitDensity = dens0(i+1)\n                SpecyGlobal(i)%Density = SpecyGlobal(i)%InitDensity\n            End If\n        End Do\n/' "$mcc_file"
 fi
 
-# Let ParticlePerGrid in pic.inp control the initial slab particle count.
-perl -0pi -e 's/        !======= for wsy paper case ==========\n        PB%NParNormal = 6000000\n        NPArMax = PB%NParNormal\n        If\(Allocated\(PB%PO\)\) Deallocate\(PB%PO\)\n        Allocate\(PB%PO\(NPArMax\)\)\n        !======================================\n/        ! Initial particle storage is allocated below from ParticlePerGrid.\n/' "$app_dir/MCC_jw/code/Interface_IFE/MCCInterface.f90"
-perl -0pi -e 's/           PB%NPar = 5000 \* \(dxmaxmax-dxminmin\) \* \(dymaxmax-dyminmin\)\s*\n            PB%Weight = affp_bjw\(isp\)\s*\n            !PB%Weight = dens0\(isp\)\*n_ref \* RegionVolume \/ PB%NPar\s*\n            !print\*,dens0\(isp\)\*n_ref\s*\n            PB%NParNormal = 5000 \* \(dxmaxmax-dxminmin\) \* \(dymaxmax-dyminmin\)[^\n]*\n/            If (delta_global == 0) Then\n                RegionVolume = (dxmaxmax-dxminmin)*L_ref * (dymaxmax-dyminmin)*L_ref\n            Elseif (delta_global == 1) Then\n                RegionVolume = (dxmaxmax-dxminmin)*L_ref * PI*(dymaxmax**2-dyminmin**2)*L_ref**2\n            Endif\n            PB%NPar = INT(DBLE(ParticlePerGrid) * (dxmaxmax-dxminmin) * (dymaxmax-dyminmin))\n            PB%Weight = dens0(isp)*n_ref * RegionVolume \/ DBLE(PB%NPar)\n            PB%NParNormal = PB%NPar\n/s' "$app_dir/MCC_jw/code/Interface_IFE/MCCInterface.f90"
-perl -0pi -e 's/NPArMax = Ceiling\(3\.0 \* PB%NParNormal\)/NPArMax = Ceiling(1.2D0 * PB%NParNormal)/' "$app_dir/MCC_jw/code/Interface_IFE/MCCInterface.f90"
+# Let ParticlePerGrid in INPUT/pic.inp control the initial slab particle count.
+perl -0pi -e 's/        !======= for wsy paper case ==========\n        PB%NParNormal = 6000000\n        NPArMax = PB%NParNormal\n        If\(Allocated\(PB%PO\)\) Deallocate\(PB%PO\)\n        Allocate\(PB%PO\(NPArMax\)\)\n        !======================================\n/        ! Initial particle storage is allocated below from ParticlePerGrid.\n/' "$mcc_file"
+perl -0pi -e 's/           PB%NPar = 5000 \* \(dxmaxmax-dxminmin\) \* \(dymaxmax-dyminmin\)\s*\n            PB%Weight = affp_bjw\(isp\)\s*\n            !PB%Weight = dens0\(isp\)\*n_ref \* RegionVolume \/ PB%NPar\s*\n            !print\*,dens0\(isp\)\*n_ref\s*\n            PB%NParNormal = 5000 \* \(dxmaxmax-dxminmin\) \* \(dymaxmax-dyminmin\)[^\n]*\n/            If (delta_global == 0) Then\n                RegionVolume = (dxmaxmax-dxminmin)*L_ref * (dymaxmax-dyminmin)*L_ref\n            Elseif (delta_global == 1) Then\n                RegionVolume = (dxmaxmax-dxminmin)*L_ref * PI*(dymaxmax**2-dyminmin**2)*L_ref**2\n            Endif\n            PB%NPar = INT(DBLE(ParticlePerGrid) * (dxmaxmax-dxminmin) * (dymaxmax-dyminmin))\n            PB%Weight = dens0(isp)*n_ref * RegionVolume \/ DBLE(PB%NPar)\n            PB%NParNormal = PB%NPar\n/s' "$mcc_file"
+perl -0pi -e 's/NPArMax = Ceiling\(3\.0 \* PB%NParNormal\)/NPArMax = Ceiling(1.2D0 * PB%NParNormal)/' "$mcc_file"
 
-# Left x boundary: specular/full reflection. Right x boundary already deletes escaped particles.
-perl -0pi -e 's/            Iposflag = 1\n            TimeRemain = \(PO%X - dxmin\)\/PO%Vx\n            TimeMove = TimeRemain\n            PO%Y = PO%Y - PO%Vy \* TimeRemain\n            PO%X = dxmin \+ 10E-6\n            !call PO%VelKappaInit[^\n]*\n            call DRandom\(ranf1\)\n            CALL RANDOM_NUMBER\(ranf1\)\n            PO%Vx =SQRT \(\(1\.d0\*Kappa-1\.5\)\/beta\*\(\(ranf1\)\*\*\(-1\/\(Kappa-1\)\)-1\)\)\n            VFactor = 1\.0 \/ PB%VFactor\n            call PO%VelRes\(VFactor\)/            Iposflag = 1\n            TimeRemain = (PO%X - dxmin)\/PO%Vx\n            TimeMove = TimeRemain\n            PO%Y = PO%Y - PO%Vy * TimeRemain\n            PO%Z = PO%Z - PO%Vz * TimeRemain\n            PO%Vx = -PO%Vx\n            PO%X = dxmin + 10E-6/' "$app_dir/MCC_jw/code/Interface_IFE/MCCInterface.f90"
+if [[ "$left_boundary" == "thermal" ]]; then
+  left_block='        If (PO%X <= dxmin) Then
+            ! PAPER_CASE_LEFT_BOUNDARY_BEGIN thermal-reservoir Maxwellian
+            ek_before = PO%Energy(PB%Mass, PB%VFactor)
+            Iposflag = 1
+            TimeRemain = (PO%X - dxmin)/PO%Vx
+            TimeMove = TimeRemain
+            PO%Y = PO%Y - PO%Vy * TimeRemain
+            PO%Z = PO%Z - PO%Vz * TimeRemain
+            PO%X = dxmin + 10E-6
+            call DRandom(ranf1)
+            call DRandom(ranf2)
+            call DRandom(ranf3)
+            PO%Vx = SQRT((-DLOG(Max(ranf1, 1.0d-300)))/beta)
+            velocity_tangential = SQRT((-DLOG(Max(ranf2, 1.0d-300)))/beta)
+            theta_v = 2*pii*ranf3
+            PO%Vy = velocity_tangential*COS(theta_v)
+            PO%Vz = velocity_tangential*SIN(theta_v)
+            VFactor = 1.0 / PB%VFactor
+            call PO%VelRes(VFactor)
+            ek_after = PO%Energy(PB%Mass, PB%VFactor)
+            If (PB%UnequalWeightFlag) Then
+                diag_weight = PO%WQ
+            Else
+                diag_weight = PB%Weight
+            End If
+            Call AddDiagThermalExchange(diag_weight, ek_before, ek_after)
+            ! PAPER_CASE_LEFT_BOUNDARY_END'
+else
+  left_block='        If (PO%X <= dxmin) Then
+            ! PAPER_CASE_LEFT_BOUNDARY_BEGIN specular
+            Iposflag = 1
+            TimeRemain = (PO%X - dxmin)/PO%Vx
+            TimeMove = TimeRemain
+            PO%Y = PO%Y - PO%Vy * TimeRemain
+            PO%Z = PO%Z - PO%Vz * TimeRemain
+            PO%Vx = -PO%Vx
+            PO%X = dxmin + 10E-6
+            ! PAPER_CASE_LEFT_BOUNDARY_END'
+fi
+export PAPER_LEFT_BOUNDARY_BLOCK="$left_block"
+replace_block "$mcc_file" 'BEGIN { $r = $ENV{"PAPER_LEFT_BOUNDARY_BLOCK"} . "\n" } s/        If \(PO%X <= dxmin\) Then.*?        Elseif \(PO%X > dxmax\) Then/$r        Elseif (PO%X > dxmax) Then/s'
+unset PAPER_LEFT_BOUNDARY_BLOCK
 
-# y boundaries: periodic particle wrap, matching the paper setup.
-perl -0pi -e 's/        Elseif \(PO%Y < dymin\) Then.*?        Elseif \(PO%Y > dymax\) Then.*?        Endif\n        \n        If \(N_objects/        Elseif (PO%Y < dymin) Then\n            If (delta == 0) Then\n                Do While (PO%Y < dymin)\n                    PO%Y = PO%Y + (dymax - dymin)\n                End Do\n            Elseif (delta == 1) Then\n                Print*,'"'"'wrong cross'"'"'\n                Print*,PO\n                pause\n            Endif\n        Elseif (PO%Y > dymax) Then\n            If (delta == 0) Then\n                Do While (PO%Y > dymax)\n                    PO%Y = PO%Y - (dymax - dymin)\n                End Do\n            Endif\n        Endif\n        \n        If (N_objects/s' "$app_dir/MCC_jw/code/Interface_IFE/MCCInterface.f90"
+# y boundaries: periodic particle wrap, matching the 1D-dominant slab setup.
+y_block='        Elseif (PO%Y < dymin) Then
+            If (delta == 0) Then
+                Do While (PO%Y < dymin)
+                    PO%Y = PO%Y + (dymax - dymin)
+                End Do
+            Elseif (delta == 1) Then
+                Print*, "wrong cross"
+                Print*, PO
+                pause
+            Endif
+        Elseif (PO%Y > dymax) Then
+            If (delta == 0) Then
+                Do While (PO%Y > dymax)
+                    PO%Y = PO%Y - (dymax - dymin)
+                End Do
+            Endif
+        Endif'
+export PAPER_Y_BOUNDARY_BLOCK="$y_block"
+replace_block "$mcc_file" 'BEGIN { $r = $ENV{"PAPER_Y_BOUNDARY_BLOCK"} . "\n" } s/        Elseif \(PO%Y < dymin\) Then.*?        If \(N_objects/$r        If (N_objects/s'
+unset PAPER_Y_BOUNDARY_BLOCK
 
-# Two-species output: avoid the historical third-species columns.
+# Two-species output: avoid historical third-species columns.
 perl -0pi -e 's/WRITE\(1,\('\''\(A150\)'\''\)\) '\''VARIABLES = "x" "y" "R" "Phi" "Rho" "Rho_ele" "Rho_H" "Rho_C" "efx" "efy" "Ek_ele" "Ek_ion" "Ek_tot_ele" "Ek_tot_ion" "node_type1"  "node_type2"'\''/WRITE(1,('\''(A150)'\'')) '\''VARIABLES = "x" "y" "R" "Phi" "Rho" "Rho_ele" "Rho_ion" "efx" "efy" "Ek_ele" "Ek_ion" "Ek_tot_ele" "Ek_tot_ion" "node_type1"  "node_type2"'\''/' "$app_dir/code/In-Output/Output_To_Tecplot_IJK_2D.f90"
 perl -0pi -e 's/          WRITE\(1,50\) HP\(1:2,i\), radius\(i\),Phi\(i,1\), Rho\(i,1\), Rho_s\(i,1,1\), Rho_s\(i,1,2\),Rho_s\(i,1,3\), efx\(i, 1\), efy\(i, 1\), Ek_s\(i,1,1\), Ek_s\(i,1,2\), Ek_tot\(i,1,1\), Ek_tot\(i,1,2\), node_type\(1, i\), node_type\(2, i\)/          WRITE(1,*) HP(1:2,i), radius(i), Phi(i,1), Rho(i,1), Rho_s(i,1,1), Rho_s(i,1,2), \&\n                     efx(i,1), efy(i,1), Ek_s(i,1,1), Ek_s(i,1,2), Ek_tot(i,1,1), Ek_tot(i,1,2), \&\n                     node_type(1,i), node_type(2,i)/' "$app_dir/code/In-Output/Output_To_Tecplot_IJK_2D.f90"
 
@@ -94,7 +195,7 @@ EOF_OBJECT
 
 ion_mass="3.6438D-28"
 cat > "$app_dir/INPUT/pic.inp" <<EOF_PIC
-! Maxwellian specular-reflection plasma expansion, mi/me = 400
+! Maxwellian mi/me=400 two-species plasma expansion
 0, 0
 .false.
 .false.
@@ -102,7 +203,7 @@ cat > "$app_dir/INPUT/pic.inp" <<EOF_PIC
 1.0
 $ppg
 1.0D0, 1.0D0, 1.0D0
-10000000
+$particle_capacity
 .FALSE., .FALSE.
 2
 $nt, 0.05
@@ -166,18 +267,90 @@ CF%NRun               =   $nt,
 CF%NDiagShort         =   1000,
 CF%NDiagLong          =   5000,
 CF%ParticlePerGrid    =   $ppg,
+CF%withRecombination  =   .false.,
 /
 EOF_CF
 
-mkdir -p "$app_dir/OUTPUT/Field" "$app_dir/OUTPUT/Velocity" "$app_dir/OUTPUT/Energy" "$app_dir/OUTPUT/Average" "$app_dir/DUMP"
+mkdir -p "$app_dir/OUTPUT/Field" "$app_dir/OUTPUT/Velocity" "$app_dir/OUTPUT/Particle" \
+         "$app_dir/OUTPUT/Global" "$app_dir/OUTPUT/Phase" "$app_dir/OUTPUT/Energy" \
+         "$app_dir/OUTPUT/History" "$app_dir/OUTPUT/Average" "$app_dir/DUMP"
+
+cat > "$app_dir/case_config.txt" <<EOF_CONFIG
+case_name = maxwellian_mi400_${left_boundary}_ppc${ppg}_nt${nt}
+distribution = maxwellian
+left_boundary = ${left_boundary}
+species = electron, ion
+ion_mass_over_electron_mass = 400
+ion_charge_state = 1
+density_ref_m3 = 1.0e21
+Te0_eV = 1.0
+Ti0_eV = 0.01
+domain_lambdaD = [0,1024] x [0,4]
+initial_slab_lambdaD = [0,128] x [0,4]
+mesh = 1025 x 5
+dx_lambdaD = 1.0
+dy_lambdaD = 1.0
+dt_omega_pe = 0.05
+nt = ${nt}
+particles_per_cell_per_species = ${ppg}
+initial_particles_total = ${initial_particles}
+particle_capacity = ${particle_capacity}
+target_omega_pi_t_30_step = 12000
+target_omega_pi_t_50_step = 20000
+diagnostic_stride_global = 1000
+field_velocity_output_stride = 1000
+seed_control = not_yet_parameterized
+EOF_CONFIG
+
+cat > "$app_dir/run_maxwell_mi400_${left_boundary}.slurm" <<EOF_SLURM
+#!/bin/bash
+#SBATCH -J mx400_${left_boundary}
+#SBATCH -p comp
+#SBATCH -N 1
+#SBATCH -n 1
+#SBATCH -c 4
+#SBATCH -t 12:00:00
+#SBATCH -o slurm-%j.out
+#SBATCH -e slurm-%j.err
+
+module purge
+module load intel/2022.1
+module load cmake/3.23.5
+
+cd /data/home/dg001947/pic-/PIC-IFE_GEC
+ulimit -s unlimited
+
+rm -f run.log OUTPUT/global_diagnostics.csv
+mkdir -p OUTPUT/{Field,Velocity,Particle,Global,Phase,Energy,History,Average} DUMP
+
+./1DPIC > run.log 2>&1
+EOF_SLURM
+
+pic_ispe="$(awk 'NR==11 {print $1}' "$app_dir/INPUT/pic.inp" | tr -d ',')"
+pic_nt="$(awk 'NR==12 {print $1}' "$app_dir/INPUT/pic.inp" | tr -d ',')"
+if [[ "$pic_ispe" != "2" || "$pic_nt" != "$nt" ]]; then
+  echo "case validation failed: ispe_tot=$pic_ispe nt=$pic_nt" >&2
+  exit 1
+fi
+grep -q "Integer(4) :: MaxKappa=1" "$mcc_file"
+grep -q "PAPER_CASE_LEFT_BOUNDARY_BEGIN" "$mcc_file"
+grep -q "CF%NRun               =   $nt" "$app_dir/MCC_jw/input/controlflow.txt"
 
 cat <<EOF_DONE
-Prepared Maxwellian mi/me=400 case in:
-  $app_dir
+Prepared standard paper baseline case:
+  app_dir        = $app_dir
+  distribution   = Maxwellian
+  left_boundary  = $left_boundary
+  species        = electron + ion (mi/me=400)
+  ppc            = $ppg
+  nt, dt         = $nt, 0.05
+  config         = $app_dir/case_config.txt
+  slurm          = $app_dir/run_maxwell_mi400_${left_boundary}.slurm
 
-Particles per cell: $ppg
-nt: $nt
-
-For the paper-level particle count, rerun:
-  bash scripts/setup_maxwell_mi400_case.sh 80000 20000
+Expected key outputs:
+  OUTPUT/global_diagnostics.csv
+  OUTPUT/Field/Average_x_012000.dat
+  OUTPUT/Field/Average_x_020000.dat
+  OUTPUT/Velocity/velocity_IJ_3012000.dat
+  OUTPUT/Velocity/velocity_IJ_3020000.dat
 EOF_DONE

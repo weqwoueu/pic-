@@ -148,3 +148,31 @@ verification_runs/
 ```
 
 后处理要从 `Average_x` 和 `velocity_IJ` 中抽取 `ne(x)`、`ni(x)`、`vth,e(x)`，再拟合 `ln(Te/Te0) = (gamma_e - 1) ln(ne/ne0) + b`，得到 `gamma_fit_t30.csv` 和 `gamma_fit_t50.csv`。之后再开始做 `dx/dt/ppc` 收敛性，以及 Maxwellian、kappa=2、polytropic gamma=2 的正式对比图。
+
+## 2026-07-05 标准论文 case 配置脚本
+
+已经把 `scripts/setup_maxwell_mi400_case.sh` 整理成标准 Maxwellian 基准 case 准备脚本。目标配置是：两物种 electron+ion，`mi/me=400`，`Z=1`，`dx=dy=lambda_D0`，`dt=0.05/omega_pe`，区域 `[0,1024] x [0,4]`，初始 slab `[0,128] x [0,4]`。第三个参数控制左边界：`thermal` 是 isothermal/thermal-reservoir 基准，`specular` 是 adiabatic/energy-conserving 对照。
+
+服务器上正式准备标准测试：
+
+```bash
+cd ~/pic-
+bash scripts/setup_maxwell_mi400_case.sh 1000 20000 thermal
+cd PIC-IFE_GEC
+bash -n ../scripts/setup_maxwell_mi400_case.sh
+rm -rf build OUTPUT DUMP
+module purge
+module load intel/2022.1
+module load cmake/3.23.5
+cmake -S . -B build -DCMAKE_Fortran_COMPILER="$(which ifort)"
+cmake --build build -j4
+sbatch run_maxwell_mi400_thermal.slurm
+```
+
+论文级粒子数以后再把第一条改成：
+
+```bash
+bash scripts/setup_maxwell_mi400_case.sh 80000 20000 thermal
+```
+
+跑完后日志里应该只看到 electron 和一个 ion species，不应该再出现 `Ar(+)`。核心输出仍然是 `global_diagnostics.csv`、`Average_x_012000/020000.dat`、`velocity_IJ_3012000/3020000.dat`。
