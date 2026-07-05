@@ -117,3 +117,34 @@ mi/me=1600  -> it=40000
 图 10-13 再跑边界比较：同一分布下跑 `isothermal` 和 `adiabatic` 两套，取 `ωpi t=30` 和 `50`。
 
 关键提醒：现在仓库还差一步“参数配置化”。分布、κ、γ、边界、质量比有些是硬编码的，直接跑当前版本只能算“师兄论文方向的缩减算例”，还不能当最终复现。下一步最该做的是把这些硬编码整理成 case 配置，至少让一个 case 目录清楚写明：分布、质量比、边界、nt、输出步。
+## 2026-07-05 诊断模块完成后的下一步记忆
+
+本轮已经完成并验证了全局诊断模块：`global_diagnostics.csv` 能输出粒子数守恒和能量守恒相关列；场能量 `Efield` 已修正物理尺度，从原来的 `~1e9` 量级降到 `~1e-4` 量级，`Ebalance_error` 在早期测试中从约 `-68%` 改善到约 `-0.76%`。这说明诊断模块主问题已经解决，可以进入论文复现实验阶段。
+
+接下来不要再零散跑短测试，而是先做一个标准 Maxwellian 基准算例：`mi/me=400`、`dt=0.05`、`nt=20000`，目标时刻为 `omega_pi t=50`。中间重点保留 `omega_pi t=30` 对应的 `it=12000` 和最终 `omega_pi t=50` 对应的 `it=20000`。
+
+需要检查并保存的核心输出：
+
+```text
+OUTPUT/global_diagnostics.csv
+OUTPUT/Field/Average_x_012000.dat
+OUTPUT/Field/Average_x_020000.dat
+OUTPUT/Velocity/velocity_IJ_3012000.dat
+OUTPUT/Velocity/velocity_IJ_3020000.dat
+```
+
+完成 20000 步后，下一项工作是写后处理整理脚本，把每个算例整理成论文建议中的可复现实验目录：
+
+```text
+verification_runs/
+  maxwellian_dx1_dt005_ppc80000_seed101/
+    config.txt
+    global_diagnostics.csv
+    profiles_t30.csv
+    profiles_t50.csv
+    gamma_fit_t30.csv
+    gamma_fit_t50.csv
+    figures/
+```
+
+后处理要从 `Average_x` 和 `velocity_IJ` 中抽取 `ne(x)`、`ni(x)`、`vth,e(x)`，再拟合 `ln(Te/Te0) = (gamma_e - 1) ln(ne/ne0) + b`，得到 `gamma_fit_t30.csv` 和 `gamma_fit_t50.csv`。之后再开始做 `dx/dt/ppc` 收敛性，以及 Maxwellian、kappa=2、polytropic gamma=2 的正式对比图。
