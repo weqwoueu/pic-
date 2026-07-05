@@ -19,8 +19,9 @@ Module ModuleGlobalDiagnostics
                                   ResetDiagCounters
     Use Field_2D,            Only: efx, efy
     Use IFE_Data,            Only: Field_Size
-    Use Constant_Variable_2D,Only: EPSILON0, Efield_ref
+    Use Constant_Variable_2D,Only: EPSILON0, Efield_ref, L_ref
     Use Cell_Volume_Data,    Only: Cell_Volume_zwz
+    Use Domain_2D,           Only: delta_global
     Implicit None
 
     ! ---- initial values for balance check ----
@@ -132,13 +133,17 @@ Contains
         Implicit None
         Real(8) :: efield_j
         Integer :: i
-        Real(8) :: ex_phys, ey_phys, dV
+        Real(8) :: ex_phys, ey_phys, dV, geom_scale
 
         efield_j = 0.0d0
+        ! Cell_Volume_zwz is stored in normalized coordinates.
+        geom_scale = L_ref * L_ref
+        If (delta_global == 1) geom_scale = L_ref * L_ref * L_ref
+
         Do i = 1, Field_Size
             ex_phys = efx(i, 1) * Efield_ref
             ey_phys = efy(i, 1) * Efield_ref
-            dV      = Cell_Volume_zwz(2, i)
+            dV      = Cell_Volume_zwz(2, i) * geom_scale
             efield_j = efield_j + 0.5d0 * EPSILON0 * (ex_phys*ex_phys + ey_phys*ey_phys) * dV
         End Do
     End Function ComputeFieldEnergy
