@@ -133,21 +133,28 @@ OUTPUT/Velocity/velocity_IJ_3012000.dat
 OUTPUT/Velocity/velocity_IJ_3020000.dat
 ```
 
-完成 20000 步后，下一项工作是写后处理整理脚本，把每个算例整理成论文建议中的可复现实验目录：
+完成 20000 步后，每个算例先保存到 `verification_runs/<case_name>/`，后处理生成物统一放到该目录下的 `postprocessed/`：
 
 ```text
 verification_runs/
-  maxwellian_dx1_dt005_ppc80000_seed101/
-    config.txt
+  maxwellian_mi400_thermal_ppc1000_nt20000/
+    case_config.txt
     global_diagnostics.csv
-    profiles_t30.csv
-    profiles_t50.csv
-    gamma_fit_t30.csv
-    gamma_fit_t50.csv
-    figures/
+    Average_x_012000.dat
+    Average_x_020000.dat
+    velocity_IJ_3012000.dat
+    velocity_IJ_3020000.dat
+    postprocessed/
+      maxwell_mi400_t012000.png
+      maxwell_mi400_t020000.png
+      profiles_t30.csv
+      profiles_t50.csv
+      gamma_fit_t30.csv
+      gamma_fit_t50.csv
+      postprocess_summary.txt
 ```
 
-后处理要从 `Average_x` 和 `velocity_IJ` 中抽取 `ne(x)`、`ni(x)`、`vth,e(x)`，再拟合 `ln(Te/Te0) = (gamma_e - 1) ln(ne/ne0) + b`，得到 `gamma_fit_t30.csv` 和 `gamma_fit_t50.csv`。之后再开始做 `dx/dt/ppc` 收敛性，以及 Maxwellian、kappa=2、polytropic gamma=2 的正式对比图。
+现在本地脚本入口是 `scripts/draw_png.py` 和 `scripts/postprocess_maxwell_mi400.py`。后处理要从 `Average_x` 和 `velocity_IJ` 中抽取 `ne(x)`、`ni(x)`、`vth,e(x)`，再拟合 `ln(Te/Te0) = (gamma_e - 1) ln(ne/ne0) + b`，得到 `gamma_fit_t30.csv` 和 `gamma_fit_t50.csv`。之后再开始做 `dx/dt/ppc` 收敛性，以及 Maxwellian、kappa=2、polytropic gamma=2 的正式对比图。
 
 ## 2026-07-05 标准论文 case 配置脚本
 

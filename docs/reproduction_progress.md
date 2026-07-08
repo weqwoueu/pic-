@@ -8,7 +8,8 @@
 - 本轮目标：准备在电光云上复现师兄论文里的 collisionless plasma expansion 算例。
 - 重点算例：Maxwellian 初始速度分布，`mi/me = 400`，目标时刻 `omega_pi t = 50`。
 - 对应脚本：`scripts/setup_maxwell_mi400_case.sh`
-- 画图脚本：`scripts/plot_maxwell_mi400.py`
+- 画图脚本：`scripts/draw_png.py`
+- 后处理脚本：`scripts/postprocess_maxwell_mi400.py`
 
 ## 云端状态
 
@@ -96,17 +97,17 @@ ls PIC-IFE_GEC/OUTPUT/Field/Average_x_020000.dat
 ls PIC-IFE_GEC/OUTPUT/Velocity/velocity_IJ_3020000.dat
 ```
 
-画图：
+保存到 `verification_runs` 后画图：
 
 ```bash
 cd /data/home/dg001947/pic-
-python3 scripts/plot_maxwell_mi400.py PIC-IFE_GEC 20000
+python3 scripts/draw_png.py verification_runs/maxwellian_mi400_thermal_ppc1000_nt20000 20000
 ```
 
 预期图片：
 
 ```bash
-PIC-IFE_GEC/figures/maxwell_mi400_t020000.png
+verification_runs/maxwellian_mi400_thermal_ppc1000_nt20000/postprocessed/maxwell_mi400_t020000.png
 ```
 
 ## 本轮修正
@@ -125,3 +126,69 @@ rm -rf build
 cmake -S . -B build -DCMAKE_Fortran_COMPILER="$(which ifort)"
 cmake --build build -j"$(nproc)"
 ```
+
+## 2026-07-08 当前进度
+
+已经完成标准 Maxwellian 小粒子数基准测试：
+
+```text
+case = maxwellian_mi400_thermal_ppc1000_nt20000
+distribution = Maxwellian
+left boundary = thermal-reservoir
+species = electron + ion
+mi/me = 400
+particles per cell per species = 1000
+nt = 20000
+dt = 0.05 / omega_pe
+target time = omega_pi t = 50
+```
+
+服务器保存目录：
+
+```bash
+~/pic-/verification_runs/maxwellian_mi400_thermal_ppc1000_nt20000
+```
+
+该目录已保存：
+
+```text
+case_config.txt
+pic.inp
+controlflow.txt
+global_diagnostics.csv
+physics_parameter.inp
+normalize.inp
+Average_x_012000.dat
+Average_x_020000.dat
+velocity_IJ_3012000.dat
+velocity_IJ_3020000.dat
+run.log
+```
+
+诊断结论：
+
+- Slurm 任务正常结束，`run finish at after it=20000`。
+- 日志中只出现 `Electron` 和一个离子物种 `He(+)`，没有 `Ar(+)`，说明已经是两物种标准测试。
+- `He(+)` 只是 MCC/gas 数据库显示名；标准 case 中质量和电荷由 `INPUT/pic.inp` 覆盖为 `mi/me=400, Z=1`。
+- 粒子数守恒正常：`Ne_domain + Ne_lost` 基本回到初始电子数。
+- `Ebalance_error` 在 `ppc=1000` 小粒子数测试下最终约为 6%，可作为流程验证；正式论文精度需要提高 ppc 并做收敛性。
+
+已新增本地后处理入口：
+
+```bash
+python3 scripts/draw_png.py verification_runs/maxwellian_mi400_thermal_ppc1000_nt20000 12000
+python3 scripts/draw_png.py verification_runs/maxwellian_mi400_thermal_ppc1000_nt20000 20000
+python3 scripts/postprocess_maxwell_mi400.py verification_runs/maxwellian_mi400_thermal_ppc1000_nt20000
+```
+
+这些脚本会读取 `verification_runs/<case_name>/` 中的扁平归档文件，并把生成物写入：
+
+```text
+verification_runs/<case_name>/postprocessed/
+```
+
+下一步：
+
+1. 把本地脚本同步到服务器，在已完成的 `maxwellian_mi400_thermal_ppc1000_nt20000` 目录上运行画图和后处理。
+2. 检查 `postprocessed/profiles_t30.csv`、`profiles_t50.csv`、`gamma_fit_t30.csv`、`gamma_fit_t50.csv` 是否正常。
+3. 确认后处理无误后，再提高粒子数或做 `dx/dt/ppc` 收敛性。
