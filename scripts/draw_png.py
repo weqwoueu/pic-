@@ -23,12 +23,11 @@ PNG files are written to:
   verification_runs/<case_name>/postprocessed/
 """
 
-from __future__ import annotations
-
 import argparse
 import math
 import re
 from pathlib import Path
+from typing import List, Optional, Pattern, Tuple
 
 import numpy as np
 
@@ -72,13 +71,13 @@ def parse_args() -> argparse.Namespace:
 
 
 def read_numeric_table(path: Path, min_cols: int) -> np.ndarray:
-    rows: list[list[float]] = []
+    rows = []
     with path.open("r", errors="replace") as handle:
         for raw in handle:
             line = raw.strip()
             if not line or line.startswith("#"):
                 continue
-            values: list[float] = []
+            values = []
             for token in line.replace(",", " ").split():
                 try:
                     values.append(float(token.replace("D", "E").replace("d", "e")))
@@ -103,7 +102,7 @@ def parse_ref_value(path: Path, name: str, default: float) -> float:
     return default
 
 
-def parse_config_value(path: Path, key: str, default: str | None = None) -> str | None:
+def parse_config_value(path: Path, key: str, default: Optional[str] = None) -> Optional[str]:
     if not path.exists():
         return default
     prefix = key.lower()
@@ -127,7 +126,7 @@ def parse_config_float(path: Path, key: str, default: float) -> float:
     return float(nums[-1].replace("D", "E").replace("d", "e"))
 
 
-def output_paths(case_dir: Path, pattern: str, nested: tuple[str, str]) -> list[Path]:
+def output_paths(case_dir: Path, pattern: str, nested: Tuple[str, str]) -> List[Path]:
     paths = sorted(case_dir.glob(pattern))
     if paths:
         return paths
@@ -135,17 +134,17 @@ def output_paths(case_dir: Path, pattern: str, nested: tuple[str, str]) -> list[
     return sorted((case_dir / subdir).glob(subpattern))
 
 
-def parse_step(path: Path, pattern: re.Pattern[str]) -> int | None:
+def parse_step(path: Path, pattern: Pattern) -> Optional[int]:
     match = pattern.search(path.name)
     if not match:
         return None
     return int(match.group(1))
 
 
-def choose_file(paths: list[Path], pattern: re.Pattern[str], requested: int | None) -> tuple[Path, int]:
+def choose_file(paths: List[Path], pattern: Pattern, requested: Optional[int]) -> Tuple[Path, int]:
     if not paths:
         raise SystemExit("No matching output files found in the case directory.")
-    indexed: list[tuple[int, Path]] = []
+    indexed = []
     for path in paths:
         step = parse_step(path, pattern)
         if step is not None:
@@ -163,7 +162,7 @@ def choose_file(paths: list[Path], pattern: re.Pattern[str], requested: int | No
     return path, step
 
 
-def infer_label(config_file: Path, explicit_label: str | None) -> str:
+def infer_label(config_file: Path, explicit_label: Optional[str]) -> str:
     if explicit_label:
         return explicit_label
     left_boundary = parse_config_value(config_file, "left_boundary", "unknown")
