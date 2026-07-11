@@ -253,7 +253,6 @@ sbatch run_maxwell_mi400.slurm
 | `cmake` 找不到 `ifort` | 先 `module load compiler/intel/...`，或改用 `ifx` |
 | 输出没有 `020000` | 确认 `INPUT/pic.inp` 里是 `20000, 0.05`，或重新运行配置脚本 |
 | 画图脚本找不到文件 | 先确认结果已经保存到 `verification_runs/<case_name>/`，并且里面有 `Average_x_*.dat` 和 `velocity_IJ_3*.dat` |
-| `SyntaxError: future feature annotations is not defined` | 服务器 Python 偏老；拉取最新版脚本，当前 `draw_png.py` 和 `postprocess_maxwell_mi400.py` 已兼容 Python 3.6 |
 | 论文级粒子数跑不动 | 先用 `1000/cell` 或 `5000/cell` 做证明图，再申请更多内存和墙钟时间 |
 
 ## 最短命令清单
