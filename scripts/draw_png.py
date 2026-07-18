@@ -92,6 +92,34 @@ def read_numeric_table(path: Path, min_cols: int) -> np.ndarray:
     return np.asarray(rows, dtype=float)
 
 
+def read_velocity_table(path: Path) -> np.ndarray:
+    """Read the seven-column velocity format, including wrapped records."""
+    values: list[float] = []
+    with path.open("r", errors="replace") as handle:
+        for raw in handle:
+            line = raw.strip()
+            if not line or line.startswith("#"):
+                continue
+            try:
+                row_values = [
+                    float(token.replace("D", "E").replace("d", "e"))
+                    for token in line.replace(",", " ").split()
+                ]
+            except ValueError:
+                continue
+            values.extend(row_values)
+
+    column_count = 7
+    if not values:
+        raise SystemExit(f"No numeric velocity data found in {path}")
+    if len(values) % column_count:
+        raise SystemExit(
+            f"Incomplete velocity record in {path}: "
+            f"found {len(values)} values, expected a multiple of {column_count}"
+        )
+    return np.asarray(values, dtype=float).reshape((-1, column_count))
+
+
 def parse_ref_value(path: Path, name: str, default: float) -> float:
     if not path.exists():
         return default
@@ -192,7 +220,7 @@ def main() -> int:
     )
 
     field = read_numeric_table(field_file, 9)
-    velocity = read_numeric_table(velocity_file, 10)
+    velocity = read_velocity_table(velocity_file)
 
     physics_file = case_dir / "physics_parameter.inp"
     config_file = case_dir / "case_config.txt"
@@ -214,9 +242,10 @@ def main() -> int:
     ne = np.abs(field[:, 3]) / n0
     ni = np.abs(field[:, 4]) / n0
 
-    x_vel = velocity[:, 9] - 0.5
-    thermal_e = velocity[:, 3]
-    count_e = velocity[:, 6]
+    dx_lambda_d = parse_config_float(config_file, "dx_lambdaD", 1.0)
+    x_vel = (velocity[:, 6] - 0.5) * dx_lambda_d
+    thermal_e = velocity[:, 2]
+    count_e = velocity[:, 4]
     thermal_e = np.where(count_e > 0, thermal_e, np.nan)
     order = np.argsort(x_vel)
     x_vel = x_vel[order]

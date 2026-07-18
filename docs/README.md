@@ -14,6 +14,9 @@
 | `scripts/setup_maxwell_mi400_case.sh` | 配置论文 Maxwell `mi/me=400` 证明算例 |
 | `scripts/draw_png.py` | 从 `verification_runs/<case_name>/` 读取归档结果并画密度、电子热速度图 |
 | `scripts/postprocess_maxwell_mi400.py` | 从归档结果生成论文后处理 CSV 和 `gamma_e` 拟合结果 |
+| `scripts/archive_verification_case.sh` | 按 `case_config.txt` 自动归档正式算例的配置、日志和关键输出 |
+| `docs/numerical_validation_plan.md` | 按 PDF 工作建议整理的收敛性测试顺序和判定标准 |
+| `docs/术语解释.md` | 物理符号、数值术语、诊断量、工作建议和汇报话术的通俗说明 |
 
 程序用相对路径读写文件，所以运行 `1DPIC` 时工作目录必须是 `PIC-IFE_GEC/`。
 
@@ -34,8 +37,9 @@
 远程 IDE 找不到 `ifort` 时，在 IDE 终端先执行：
 
 ```bash
-module load compiler/intel/2021.3.0
-module load compiler/cmake/3.23.3
+module purge
+module load intel/2022.1
+module load cmake/3.23.5
 which ifort
 which cmake
 ```
@@ -54,7 +58,7 @@ source /opt/oneapi/setvars.sh
 cd /path/to/pic-
 git fetch origin
 git status --short --branch
-git pull --rebase
+git pull --ff-only
 ```
 
 如果有本地未提交改动，先提交或 `git stash push -u`，不要直接覆盖。
@@ -64,8 +68,9 @@ git pull --rebase
 先用云端已有脚本确认代码能编译、能运行、能输出：
 
 ```bash
-module load compiler/intel/2021.3.0
-module load compiler/cmake/3.23.3
+module purge
+module load intel/2022.1
+module load cmake/3.23.5
 
 cd /path/to/pic-/PIC-IFE_GEC
 bash ./run_min_case.sh
@@ -102,7 +107,7 @@ mi = 400 * me = 3.6438D-28 kg
 | 网格 | `1025 x 5`，即 `dx=dy=lambda_D0` |
 | 时间步 | `dt=0.05 omega_pe^-1` |
 | 目标时刻 | `omega_pi t = 50` |
-| 左 x 边界 | specular / full reflection |
+| 左 x 边界 | thermal reservoir（默认）或 specular |
 | 右 x 边界 | outflow / delete |
 | y 边界 | periodic |
 | 温度 | `Te0=1 eV`, `Ti0=0.01 eV` |
@@ -112,7 +117,7 @@ mi = 400 * me = 3.6438D-28 kg
 
 ```bash
 cd /path/to/pic-
-bash scripts/setup_maxwell_mi400_case.sh 1000 20000
+bash scripts/setup_maxwell_mi400_case.sh 1000 20000 thermal 101 0.05 1.0
 ```
 
 这里 `nt=20000, dt=0.05`，所以：
@@ -125,15 +130,16 @@ omega_pi t = nt * dt / sqrt(mi/me) = 20000 * 0.05 / 20 = 50
 
 ```bash
 cd PIC-IFE_GEC
-module load compiler/intel/2021.3.0
-module load compiler/cmake/3.23.3
+module purge
+module load intel/2022.1
+module load cmake/3.23.5
 
 rm -rf build
 cmake -S . -B build -DCMAKE_Fortran_COMPILER="$(which ifort)"
-cmake --build build -j"$(nproc)"
+cmake --build build -j4
 
-mkdir -p OUTPUT/Field OUTPUT/Velocity OUTPUT/Energy OUTPUT/Average DUMP
-./1DPIC > run.log 2>&1
+sbatch run_maxwellian_dx1_dt005_ppc1000_seed101_thermal.slurm
+squeue -u dg001947
 ```
 
 看运行日志：
@@ -186,8 +192,12 @@ profiles_t30.csv
 profiles_t50.csv
 gamma_fit_t30.csv
 gamma_fit_t50.csv
+gamma_fit_t30.png
+gamma_fit_t50.png
 postprocess_summary.txt
 ```
+
+`gamma_e` 统一按照工作建议中的区间 `10^-3 <= ni/n0 < 1` 拟合；CSV 同时记录标准误差、`R^2`、空间范围、排除点数，profile 文件用 `gamma_fit_included` 标记每个点是否参与拟合。
 
 如果服务器没有画图库：
 
@@ -208,41 +218,28 @@ python3 -m pip install --user matplotlib numpy
 128 * 4 * 80000 * 2 = 81.92 million
 ```
 
-这会非常吃内存和时间。先用 `1000/cell` 跑通证明流程，再跑论文级：
+这会非常吃内存和时间。先用 `1000/cell` 跑通流程，再按 [数值验证计划](numerical_validation_plan.md) 依次跑 `20000/40000/80000 ppc`，不要直接提交最大算例。
 
 ```bash
-cd /path/to/pic-
-bash scripts/setup_maxwell_mi400_case.sh 80000 20000
+cd ~/pic-
+bash scripts/setup_maxwell_mi400_case.sh 20000 20000 thermal 101 0.05 1.0
 cd PIC-IFE_GEC
-./1DPIC > run_paper.log 2>&1
+sbatch run_maxwellian_dx1_dt005_ppc20000_seed101_thermal.slurm
 ```
 
 ## Slurm 示例
 
-保存为 `run_maxwell_mi400.slurm`，分区名按账号修改：
+配置脚本会在 `PIC-IFE_GEC/` 自动生成 Slurm 文件，不需要手写。文件名包含所有关键参数，例如：
 
-```bash
-#!/bin/bash
-#SBATCH -J maxwell-mi400
-#SBATCH -p xahcnormal
-#SBATCH -N 1
-#SBATCH -n 1
-#SBATCH -t 48:00:00
-#SBATCH -o slurm-%j.out
-#SBATCH -e slurm-%j.err
-
-module load compiler/intel/2021.3.0
-module load compiler/cmake/3.23.3
-
-cd /path/to/pic-/PIC-IFE_GEC
-mkdir -p OUTPUT/Field OUTPUT/Velocity OUTPUT/Energy OUTPUT/Average DUMP
-./1DPIC > run.log 2>&1
+```text
+run_maxwellian_dx1_dt005_ppc1000_seed101_thermal.slurm
 ```
 
-提交：
+提交后用 `squeue` 查看状态；任务正常结束会自动归档，不要同时提交两个使用同一 `PIC-IFE_GEC` 工作目录的 case。
 
 ```bash
-sbatch run_maxwell_mi400.slurm
+sbatch run_maxwellian_dx1_dt005_ppc1000_seed101_thermal.slurm
+squeue -u dg001947
 ```
 
 ## 常见问题
@@ -250,7 +247,7 @@ sbatch run_maxwell_mi400.slurm
 | 现象 | 处理 |
 |------|------|
 | `cannot open ./INPUT/mesh.inp` | 工作目录错了，先 `cd PIC-IFE_GEC` 再运行 |
-| `cmake` 找不到 `ifort` | 先 `module load compiler/intel/...`，或改用 `ifx` |
+| `cmake` 找不到 `ifort` | 先 `module load intel/2022.1`，再检查 `which ifort`；不要用带 Intel 参数的工程强制切到 `gfortran` |
 | 输出没有 `020000` | 确认 `INPUT/pic.inp` 里是 `20000, 0.05`，或重新运行配置脚本 |
 | 画图脚本找不到文件 | 先确认结果已经保存到 `verification_runs/<case_name>/`，并且里面有 `Average_x_*.dat` 和 `velocity_IJ_3*.dat` |
 | 论文级粒子数跑不动 | 先用 `1000/cell` 或 `5000/cell` 做证明图，再申请更多内存和墙钟时间 |
@@ -259,26 +256,22 @@ sbatch run_maxwell_mi400.slurm
 
 ```bash
 cd /path/to/pic-
-git pull --rebase
-bash scripts/setup_maxwell_mi400_case.sh 1000 20000
+git pull --ff-only
+bash scripts/setup_maxwell_mi400_case.sh 1000 20000 thermal 101 0.05 1.0
 
 cd PIC-IFE_GEC
-module load compiler/intel/2021.3.0
-module load compiler/cmake/3.23.3
+module purge
+module load intel/2022.1
+module load cmake/3.23.5
 rm -rf build
 cmake -S . -B build -DCMAKE_Fortran_COMPILER="$(which ifort)"
-cmake --build build -j"$(nproc)"
-mkdir -p OUTPUT/Field OUTPUT/Velocity OUTPUT/Energy OUTPUT/Average DUMP
-./1DPIC > run.log 2>&1
+cmake --build build -j4
+sbatch run_maxwellian_dx1_dt005_ppc1000_seed101_thermal.slurm
+squeue -u dg001947
 
+# 跑完并自动归档后，在仓库根目录后处理：
 cd ..
-case_dir=verification_runs/maxwellian_mi400_thermal_ppc1000_nt20000
-mkdir -p "$case_dir"
-cp PIC-IFE_GEC/case_config.txt PIC-IFE_GEC/INPUT/pic.inp PIC-IFE_GEC/MCC_jw/input/controlflow.txt PIC-IFE_GEC/run.log "$case_dir"/
-cp PIC-IFE_GEC/OUTPUT/global_diagnostics.csv PIC-IFE_GEC/OUTPUT/physics_parameter.inp PIC-IFE_GEC/OUTPUT/normalize.inp "$case_dir"/
-cp PIC-IFE_GEC/OUTPUT/Field/Average_x_012000.dat PIC-IFE_GEC/OUTPUT/Field/Average_x_020000.dat "$case_dir"/
-cp PIC-IFE_GEC/OUTPUT/Velocity/velocity_IJ_3012000.dat PIC-IFE_GEC/OUTPUT/Velocity/velocity_IJ_3020000.dat "$case_dir"/
-
+case_dir=verification_runs/maxwellian_dx1_dt005_ppc1000_seed101_thermal
 python3 scripts/draw_png.py "$case_dir" 12000
 python3 scripts/draw_png.py "$case_dir" 20000
 python3 scripts/postprocess_maxwell_mi400.py "$case_dir"
@@ -298,7 +291,7 @@ python3 scripts/postprocess_maxwell_mi400.py "$case_dir"
 | `build/` | CMake 编译目录 | 可删，重新 `cmake` 会生成 |
 | `case_config.txt` | 当前 case 的配置摘要 | 保存到 `verification_runs` |
 | `run.log` | 当前运行日志 | 保存一份，空间紧可 `gzip` |
-| `run_maxwell_mi400_thermal.slurm` | Slurm 提交脚本 | 可保留 |
+| `run_maxwellian_*.slurm` | 配置脚本按参数生成的 Slurm 提交脚本 | 可保留 |
 | `OUTPUT/` | 当前运行输出 | 不直接长期堆在这里 |
 | `DUMP/` | 重启 dump 文件 | 不做重启时可删 |
 | `MCCB*.dat`, `SN*.dat`, `SR*.dat`, `10000*.dat` | MCC/碰撞模块生成的中间表或统计文件 | 一般可删 |
@@ -408,7 +401,7 @@ MCC_jw/
 code/
 CMakeLists.txt
 case_config.txt
-run_maxwell_mi400_thermal.slurm
+run_maxwellian_*.slurm
 *.f90
 ```
 
@@ -419,7 +412,7 @@ cd ~/pic-
 git pull --ff-only
 
 bash -n scripts/setup_maxwell_mi400_case.sh
-bash scripts/setup_maxwell_mi400_case.sh 1000 20000 thermal
+bash scripts/setup_maxwell_mi400_case.sh 1000 20000 thermal 101 0.05 1.0
 
 cd PIC-IFE_GEC
 module purge
@@ -430,8 +423,14 @@ rm -rf build
 cmake -S . -B build -DCMAKE_Fortran_COMPILER="$(which ifort)"
 cmake --build build -j4
 
-sbatch run_maxwell_mi400_thermal.slurm
+sbatch run_maxwellian_dx1_dt005_ppc1000_seed101_thermal.slurm
 squeue -u dg001947
+```
+
+任务正常结束后，脚本会自动把配置、日志、全局诊断以及 `t=30/50` 的场和速度输出归档到：
+
+```text
+verification_runs/maxwellian_dx1_dt005_ppc1000_seed101_thermal/
 ```
 
 查看运行：

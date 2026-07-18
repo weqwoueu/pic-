@@ -26,6 +26,7 @@ USE IFE_INTERFACE, ONLY: IFE_START_2D, Input_2D, Setup_IFE_Mesh_2D, &
 USE ModuleMCCInterface   !$ ab.ZWZ 2021/12/19 for JW's MCC
 Use ModuleDiagOneStep
 Use ModuleGlobalDiagnostics
+Use ModuleSimulationRandomSeed, Only: InitializeSimulationRandomSeed
 IMPLICIT NONE
 
 !? ------------------- what are they used for? -------------------------
@@ -66,8 +67,23 @@ REAL(8), PARAMETER	::	pii	= 3.14159265358979D0
 REAL(8) :: xp, yp, resu, error  !$ ab.ZWZ to check convergence 2021/7/9     !? used in convergence checking, delete ?
 Logical :: DumpFlag
 
-Integer(4) :: isp 
+Integer(4) :: isp
+Integer :: SimulationSeed, SeedStatus
+Character(Len=32) :: SeedText
 
+
+SimulationSeed = 101
+SeedText = ''
+Call Get_Environment_Variable('PIC_RANDOM_SEED', SeedText, Status=SeedStatus)
+If (SeedStatus == 0 .And. Len_Trim(SeedText) > 0) Then
+    Read(SeedText, *, Iostat=SeedStatus) SimulationSeed
+    If (SeedStatus /= 0) Then
+        Print*, 'Invalid PIC_RANDOM_SEED: ', Trim(SeedText)
+        Stop 2
+    End If
+End If
+Call InitializeSimulationRandomSeed(SimulationSeed)
+Print*, 'PIC random seed = ', SimulationSeed
 
 CALL My_Label(  '2 Dimension I F E - P I C', 'Immersed Finite Element Particle-In-Cell Code', &
 				'Y. Cao and R. Kafafy', 'Dr. J. Wang and Dr. T. Lin')

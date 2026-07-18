@@ -192,3 +192,14 @@ verification_runs/<case_name>/postprocessed/
 1. 把本地脚本同步到服务器，在已完成的 `maxwellian_mi400_thermal_ppc1000_nt20000` 目录上运行画图和后处理。
 2. 检查 `postprocessed/profiles_t30.csv`、`profiles_t50.csv`、`gamma_fit_t30.csv`、`gamma_fit_t50.csv` 是否正常。
 3. 确认后处理无误后，再提高粒子数或做 `dx/dt/ppc` 收敛性。
+
+## 2026-07-14 后处理与收敛准备
+
+- 已从 `pdf材料/工作建议.pdf` 原始页面核对统一拟合流程，固定区间为 `10^-3 <= ni/n0 < 1`，区间由离子密度 `ni` 判定，拟合关系仍为 `Te(ne)`。
+- 已修复速度文件七列记录被 Intel Fortran 自动换行造成的读取失败，并修正热速度、粒子计数和 cell 坐标列映射。
+- 后处理现在输出 `gamma_e` 标准误差、残差标准误差、`R^2`、拟合空间范围、排除点数、逐点纳入标记和拟合散点图。
+- 当前 `ppc=1000` Maxwellian 预验证结果为：t30 `gamma_e=1.0387 +/- 0.0052`，t50 `gamma_e=1.0269 +/- 0.0052`。该结果接近论文值，但不能替代正式粒子数收敛。
+- 已为程序增加统一的 `PIC_RANDOM_SEED` 入口，同时控制 intrinsic `RANDOM_NUMBER` 与历史 `DRandom`。
+- `setup_maxwell_mi400_case.sh` 已支持参数 `ppc nt boundary seed dt dx`，其中 `dx=1.0/0.5`、`dt=0.05/0.025`。
+- 已增加 `archive_verification_case.sh`，正式作业成功后按 case 名自动归档并拒绝覆盖已有结果。
+- 第一阶段 Maxwellian 收敛顺序和资源规模见 `docs/numerical_validation_plan.md`。

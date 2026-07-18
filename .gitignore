@@ -26,6 +26,7 @@ PIC-IFE_GEC/OUTPUT/
 PIC-IFE_GEC/DUMP/
 PIC-IFE_GEC/figures/
 PIC-IFE_GEC/base/
+/verification_runs/
 *.dat
 *.msh
 *dump*

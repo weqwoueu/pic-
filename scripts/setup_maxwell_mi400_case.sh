@@ -7,15 +7,15 @@ set -euo pipefail
 #   mass ratio    : mi/me = 400, Z = 1
 #   domain        : [0, 1024 lambda_D0] x [0, 4 lambda_D0]
 #   initial slab  : [0, 128 lambda_D0] x [0, 4 lambda_D0]
-#   mesh          : dx = dy = lambda_D0
-#   time step     : dt = 0.05 / omega_pe
+#   mesh          : dx = dy = 1.0 or 0.5 lambda_D0
+#   time step     : dt = 0.05 or 0.025 / omega_pe
 #
 # Usage:
-#   bash scripts/setup_maxwell_mi400_case.sh [particles_per_cell] [nt] [thermal|specular]
+#   bash scripts/setup_maxwell_mi400_case.sh [ppc] [nt] [boundary] [seed] [dt] [dx]
 #
 # Examples:
-#   bash scripts/setup_maxwell_mi400_case.sh 1000 20000 thermal
-#   bash scripts/setup_maxwell_mi400_case.sh 80000 20000 thermal
+#   bash scripts/setup_maxwell_mi400_case.sh 1000 20000 thermal 101 0.05 1.0
+#   bash scripts/setup_maxwell_mi400_case.sh 80000 40000 thermal 101 0.025 1.0
 #
 # The paper-level ppc=80000 case is large. Use 1000 first as a standard
 # configuration smoke test, then increase to 80000 for production.
@@ -23,6 +23,9 @@ set -euo pipefail
 ppg="${1:-1000}"
 nt="${2:-20000}"
 left_boundary="${3:-thermal}"
+random_seed="${4:-101}"
+dt="${5:-0.05}"
+dx="${6:-1.0}"
 
 case "$left_boundary" in
   thermal|specular) ;;
@@ -32,18 +35,44 @@ case "$left_boundary" in
     ;;
 esac
 
+case "$dt" in
+  0.05|.05) dt="0.05"; dt_tag="005" ;;
+  0.025|.025) dt="0.025"; dt_tag="0025" ;;
+  *)
+    echo "dt must be 0.05 or 0.025" >&2
+    exit 2
+    ;;
+esac
+
+case "$dx" in
+  1|1.0) dx="1.0"; dx_tag="1"; mesh_nx=1025; mesh_ny=5; slab_cells_x=128; slab_cells_y=4 ;;
+  0.5|.5) dx="0.5"; dx_tag="05"; mesh_nx=2049; mesh_ny=9; slab_cells_x=256; slab_cells_y=8 ;;
+  *)
+    echo "dx must be 1.0 or 0.5" >&2
+    exit 2
+    ;;
+esac
+
+if ! [[ "$ppg" =~ ^[1-9][0-9]*$ && "$nt" =~ ^[1-9][0-9]*$ && "$random_seed" =~ ^[0-9]+$ ]]; then
+  echo "ppc and nt must be positive integers; seed must be a non-negative integer" >&2
+  exit 2
+fi
+
 repo_root="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 app_dir="$repo_root/PIC-IFE_GEC"
 mcc_file="$app_dir/MCC_jw/code/Interface_IFE/MCCInterface.f90"
 
-slab_x=128
-slab_y=4
 species_count=2
-initial_particles=$((ppg * slab_x * slab_y * species_count))
+initial_particles=$((ppg * slab_cells_x * slab_cells_y * species_count))
 particle_capacity=$(((initial_particles * 12 + 9) / 10))
 if (( particle_capacity < 10000000 )); then
   particle_capacity=10000000
 fi
+
+target_t30_step="$(awk -v dt="$dt" 'BEGIN { printf "%.0f", 600.0 / dt }')"
+target_t50_step="$(awk -v dt="$dt" 'BEGIN { printf "%.0f", 1000.0 / dt }')"
+printf -v target_t30_file_step '%06d' "$target_t30_step"
+printf -v target_t50_file_step '%06d' "$target_t50_step"
 
 backup_once() {
   local f="$1"
@@ -95,6 +124,7 @@ fi
 perl -0pi -e 's/        !======= for wsy paper case ==========\n        PB%NParNormal = 6000000\n        NPArMax = PB%NParNormal\n        If\(Allocated\(PB%PO\)\) Deallocate\(PB%PO\)\n        Allocate\(PB%PO\(NPArMax\)\)\n        !======================================\n/        ! Initial particle storage is allocated below from ParticlePerGrid.\n/' "$mcc_file"
 perl -0pi -e 's/           PB%NPar = 5000 \* \(dxmaxmax-dxminmin\) \* \(dymaxmax-dyminmin\)\s*\n            PB%Weight = affp_bjw\(isp\)\s*\n            !PB%Weight = dens0\(isp\)\*n_ref \* RegionVolume \/ PB%NPar\s*\n            !print\*,dens0\(isp\)\*n_ref\s*\n            PB%NParNormal = 5000 \* \(dxmaxmax-dxminmin\) \* \(dymaxmax-dyminmin\)[^\n]*\n/            If (delta_global == 0) Then\n                RegionVolume = (dxmaxmax-dxminmin)*L_ref * (dymaxmax-dyminmin)*L_ref\n            Elseif (delta_global == 1) Then\n                RegionVolume = (dxmaxmax-dxminmin)*L_ref * PI*(dymaxmax**2-dyminmin**2)*L_ref**2\n            Endif\n            PB%NPar = INT(DBLE(ParticlePerGrid) * (dxmaxmax-dxminmin) * (dymaxmax-dyminmin))\n            PB%Weight = dens0(isp)*n_ref * RegionVolume \/ DBLE(PB%NPar)\n            PB%NParNormal = PB%NPar\n/s' "$mcc_file"
 perl -0pi -e 's/NPArMax = Ceiling\(3\.0 \* PB%NParNormal\)/NPArMax = Ceiling(1.2D0 * PB%NParNormal)/' "$mcc_file"
+perl -0pi -e 's/PB%NPar = INT\(DBLE\(ParticlePerGrid\) \* \(dxmaxmax-dxminmin\) \* \(dymaxmax-dyminmin\)\)/PB%NPar = INT(DBLE(ParticlePerGrid) * (dxmaxmax-dxminmin) * (dymaxmax-dyminmin) \/ (hx(1)*hx(2)))/' "$mcc_file"
 
 if [[ "$left_boundary" == "thermal" ]]; then
   left_block='        If (PO%X <= dxmin) Then
@@ -167,6 +197,7 @@ perl -0pi -e 's/WRITE\(1,\('\''\(A150\)'\''\)\) '\''VARIABLES = "x" "y" "R" "Phi
 perl -0pi -e 's/          WRITE\(1,50\) HP\(1:2,i\), radius\(i\),Phi\(i,1\), Rho\(i,1\), Rho_s\(i,1,1\), Rho_s\(i,1,2\),Rho_s\(i,1,3\), efx\(i, 1\), efy\(i, 1\), Ek_s\(i,1,1\), Ek_s\(i,1,2\), Ek_tot\(i,1,1\), Ek_tot\(i,1,2\), node_type\(1, i\), node_type\(2, i\)/          WRITE(1,*) HP(1:2,i), radius(i), Phi(i,1), Rho(i,1), Rho_s(i,1,1), Rho_s(i,1,2), \&\n                     efx(i,1), efy(i,1), Ek_s(i,1,1), Ek_s(i,1,2), Ek_tot(i,1,1), Ek_tot(i,1,2), \&\n                     node_type(1,i), node_type(2,i)/' "$app_dir/code/In-Output/Output_To_Tecplot_IJK_2D.f90"
 
 perl -0pi -e 's/        do num=1,N\n            !WRITE\(544, '\''\(A150\)'\''\) [^\n]*\n            WRITE\(544, 18\) driftVelocity\(1,num, 1\), driftVelocity\(2,num, 1\), driftVelocity\(3,num, 1\), thermalVelocity\(1,num, 1\), thermalVelocity\(2,num, 1\), thermalVelocity\(3,num, 1\),x_num\(1,num\),x_num\(2,num\),x_num\(3,num\),num\n        end do\n    \n        \n18      FORMAT[^\n]*\n/        WRITE(544, '\''(A)'\'') '\''# drift_e drift_i thermal_e thermal_i count_e count_i cell'\''\n        do num=1,N\n            WRITE(544, *) driftVelocity(1,num,1), driftVelocity(2,num,1), thermalVelocity(1,num,1), \&\n                          thermalVelocity(2,num,1), x_num(1,num), x_num(2,num), num\n        end do\n    \n        \n/s' "$app_dir/OUTPUT_velocity.f90"
+perl -0pi -e 's/WRITE\(544, \*\) driftVelocity/WRITE(544, '\''(6(ES16.8,1X),I8)'\'') driftVelocity/' "$app_dir/OUTPUT_velocity.f90"
 perl -0pi -e 's/    If \(Mod\(it,1000\)\.eq\.0 \.Or\. it == 1\) Then/    If (Mod(it,1000).eq.0 .Or. it == 1 .Or. it == nt) Then/' "$app_dir/OUTPUT_velocity.f90"
 if ! grep -q 'Use TimeControl, Only: nt' "$app_dir/OUTPUT_velocity.f90"; then
   perl -0pi -e 's/(Use Constant_Variable_2D\r?\n)/$1Use TimeControl, Only: nt\n/' "$app_dir/OUTPUT_velocity.f90"
@@ -179,8 +210,10 @@ perl -0pi -e 's/WRITE\(543,\s*17\)/WRITE(543, *)/g; s/\r?\n\s*17 FORMAT[^\r\n]*(
 cat > "$app_dir/INPUT/mesh.inp" <<'EOF_MESH'
 0., 0., 0.
 1024.0, 4.0, 0.
-1025, 5, 0
-1.0, 1.0
+EOF_MESH
+cat >> "$app_dir/INPUT/mesh.inp" <<EOF_MESH
+$mesh_nx, $mesh_ny, 0
+$dx, $dx
 1.0
 EOF_MESH
 
@@ -206,7 +239,7 @@ $ppg
 $particle_capacity
 .FALSE., .FALSE.
 2
-$nt, 0.05
+$nt, $dt
 1000000
 1
 1000000
@@ -275,8 +308,10 @@ mkdir -p "$app_dir/OUTPUT/Field" "$app_dir/OUTPUT/Velocity" "$app_dir/OUTPUT/Par
          "$app_dir/OUTPUT/Global" "$app_dir/OUTPUT/Phase" "$app_dir/OUTPUT/Energy" \
          "$app_dir/OUTPUT/History" "$app_dir/OUTPUT/Average" "$app_dir/DUMP"
 
+case_name="maxwellian_dx${dx_tag}_dt${dt_tag}_ppc${ppg}_seed${random_seed}_${left_boundary}"
+
 cat > "$app_dir/case_config.txt" <<EOF_CONFIG
-case_name = maxwellian_mi400_${left_boundary}_ppc${ppg}_nt${nt}
+case_name = ${case_name}
 distribution = maxwellian
 left_boundary = ${left_boundary}
 species = electron, ion
@@ -287,24 +322,24 @@ Te0_eV = 1.0
 Ti0_eV = 0.01
 domain_lambdaD = [0,1024] x [0,4]
 initial_slab_lambdaD = [0,128] x [0,4]
-mesh = 1025 x 5
-dx_lambdaD = 1.0
-dy_lambdaD = 1.0
-dt_omega_pe = 0.05
+mesh = ${mesh_nx} x ${mesh_ny}
+dx_lambdaD = ${dx}
+dy_lambdaD = ${dx}
+dt_omega_pe = ${dt}
 nt = ${nt}
 particles_per_cell_per_species = ${ppg}
 initial_particles_total = ${initial_particles}
 particle_capacity = ${particle_capacity}
-target_omega_pi_t_30_step = 12000
-target_omega_pi_t_50_step = 20000
+target_omega_pi_t_30_step = ${target_t30_step}
+target_omega_pi_t_50_step = ${target_t50_step}
 diagnostic_stride_global = 1000
 field_velocity_output_stride = 1000
-seed_control = not_yet_parameterized
+random_seed = ${random_seed}
 EOF_CONFIG
 
-cat > "$app_dir/run_maxwell_mi400_${left_boundary}.slurm" <<EOF_SLURM
+cat > "$app_dir/run_${case_name}.slurm" <<EOF_SLURM
 #!/bin/bash
-#SBATCH -J mx400_${left_boundary}
+#SBATCH -J mx_${dx_tag}_${dt_tag}_${ppg}
 #SBATCH -p comp
 #SBATCH -N 1
 #SBATCH -n 1
@@ -319,11 +354,48 @@ module load cmake/3.23.5
 
 cd /data/home/dg001947/pic-/PIC-IFE_GEC
 ulimit -s unlimited
+export PIC_RANDOM_SEED=${random_seed}
+
+if command -v flock >/dev/null 2>&1; then
+  exec 9>.pic_run.lock
+  if ! flock -n 9; then
+    echo "another PIC case is already using this working directory" >&2
+    exit 3
+  fi
+fi
 
 rm -f run.log OUTPUT/global_diagnostics.csv
 mkdir -p OUTPUT/{Field,Velocity,Particle,Global,Phase,Energy,History,Average} DUMP
 
+run_start_utc="\$(date -u +%Y-%m-%dT%H:%M:%SZ)"
+run_start_epoch="\$(date +%s)"
+set +e
 ./1DPIC > run.log 2>&1
+run_status="\$?"
+set -e
+run_end_utc="\$(date -u +%Y-%m-%dT%H:%M:%SZ)"
+run_end_epoch="\$(date +%s)"
+run_elapsed_seconds="\$((run_end_epoch - run_start_epoch))"
+git_revision="\$(git -C /data/home/dg001947/pic- rev-parse HEAD 2>/dev/null || echo unknown)"
+
+cat > run_metadata.txt <<EOF_METADATA
+case_name = ${case_name}
+git_revision = \$git_revision
+slurm_job_id = \${SLURM_JOB_ID:-unknown}
+hostname = \$(hostname)
+run_start_utc = \$run_start_utc
+run_end_utc = \$run_end_utc
+run_elapsed_seconds = \$run_elapsed_seconds
+exit_status = \$run_status
+EOF_METADATA
+
+if [[ "\$run_status" -ne 0 ]]; then
+  echo "1DPIC failed with exit status \$run_status" >&2
+  exit "\$run_status"
+fi
+
+cd /data/home/dg001947/pic-
+bash scripts/archive_verification_case.sh
 EOF_SLURM
 
 pic_ispe="$(awk 'NR==11 {print $1}' "$app_dir/INPUT/pic.inp" | tr -d ',')"
@@ -335,6 +407,7 @@ fi
 grep -q "Integer(4) :: MaxKappa=1" "$mcc_file"
 grep -q "PAPER_CASE_LEFT_BOUNDARY_BEGIN" "$mcc_file"
 grep -q "CF%NRun               =   $nt" "$app_dir/MCC_jw/input/controlflow.txt"
+grep -q "PIC random seed" "$app_dir/code/PIC/Main_IFE_Test_2.f90"
 
 cat <<EOF_DONE
 Prepared standard paper baseline case:
@@ -343,14 +416,16 @@ Prepared standard paper baseline case:
   left_boundary  = $left_boundary
   species        = electron + ion (mi/me=400)
   ppc            = $ppg
-  nt, dt         = $nt, 0.05
+  seed           = $random_seed
+  dx, dt         = $dx, $dt
+  nt             = $nt
   config         = $app_dir/case_config.txt
-  slurm          = $app_dir/run_maxwell_mi400_${left_boundary}.slurm
+  slurm          = $app_dir/run_${case_name}.slurm
 
 Expected key outputs:
   OUTPUT/global_diagnostics.csv
-  OUTPUT/Field/Average_x_012000.dat
-  OUTPUT/Field/Average_x_020000.dat
-  OUTPUT/Velocity/velocity_IJ_3012000.dat
-  OUTPUT/Velocity/velocity_IJ_3020000.dat
+  OUTPUT/Field/Average_x_${target_t30_file_step}.dat
+  OUTPUT/Field/Average_x_${target_t50_file_step}.dat
+  OUTPUT/Velocity/velocity_IJ_3${target_t30_file_step}.dat
+  OUTPUT/Velocity/velocity_IJ_3${target_t50_file_step}.dat
 EOF_DONE
