@@ -198,8 +198,36 @@ verification_runs/<case_name>/postprocessed/
 - 已从 `pdf材料/工作建议.pdf` 原始页面核对统一拟合流程，固定区间为 `10^-3 <= ni/n0 < 1`，区间由离子密度 `ni` 判定，拟合关系仍为 `Te(ne)`。
 - 已修复速度文件七列记录被 Intel Fortran 自动换行造成的读取失败，并修正热速度、粒子计数和 cell 坐标列映射。
 - 后处理现在输出 `gamma_e` 标准误差、残差标准误差、`R^2`、拟合空间范围、排除点数、逐点纳入标记和拟合散点图。
-- 当前 `ppc=1000` Maxwellian 预验证结果为：t30 `gamma_e=1.0387 +/- 0.0052`，t50 `gamma_e=1.0269 +/- 0.0052`。该结果接近论文值，但不能替代正式粒子数收敛。
+- 当时未统一控制随机种子的 `ppc=1000` Maxwellian 预验证结果为：t30 `gamma_e=1.0387 +/- 0.0052`，t50 `gamma_e=1.0269 +/- 0.0052`。该结果只保留作历史参考，不能当作正式 seed 样本。
 - 已为程序增加统一的 `PIC_RANDOM_SEED` 入口，同时控制 intrinsic `RANDOM_NUMBER` 与历史 `DRandom`。
 - `setup_maxwell_mi400_case.sh` 已支持参数 `ppc nt boundary seed dt dx`，其中 `dx=1.0/0.5`、`dt=0.05/0.025`。
 - 已增加 `archive_verification_case.sh`，正式作业成功后按 case 名自动归档并拒绝覆盖已有结果。
 - 第一阶段 Maxwellian 收敛顺序和资源规模见 `docs/numerical_validation_plan.md`。
+
+## 2026-07-20 随机种子冒烟测试
+
+新增随机种子模块已经通过服务器 Intel 编译和完整运行验证：
+
+```text
+case = maxwellian_dx1_dt005_ppc1000_seed101_thermal
+git revision = 4ec6fb4b4993ee3feb9bff15a4b213f36456a2c5
+Slurm job = 381647
+node = c2n004
+seed = 101
+steps = 20000
+elapsed = 3530 s (58 min 50 s)
+exit status = 0
+```
+
+- 日志包含 `PIC random seed = 101` 和 `run finish at after it=20000`。
+- 自动归档成功，关键配置、诊断、场和速度文件共约 `34 MB`。
+- 最终 `Ebalance_error=0.063708601`，即约 `+6.37%`。这对 `ppc=1000` 流程测试可记录，但不能作为正式精度结论。
+- 最终电子 `Ne_domain + Ne_lost` 与初始电子数在输出精度内闭合，离子数保持不变。
+- 工程没有 MPI/OpenMP 运行并行，生成的 Slurm 脚本已从 `4` CPU 核改为 `1` 核，避免按核计费浪费。
+- `sacct` 显示墙钟 `58:51`、总 CPU 时间 `58:32`、`AllocCPUS=4`、`MaxRSS=109588 KiB`。CPU 时间与墙钟几乎相同，确认运行阶段实际只使用约 1 核；峰值内存约 `107 MiB`。
+- `comp` 分区显示 `MaxTime=UNLIMITED`。按粒子数线性外推，`ppc=20000` 暂估约 `20 h` 和 `2.1 GiB`，生成脚本的墙钟上限已由 `12 h` 调整为 `36 h`，后续以实测结果修正。
+- 本次 4 核作业的 `ReqMem=31664 MiB`，即集群默认约 `7916 MiB/核`，并显示 `billing=4`。后续改为 1 核后预计仍有约 `7.7 GiB` 内存额度，足以覆盖 `ppc=20000` 的暂估需求。
+- 本地后处理成功。固定 `seed=101` 时，t30 得到 `gamma_e=1.0443 +/- 0.0049`、`R^2=0.279`，t50 得到 `gamma_e=1.0468 +/- 0.0058`、`R^2=0.164`。剖面与拟合图未见结构异常，但稀薄前沿热速度噪声明显。
+- 与旧的未受控随机序列相比，t50 `gamma_e` 相差约 `0.0199`。两次运行不能作为正式 seed 对照，但足以说明 `ppc=1000` 不适合确定最终指数。
+
+下一步先在本地后处理该归档并记录 `gamma_e`，然后提交 `ppc=20000, seed=101` 的第一组资源与噪声试跑。正式提交前需通过 `sacct` 记录本次作业的 `MaxRSS`，并确认 `comp` 分区允许的最长墙钟时间。

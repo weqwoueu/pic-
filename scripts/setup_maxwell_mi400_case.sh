@@ -343,8 +343,8 @@ cat > "$app_dir/run_${case_name}.slurm" <<EOF_SLURM
 #SBATCH -p comp
 #SBATCH -N 1
 #SBATCH -n 1
-#SBATCH -c 4
-#SBATCH -t 12:00:00
+#SBATCH -c 1
+#SBATCH -t 36:00:00
 #SBATCH -o slurm-%j.out
 #SBATCH -e slurm-%j.err
 
