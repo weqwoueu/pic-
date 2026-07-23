@@ -69,6 +69,44 @@ if (( particle_capacity < 10000000 )); then
   particle_capacity=10000000
 fi
 
+# Resource model calibrated from the completed dx=1, dt=0.05, ppc=40000 run:
+# 40960000 initial particles, nt=20000, 75036 s elapsed, 5522 MiB MaxRSS.
+# Add 35% memory and 50% time headroom, then round to scheduler-friendly values.
+reference_particles=40960000
+reference_nt=20000
+reference_elapsed_seconds=75036
+reference_maxrss_mib=5522
+
+estimated_memory_mib=$(( \
+  (reference_maxrss_mib * initial_particles + reference_particles - 1) \
+  / reference_particles \
+))
+requested_memory_mib=$(((estimated_memory_mib * 135 + 99) / 100))
+requested_memory_mib=$((((requested_memory_mib + 499) / 500) * 500))
+if (( requested_memory_mib < 1000 )); then
+  requested_memory_mib=1000
+fi
+
+estimated_runtime_seconds=$(( \
+  (reference_elapsed_seconds * initial_particles * nt \
+    + reference_particles * reference_nt - 1) \
+  / (reference_particles * reference_nt) \
+))
+requested_runtime_seconds=$(((estimated_runtime_seconds * 3 + 1) / 2))
+requested_walltime_hours=$(((requested_runtime_seconds + 3599) / 3600))
+if (( requested_walltime_hours < 12 )); then
+  requested_walltime_hours=12
+fi
+requested_walltime_hours=$((((requested_walltime_hours + 11) / 12) * 12))
+requested_walltime_days=$((requested_walltime_hours / 24))
+requested_walltime_remainder=$((requested_walltime_hours % 24))
+if (( requested_walltime_days > 0 )); then
+  printf -v requested_walltime '%d-%02d:00:00' \
+    "$requested_walltime_days" "$requested_walltime_remainder"
+else
+  printf -v requested_walltime '%02d:00:00' "$requested_walltime_hours"
+fi
+
 target_t30_step="$(awk -v dt="$dt" 'BEGIN { printf "%.0f", 600.0 / dt }')"
 target_t50_step="$(awk -v dt="$dt" 'BEGIN { printf "%.0f", 1000.0 / dt }')"
 printf -v target_t30_file_step '%06d' "$target_t30_step"
@@ -330,6 +368,9 @@ nt = ${nt}
 particles_per_cell_per_species = ${ppg}
 initial_particles_total = ${initial_particles}
 particle_capacity = ${particle_capacity}
+slurm_cpus = 1
+slurm_memory_mib = ${requested_memory_mib}
+slurm_walltime = ${requested_walltime}
 target_omega_pi_t_30_step = ${target_t30_step}
 target_omega_pi_t_50_step = ${target_t50_step}
 diagnostic_stride_global = 1000
@@ -344,7 +385,8 @@ cat > "$app_dir/run_${case_name}.slurm" <<EOF_SLURM
 #SBATCH -N 1
 #SBATCH -n 1
 #SBATCH -c 1
-#SBATCH -t 36:00:00
+#SBATCH --mem=${requested_memory_mib}M
+#SBATCH -t ${requested_walltime}
 #SBATCH -o slurm-%j.out
 #SBATCH -e slurm-%j.err
 
@@ -419,6 +461,9 @@ Prepared standard paper baseline case:
   seed           = $random_seed
   dx, dt         = $dx, $dt
   nt             = $nt
+  Slurm CPUs     = 1
+  Slurm memory   = ${requested_memory_mib} MiB
+  Slurm walltime = ${requested_walltime}
   config         = $app_dir/case_config.txt
   slurm          = $app_dir/run_${case_name}.slurm
 
