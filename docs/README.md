@@ -14,6 +14,7 @@
 | `scripts/setup_maxwell_mi400_case.sh` | 配置论文 Maxwell `mi/me=400` 证明算例 |
 | `scripts/draw_png.py` | 从 `verification_runs/<case_name>/` 读取归档结果并画密度、电子热速度图 |
 | `scripts/postprocess_maxwell_mi400.py` | 从归档结果生成论文后处理 CSV 和 `gamma_e` 拟合结果 |
+| `scripts/summarize_maxwell_seed_ensemble.py` | 汇总多个 Maxwellian seed 的 `gamma_e` 均值、样本标准差和统计图 |
 | `scripts/archive_verification_case.sh` | 按 `case_config.txt` 自动归档正式算例的配置、日志和关键输出 |
 | `docs/numerical_validation_plan.md` | 按 PDF 工作建议整理的收敛性测试顺序和判定标准 |
 | `docs/术语解释.md` | 物理符号、数值术语、诊断量、工作建议和汇报话术的通俗说明 |
@@ -178,6 +179,18 @@ verification_runs/maxwellian_mi400_thermal_ppc1000_nt20000/postprocessed/maxwell
 ```bash
 python3 scripts/postprocess_maxwell_mi400.py verification_runs/maxwellian_mi400_thermal_ppc1000_nt20000
 ```
+
+三个 seed 都完成单 case 后处理后，在本地汇总统计：
+
+```powershell
+python scripts\summarize_maxwell_seed_ensemble.py `
+  verification_runs\maxwellian_dx1_dt005_ppc80000_seed101_thermal `
+  verification_runs\maxwellian_dx1_dt005_ppc80000_seed202_thermal `
+  verification_runs\maxwellian_dx1_dt005_ppc80000_seed303_thermal `
+  --reference 1.023 --reference-error 0.003
+```
+
+脚本按 seed 等权计算 `gamma_e` 均值、样本标准差和均值标准误。论文结果的随机误差优先使用 `gamma_e_sample_standard_deviation`，不要用单次拟合标准误差替代跨 seed 波动。
 
 生成文件统一放在：
 
