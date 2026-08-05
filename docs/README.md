@@ -440,6 +440,22 @@ sbatch run_maxwellian_dx1_dt005_ppc1000_seed101_thermal.slurm
 squeue -u dg001947
 ```
 
+### 并行运行不同 case
+
+同一个 `PIC-IFE_GEC` 目录中的可执行文件、`INPUT`、`OUTPUT`、`run.log` 和锁文件都是共享的，因此不能在该目录中并行运行两个 case。确需并行时，为新 case 创建独立 Git worktree，并把归档根目录指回主仓库：
+
+```bash
+cd ~
+git -C ~/pic- fetch origin main
+git -C ~/pic- worktree add --detach ~/pic-dx05 origin/main
+
+cd ~/pic-dx05
+PIC_ARCHIVE_ROOT=~/pic-/verification_runs \
+  bash scripts/setup_maxwell_mi400_case.sh 80000 20000 thermal 101 0.05 0.5
+```
+
+随后只在 `~/pic-dx05/PIC-IFE_GEC` 中编译和提交该 case。生成的 Slurm 文件会使用 worktree 的绝对路径，结果仍归档到 `~/pic-/verification_runs/<case_name>/`。不同 worktree 可以并行；同一个 worktree 仍只能运行一个 case。
+
 任务正常结束后，脚本会自动把配置、日志、全局诊断以及 `t=30/50` 的场和速度输出归档到：
 
 ```text

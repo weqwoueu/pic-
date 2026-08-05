@@ -3,6 +3,7 @@ set -euo pipefail
 
 repo_root="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 app_dir="${PIC_APP_DIR:-$repo_root/PIC-IFE_GEC}"
+archive_root="${PIC_ARCHIVE_ROOT:-$repo_root/verification_runs}"
 config_file="$app_dir/case_config.txt"
 
 config_value() {
@@ -35,7 +36,7 @@ fi
 printf -v t30_file_step '%06d' "$t30_step"
 printf -v t50_file_step '%06d' "$t50_step"
 
-archive_dir="$repo_root/verification_runs/$case_name"
+archive_dir="$archive_root/$case_name"
 if [[ -e "$archive_dir" ]]; then
   echo "archive already exists; refusing to mix results: $archive_dir" >&2
   exit 2

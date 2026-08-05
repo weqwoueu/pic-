@@ -60,6 +60,7 @@ fi
 
 repo_root="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 app_dir="$repo_root/PIC-IFE_GEC"
+archive_root="${PIC_ARCHIVE_ROOT:-$repo_root/verification_runs}"
 mcc_file="$app_dir/MCC_jw/code/Interface_IFE/MCCInterface.f90"
 
 species_count=2
@@ -376,6 +377,7 @@ target_omega_pi_t_50_step = ${target_t50_step}
 diagnostic_stride_global = 1000
 field_velocity_output_stride = 1000
 random_seed = ${random_seed}
+archive_root = ${archive_root}
 EOF_CONFIG
 
 cat > "$app_dir/run_${case_name}.slurm" <<EOF_SLURM
@@ -394,7 +396,7 @@ module purge
 module load intel/2022.1
 module load cmake/3.23.5
 
-cd /data/home/dg001947/pic-/PIC-IFE_GEC
+cd "$app_dir"
 ulimit -s unlimited
 export PIC_RANDOM_SEED=${random_seed}
 
@@ -418,7 +420,7 @@ set -e
 run_end_utc="\$(date -u +%Y-%m-%dT%H:%M:%SZ)"
 run_end_epoch="\$(date +%s)"
 run_elapsed_seconds="\$((run_end_epoch - run_start_epoch))"
-git_revision="\$(git -C /data/home/dg001947/pic- rev-parse HEAD 2>/dev/null || echo unknown)"
+git_revision="\$(git -C "$repo_root" rev-parse HEAD 2>/dev/null || echo unknown)"
 
 cat > run_metadata.txt <<EOF_METADATA
 case_name = ${case_name}
@@ -436,8 +438,8 @@ if [[ "\$run_status" -ne 0 ]]; then
   exit "\$run_status"
 fi
 
-cd /data/home/dg001947/pic-
-bash scripts/archive_verification_case.sh
+PIC_APP_DIR="$app_dir" PIC_ARCHIVE_ROOT="$archive_root" \
+  bash "$repo_root/scripts/archive_verification_case.sh"
 EOF_SLURM
 
 pic_ispe="$(awk 'NR==11 {print $1}' "$app_dir/INPUT/pic.inp" | tr -d ',')"
@@ -464,6 +466,7 @@ Prepared standard paper baseline case:
   Slurm CPUs     = 1
   Slurm memory   = ${requested_memory_mib} MiB
   Slurm walltime = ${requested_walltime}
+  archive root   = $archive_root
   config         = $app_dir/case_config.txt
   slurm          = $app_dir/run_${case_name}.slurm
 
