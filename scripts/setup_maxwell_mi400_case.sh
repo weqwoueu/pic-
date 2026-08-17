@@ -210,7 +210,11 @@ if ! grep -q 'PIC_EXPANSION_MI400' "$mcc_file"; then
 fi
 
 # Let ParticlePerGrid in INPUT/pic.inp control the initial slab particle count.
-perl -0pi -e 's/        !======= for wsy paper case ==========\n        PB%NParNormal = 6000000\n        NPArMax = PB%NParNormal\n        If\(Allocated\(PB%PO\)\) Deallocate\(PB%PO\)\n        Allocate\(PB%PO\(NPArMax\)\)\n        !======================================\n/        ! Initial particle storage is allocated below from ParticlePerGrid.\n/' "$mcc_file"
+perl -0pi -e 's/^[ \t]*!======= for wsy paper case ==========\r?\n[ \t]*PB%NParNormal = 6000000\r?\n[ \t]*NPArMax = PB%NParNormal\r?\n[ \t]*If\(Allocated\(PB%PO\)\) Deallocate\(PB%PO\)\r?\n[ \t]*Allocate\(PB%PO\(NPArMax\)\)\r?\n[ \t]*!======================================\r?\n/        ! Initial particle storage is allocated below from ParticlePerGrid.\n/m' "$mcc_file"
+if grep -q 'PB%NParNormal = 6000000' "$mcc_file"; then
+  echo "case setup failed: legacy 6000000-particle allocation is still present" >&2
+  exit 1
+fi
 perl -0pi -e 's/           PB%NPar = 5000 \* \(dxmaxmax-dxminmin\) \* \(dymaxmax-dyminmin\)\s*\n            PB%Weight = affp_bjw\(isp\)\s*\n            !PB%Weight = dens0\(isp\)\*n_ref \* RegionVolume \/ PB%NPar\s*\n            !print\*,dens0\(isp\)\*n_ref\s*\n            PB%NParNormal = 5000 \* \(dxmaxmax-dxminmin\) \* \(dymaxmax-dyminmin\)[^\n]*\n/            If (delta_global == 0) Then\n                RegionVolume = (dxmaxmax-dxminmin)*L_ref * (dymaxmax-dyminmin)*L_ref\n            Elseif (delta_global == 1) Then\n                RegionVolume = (dxmaxmax-dxminmin)*L_ref * PI*(dymaxmax**2-dyminmin**2)*L_ref**2\n            Endif\n            PB%NPar = INT(DBLE(ParticlePerGrid) * (dxmaxmax-dxminmin) * (dymaxmax-dyminmin))\n            PB%Weight = dens0(isp)*n_ref * RegionVolume \/ DBLE(PB%NPar)\n            PB%NParNormal = PB%NPar\n/s' "$mcc_file"
 perl -0pi -e 's/NPArMax = Ceiling\(3\.0 \* PB%NParNormal\)/NPArMax = Ceiling(1.2D0 * PB%NParNormal)/' "$mcc_file"
 perl -0pi -e 's/PB%NPar = INT\(DBLE\(ParticlePerGrid\) \* \(dxmaxmax-dxminmin\) \* \(dymaxmax-dyminmin\)\)/PB%NPar = INT(DBLE(ParticlePerGrid) * (dxmaxmax-dxminmin) * (dymaxmax-dyminmin) \/ (hx(1)*hx(2)))/' "$mcc_file"
