@@ -476,4 +476,6 @@ Expected key outputs:
   OUTPUT/Field/Average_x_${target_t50_file_step}.dat
   OUTPUT/Velocity/velocity_IJ_3${target_t30_file_step}.dat
   OUTPUT/Velocity/velocity_IJ_3${target_t50_file_step}.dat
+  OUTPUT/Energy/energy_IJ2_${target_t30_file_step}.dat
+  OUTPUT/Energy/energy_IJ2_${target_t50_file_step}.dat
 EOF_DONE

@@ -51,6 +51,8 @@ required_files=(
   "$app_dir/OUTPUT/Field/Average_x_${t50_file_step}.dat"
   "$app_dir/OUTPUT/Velocity/velocity_IJ_3${t30_file_step}.dat"
   "$app_dir/OUTPUT/Velocity/velocity_IJ_3${t50_file_step}.dat"
+  "$app_dir/OUTPUT/Energy/energy_IJ2_${t30_file_step}.dat"
+  "$app_dir/OUTPUT/Energy/energy_IJ2_${t50_file_step}.dat"
 )
 
 for file in "${required_files[@]}"; do
@@ -68,6 +70,8 @@ cp "$app_dir/OUTPUT/Field/Average_x_${t30_file_step}.dat" \
    "$app_dir/OUTPUT/Field/Average_x_${t50_file_step}.dat" "$archive_dir/"
 cp "$app_dir/OUTPUT/Velocity/velocity_IJ_3${t30_file_step}.dat" \
    "$app_dir/OUTPUT/Velocity/velocity_IJ_3${t50_file_step}.dat" "$archive_dir/"
+cp "$app_dir/OUTPUT/Energy/energy_IJ2_${t30_file_step}.dat" \
+   "$app_dir/OUTPUT/Energy/energy_IJ2_${t50_file_step}.dat" "$archive_dir/"
 
 if [[ -f "$app_dir/run_metadata.txt" ]]; then
   cp "$app_dir/run_metadata.txt" "$archive_dir/"

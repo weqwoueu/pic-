@@ -319,6 +319,8 @@ python3 scripts/postprocess_maxwell_mi400.py "$case_dir"
 | `OUTPUT/Field/Average_x_020000.dat` | `omega_pi t = 50` 的 x 方向平均场/密度剖面 |
 | `OUTPUT/Velocity/velocity_IJ_3012000.dat` | `omega_pi t = 30` 的速度/热速度剖面 |
 | `OUTPUT/Velocity/velocity_IJ_3020000.dat` | `omega_pi t = 50` 的速度/热速度剖面 |
+| `OUTPUT/Energy/energy_IJ2_012000.dat` | `omega_pi t = 30` 的能量/速度分布直方图，用于检查高能尾 |
+| `OUTPUT/Energy/energy_IJ2_020000.dat` | `omega_pi t = 50` 的能量/速度分布直方图，用于检查高能尾 |
 | `OUTPUT/physics_parameter.inp` | 本次运行输出的物理参数 |
 | `OUTPUT/normalize.inp` | 本次运行使用的归一化参数 |
 | `OUTPUT/CellVolume.dat` | 网格体积/面积相关输出 |
@@ -343,6 +345,7 @@ cp case_config.txt INPUT/pic.inp MCC_jw/input/controlflow.txt run.log "$case_dir
 cp OUTPUT/global_diagnostics.csv OUTPUT/physics_parameter.inp OUTPUT/normalize.inp "$case_dir"/
 cp OUTPUT/Field/Average_x_012000.dat OUTPUT/Field/Average_x_020000.dat "$case_dir"/
 cp OUTPUT/Velocity/velocity_IJ_3012000.dat OUTPUT/Velocity/velocity_IJ_3020000.dat "$case_dir"/
+cp OUTPUT/Energy/energy_IJ2_012000.dat OUTPUT/Energy/energy_IJ2_020000.dat "$case_dir"/
 
 ls -lh "$case_dir"
 ```
@@ -363,6 +366,8 @@ verification_runs/maxwellian_mi400_thermal_ppc1000_nt20000/
   Average_x_020000.dat
   velocity_IJ_3012000.dat
   velocity_IJ_3020000.dat
+  energy_IJ2_012000.dat
+  energy_IJ2_020000.dat
   global_diagnostics.csv
   physics_parameter.inp
   normalize.inp
