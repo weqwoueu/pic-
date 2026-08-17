@@ -56,11 +56,19 @@ Contains
         End If
     End Subroutine AddDiagInjected
 
-    Subroutine AddDiagThermalExchange(weight, energy_lost, energy_injected)
+    Subroutine AddDiagThermalExchange(isp, weight, energy_lost, energy_injected)
         Implicit None
+        Integer(4), Intent(In) :: isp
         Real(8), Intent(In) :: weight, energy_lost, energy_injected
 
         E_lost_cum = E_lost_cum + energy_lost * weight
         E_inj_cum  = E_inj_cum  + energy_injected * weight
+        If (isp == 0) Then
+            Ne_lost_cum = Ne_lost_cum + weight
+            Ne_inj_cum  = Ne_inj_cum  + weight
+        Else
+            Ni_lost_cum = Ni_lost_cum + weight
+            Ni_inj_cum  = Ni_inj_cum  + weight
+        End If
     End Subroutine AddDiagThermalExchange
 End Module ModuleDiagCounters

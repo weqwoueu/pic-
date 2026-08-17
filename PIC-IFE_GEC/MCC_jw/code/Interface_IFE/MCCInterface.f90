@@ -393,7 +393,7 @@ Module ModuleMCCInterface
                 Else
                     diag_weight = PB%Weight
                 End If
-                Call AddDiagThermalExchange(diag_weight, ek_before, ek_after)
+                Call AddDiagThermalExchange(PB%SO%SpecyIndex, diag_weight, ek_before, ek_after)
             End If
         Elseif (PO%X > dxmax) Then
             PB%nLoss(2) = PB%nLoss(2) + 1 !> ab.ZWZ
