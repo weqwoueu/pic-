@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Postprocess a saved Maxwellian mi/me=400 verification case.
+"""Postprocess a saved plasma-expansion verification case.
 
 This script reads archived files from ``verification_runs/<case_name>`` and
 writes all derived products to ``verification_runs/<case_name>/postprocessed``.
@@ -7,10 +7,10 @@ It does not require ``PIC-IFE_GEC/OUTPUT`` after the run has been saved.
 
 Usage:
   cd ~/pic-
-  python3 scripts/postprocess_maxwell_mi400.py verification_runs/maxwellian_mi400_thermal_ppc1000_nt20000
+  python3 scripts/postprocess_paper_case.py verification_runs/<case_name>
 
 Optional custom steps:
-  python3 scripts/postprocess_maxwell_mi400.py verification_runs/maxwellian_mi400_thermal_ppc1000_nt20000 12000 20000
+  python3 scripts/postprocess_paper_case.py verification_runs/<case_name> 12000 20000
 
 Generated files:
   postprocessed/profiles_t30.csv
@@ -157,6 +157,41 @@ def parse_config_int(path: Path, key: str, default: int) -> int:
     return int(round(parse_config_float(path, key, float(default))))
 
 
+def velocity_cell_centers(
+    velocity: np.ndarray,
+    config_file: Path,
+    x_field: np.ndarray,
+) -> tuple[np.ndarray, float]:
+    """Map fixed-width velocity bins to the normalized simulation domain."""
+    cell_ids = velocity[:, 6]
+    rounded_ids = np.rint(cell_ids)
+    if (
+        not np.all(np.isfinite(cell_ids))
+        or not np.allclose(cell_ids, rounded_ids)
+        or np.min(rounded_ids) < 1
+    ):
+        raise SystemExit("Velocity output contains invalid cell identifiers.")
+
+    n_bins = int(np.max(rounded_ids))
+    domain_value = parse_config_value(config_file, "domain_lambdaD")
+    domain_numbers = FLOAT_RE.findall(domain_value) if domain_value else []
+    if len(domain_numbers) >= 2:
+        x_min = float(domain_numbers[0].replace("D", "E").replace("d", "e"))
+        x_max = float(domain_numbers[1].replace("D", "E").replace("d", "e"))
+    else:
+        x_min = float(np.nanmin(x_field))
+        x_max = float(np.nanmax(x_field))
+
+    if n_bins <= 0 or not math.isfinite(x_min) or not math.isfinite(x_max) or x_max <= x_min:
+        raise SystemExit("Could not determine the velocity diagnostic bin width.")
+
+    # OUTPUT_velocity bins FLOOR(X), so its 1024 bins span the whole domain
+    # independently of the field-mesh spacing used by the simulation.
+    bin_width = (x_max - x_min) / n_bins
+    centers = x_min + (cell_ids - 0.5) * bin_width
+    return centers, bin_width
+
+
 def output_paths(case_dir: Path, pattern: str, nested: tuple[str, str]) -> list[Path]:
     paths = sorted(case_dir.glob(pattern))
     if paths:
@@ -226,8 +261,7 @@ def build_profile(
     ek_e = field[:, 5]
     ek_i = field[:, 6]
 
-    dx_lambda_d = parse_config_float(config_file, "dx_lambdaD", 1.0)
-    x_cell = (velocity[:, 6] - 0.5) * dx_lambda_d
+    x_cell, velocity_bin_width = velocity_cell_centers(velocity, config_file, x_field)
     drift_e = velocity[:, 0]
     drift_i = velocity[:, 1]
     vthe = velocity[:, 2]
@@ -250,6 +284,27 @@ def build_profile(
     phi_cell = np.interp(x_cell, x_field, phi)
     ek_e_cell = np.interp(x_cell, x_field, ek_e)
     ek_i_cell = np.interp(x_cell, x_field, ek_i)
+
+    mapping_mask = (
+        np.isfinite(ne_cell)
+        & (ne_cell > 0.0)
+        & np.isfinite(count_e)
+        & (count_e >= FIT_MIN_ELECTRON_COUNT)
+    )
+    if np.count_nonzero(mapping_mask) >= 3:
+        density_count_correlation = float(
+            np.corrcoef(
+                np.log(ne_cell[mapping_mask]),
+                np.log(count_e[mapping_mask]),
+            )[0, 1]
+        )
+        if not math.isfinite(density_count_correlation) or density_count_correlation < 0.95:
+            raise SystemExit(
+                "Velocity bins do not align with the field density: "
+                f"log-count/log-density correlation = {density_count_correlation:.6f}"
+            )
+    else:
+        density_count_correlation = math.nan
 
     vthe = np.where(count_e > 0, vthe, np.nan)
     vthi = np.where(count_i > 0, vthi, np.nan)
@@ -279,6 +334,8 @@ def build_profile(
         "n0": n0,
         "lambda_d0": lambda_d0,
         "profile_rows": float(profile.shape[0]),
+        "velocity_bin_width_lambda_d0": velocity_bin_width,
+        "density_count_log_correlation": density_count_correlation,
     }
     return profile, metadata
 
@@ -497,6 +554,9 @@ def main() -> int:
 
     mi_me = parse_config_float(config_file, "ion_mass_over_electron_mass", 400.0)
     dt_omega_pe = parse_config_float(config_file, "dt_omega_pe", 0.05)
+    distribution = parse_config_value(config_file, "distribution", "maxwellian")
+    distribution_parameter = parse_config_value(config_file, "distribution_parameter", "none")
+    left_boundary = parse_config_value(config_file, "left_boundary", "unknown")
     steps = args.steps or [
         parse_config_int(config_file, "target_omega_pi_t_30_step", 12000),
         parse_config_int(config_file, "target_omega_pi_t_50_step", 20000),
@@ -510,6 +570,9 @@ def main() -> int:
     summary_lines = [
         f"case_dir = {case_dir}",
         f"postprocessed_dir = {out_dir}",
+        f"distribution = {distribution}",
+        f"distribution_parameter = {distribution_parameter}",
+        f"left_boundary = {left_boundary}",
         f"mi_me = {mi_me:g}",
         f"dt_omega_pe = {dt_omega_pe:g}",
     ]
@@ -583,6 +646,8 @@ def main() -> int:
                 f"fit_points = {int(fit['n_points'])}",
                 f"excluded_points = {int(fit['excluded_points'])}",
                 f"fit_x_range = [{fit['x_min']:.8g}, {fit['x_max']:.8g}]",
+                f"velocity_bin_width_lambda_D0 = {metadata['velocity_bin_width_lambda_d0']:.8g}",
+                f"density_count_log_correlation = {metadata['density_count_log_correlation']:.8g}",
                 f"n0 = {metadata['n0']:.8e}",
                 f"lambda_d0 = {metadata['lambda_d0']:.8e}",
             ]

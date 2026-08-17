@@ -1,24 +1,26 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-# Prepare the paper baseline plasma-expansion case:
-#   distribution  : Maxwellian
+# Prepare a paper plasma-expansion case:
+#   distribution  : Maxwellian, Kappa, or polytropic electrons
 #   species       : electron + one ion species
-#   mass ratio    : mi/me = 400, Z = 1
+#   mass ratio    : configurable mi/me, Z = 1
 #   domain        : [0, 1024 lambda_D0] x [0, 4 lambda_D0]
 #   initial slab  : [0, 128 lambda_D0] x [0, 4 lambda_D0]
 #   mesh          : dx = dy = 1.0 or 0.5 lambda_D0
 #   time step     : dt = 0.05 or 0.025 / omega_pe
 #
 # Usage:
-#   bash scripts/setup_maxwell_mi400_case.sh [ppc] [nt] [boundary] [seed] [dt] [dx]
+#   bash scripts/setup_maxwell_mi400_case.sh [ppc] [nt] [boundary] [seed] [dt] [dx] [distribution] [shape] [mi/me]
 #
 # Examples:
 #   bash scripts/setup_maxwell_mi400_case.sh 1000 20000 thermal 101 0.05 1.0
-#   bash scripts/setup_maxwell_mi400_case.sh 80000 40000 thermal 101 0.025 1.0
+#   bash scripts/setup_maxwell_mi400_case.sh 1000 20000 thermal 101 0.05 1.0 kappa 2 400
+#   bash scripts/setup_maxwell_mi400_case.sh 1000 20000 thermal 101 0.05 1.0 polytropic 2 400
 #
-# The paper-level ppc=80000 case is large. Use 1000 first as a standard
-# configuration smoke test, then increase to 80000 for production.
+# The paper-level ppc=80000 case is large. Use a short ppc=10, nt=200 run
+# first. Runs shorter than omega_pi*t=50 are treated as smoke tests and are
+# deliberately not archived as paper results.
 
 ppg="${1:-1000}"
 nt="${2:-20000}"
@@ -26,6 +28,49 @@ left_boundary="${3:-thermal}"
 random_seed="${4:-101}"
 dt="${5:-0.05}"
 dx="${6:-1.0}"
+distribution="${7:-maxwellian}"
+distribution_shape="${8:-}"
+mass_ratio="${9:-400}"
+
+distribution="$(printf '%s' "$distribution" | tr '[:upper:]' '[:lower:]')"
+case "$distribution" in
+  maxwellian|maxwell)
+    distribution="maxwellian"
+    distribution_tag="maxwellian"
+    distribution_shape="none"
+    electron_kappa="2.0"
+    polytropic_gamma="2.0"
+    ;;
+  kappa)
+    distribution_shape="${distribution_shape:-2}"
+    if ! [[ "$distribution_shape" =~ ^[0-9]+([.][0-9]+)?$ ]] || \
+       ! awk -v value="$distribution_shape" 'BEGIN { exit !(value > 1.5) }'; then
+      echo "Kappa shape must be a number greater than 1.5" >&2
+      exit 2
+    fi
+    shape_tag="${distribution_shape//./p}"
+    distribution_tag="kappa${shape_tag}"
+    electron_kappa="$distribution_shape"
+    polytropic_gamma="2.0"
+    ;;
+  polytropic|poly)
+    distribution="polytropic"
+    distribution_shape="${distribution_shape:-2}"
+    if ! [[ "$distribution_shape" =~ ^[0-9]+([.][0-9]+)?$ ]] || \
+       ! awk -v value="$distribution_shape" 'BEGIN { exit !(value > 1.0 && value <= 3.0) }'; then
+      echo "Polytropic gamma must satisfy 1 < gamma <= 3" >&2
+      exit 2
+    fi
+    shape_tag="${distribution_shape//./p}"
+    distribution_tag="poly${shape_tag}"
+    electron_kappa="2.0"
+    polytropic_gamma="$distribution_shape"
+    ;;
+  *)
+    echo "distribution must be 'maxwellian', 'kappa', or 'polytropic'" >&2
+    exit 2
+    ;;
+esac
 
 case "$left_boundary" in
   thermal|specular) ;;
@@ -53,8 +98,9 @@ case "$dx" in
     ;;
 esac
 
-if ! [[ "$ppg" =~ ^[1-9][0-9]*$ && "$nt" =~ ^[1-9][0-9]*$ && "$random_seed" =~ ^[0-9]+$ ]]; then
-  echo "ppc and nt must be positive integers; seed must be a non-negative integer" >&2
+if ! [[ "$ppg" =~ ^[1-9][0-9]*$ && "$nt" =~ ^[1-9][0-9]*$ && \
+        "$random_seed" =~ ^[0-9]+$ && "$mass_ratio" =~ ^[1-9][0-9]*$ ]]; then
+  echo "ppc, nt, and mi/me must be positive integers; seed must be a non-negative integer" >&2
   exit 2
 fi
 
@@ -66,8 +112,8 @@ mcc_file="$app_dir/MCC_jw/code/Interface_IFE/MCCInterface.f90"
 species_count=2
 initial_particles=$((ppg * slab_cells_x * slab_cells_y * species_count))
 particle_capacity=$(((initial_particles * 12 + 9) / 10))
-if (( particle_capacity < 10000000 )); then
-  particle_capacity=10000000
+if (( particle_capacity < 100000 )); then
+  particle_capacity=100000
 fi
 
 # Resource model calibrated from the completed dx=1, dt=0.05, ppc=40000 run:
@@ -108,10 +154,17 @@ else
   printf -v requested_walltime '%02d:00:00' "$requested_walltime_hours"
 fi
 
-target_t30_step="$(awk -v dt="$dt" 'BEGIN { printf "%.0f", 600.0 / dt }')"
-target_t50_step="$(awk -v dt="$dt" 'BEGIN { printf "%.0f", 1000.0 / dt }')"
+target_t30_step="$(awk -v dt="$dt" -v mi="$mass_ratio" 'BEGIN { printf "%.0f", 30.0 * sqrt(mi) / dt }')"
+target_t50_step="$(awk -v dt="$dt" -v mi="$mass_ratio" 'BEGIN { printf "%.0f", 50.0 * sqrt(mi) / dt }')"
 printf -v target_t30_file_step '%06d' "$target_t30_step"
 printf -v target_t50_file_step '%06d' "$target_t50_step"
+if (( nt >= target_t50_step )); then
+  run_mode="production"
+  archive_results="yes"
+else
+  run_mode="smoke"
+  archive_results="no"
+fi
 
 backup_once() {
   local f="$1"
@@ -150,9 +203,6 @@ perl -0pi -e 's/    If \(Mod\(it,1000\)\.eq\.0 \.Or\. it == 1\) Then/    If (Mod
 # Keep the global particle sanity check consistent with the selected ppc.
 perl -0pi -e "s/N_part_max = [0-9]+/N_part_max = $particle_capacity/" "$app_dir/code/Data/PIC_MAIN_PARAM_2D.f90"
 
-# Maxwellian initialization.
-perl -0pi -e 's/Integer\(4\) :: MaxKappa=[0-9]+/Integer(4) :: MaxKappa=1/' "$mcc_file"
-
 # Force the MCC/JW particle bundle to use species data read from INPUT/pic.inp.
 perl -0pi -e 's/    Use Field_2D, Only:dens0/    Use Field_2D, Only: dens0/' "$mcc_file"
 if ! grep -q 'PIC_EXPANSION_MI400' "$mcc_file"; then
@@ -164,50 +214,6 @@ perl -0pi -e 's/        !======= for wsy paper case ==========\n        PB%NParN
 perl -0pi -e 's/           PB%NPar = 5000 \* \(dxmaxmax-dxminmin\) \* \(dymaxmax-dyminmin\)\s*\n            PB%Weight = affp_bjw\(isp\)\s*\n            !PB%Weight = dens0\(isp\)\*n_ref \* RegionVolume \/ PB%NPar\s*\n            !print\*,dens0\(isp\)\*n_ref\s*\n            PB%NParNormal = 5000 \* \(dxmaxmax-dxminmin\) \* \(dymaxmax-dyminmin\)[^\n]*\n/            If (delta_global == 0) Then\n                RegionVolume = (dxmaxmax-dxminmin)*L_ref * (dymaxmax-dyminmin)*L_ref\n            Elseif (delta_global == 1) Then\n                RegionVolume = (dxmaxmax-dxminmin)*L_ref * PI*(dymaxmax**2-dyminmin**2)*L_ref**2\n            Endif\n            PB%NPar = INT(DBLE(ParticlePerGrid) * (dxmaxmax-dxminmin) * (dymaxmax-dyminmin))\n            PB%Weight = dens0(isp)*n_ref * RegionVolume \/ DBLE(PB%NPar)\n            PB%NParNormal = PB%NPar\n/s' "$mcc_file"
 perl -0pi -e 's/NPArMax = Ceiling\(3\.0 \* PB%NParNormal\)/NPArMax = Ceiling(1.2D0 * PB%NParNormal)/' "$mcc_file"
 perl -0pi -e 's/PB%NPar = INT\(DBLE\(ParticlePerGrid\) \* \(dxmaxmax-dxminmin\) \* \(dymaxmax-dyminmin\)\)/PB%NPar = INT(DBLE(ParticlePerGrid) * (dxmaxmax-dxminmin) * (dymaxmax-dyminmin) \/ (hx(1)*hx(2)))/' "$mcc_file"
-
-if [[ "$left_boundary" == "thermal" ]]; then
-  left_block='        If (PO%X <= dxmin) Then
-            ! PAPER_CASE_LEFT_BOUNDARY_BEGIN thermal-reservoir Maxwellian
-            ek_before = PO%Energy(PB%Mass, PB%VFactor)
-            Iposflag = 1
-            TimeRemain = (PO%X - dxmin)/PO%Vx
-            TimeMove = TimeRemain
-            PO%Y = PO%Y - PO%Vy * TimeRemain
-            PO%Z = PO%Z - PO%Vz * TimeRemain
-            PO%X = dxmin + 10E-6
-            call DRandom(ranf1)
-            call DRandom(ranf2)
-            call DRandom(ranf3)
-            PO%Vx = SQRT((-DLOG(Max(ranf1, 1.0d-300)))/beta)
-            velocity_tangential = SQRT((-DLOG(Max(ranf2, 1.0d-300)))/beta)
-            theta_v = 2*pii*ranf3
-            PO%Vy = velocity_tangential*COS(theta_v)
-            PO%Vz = velocity_tangential*SIN(theta_v)
-            VFactor = 1.0 / PB%VFactor
-            call PO%VelRes(VFactor)
-            ek_after = PO%Energy(PB%Mass, PB%VFactor)
-            If (PB%UnequalWeightFlag) Then
-                diag_weight = PO%WQ
-            Else
-                diag_weight = PB%Weight
-            End If
-            Call AddDiagThermalExchange(diag_weight, ek_before, ek_after)
-            ! PAPER_CASE_LEFT_BOUNDARY_END'
-else
-  left_block='        If (PO%X <= dxmin) Then
-            ! PAPER_CASE_LEFT_BOUNDARY_BEGIN specular
-            Iposflag = 1
-            TimeRemain = (PO%X - dxmin)/PO%Vx
-            TimeMove = TimeRemain
-            PO%Y = PO%Y - PO%Vy * TimeRemain
-            PO%Z = PO%Z - PO%Vz * TimeRemain
-            PO%Vx = -PO%Vx
-            PO%X = dxmin + 10E-6
-            ! PAPER_CASE_LEFT_BOUNDARY_END'
-fi
-export PAPER_LEFT_BOUNDARY_BLOCK="$left_block"
-replace_block "$mcc_file" 'BEGIN { $r = $ENV{"PAPER_LEFT_BOUNDARY_BLOCK"} . "\n" } s/        If \(PO%X <= dxmin\) Then.*?        Elseif \(PO%X > dxmax\) Then/$r        Elseif (PO%X > dxmax) Then/s'
-unset PAPER_LEFT_BOUNDARY_BLOCK
 
 # y boundaries: periodic particle wrap, matching the 1D-dominant slab setup.
 y_block='        Elseif (PO%Y < dymin) Then
@@ -265,9 +271,9 @@ cat > "$app_dir/INPUT/object.inp" <<'EOF_OBJECT'
 0, 0.0,    0.0, 4.0, 1024.0, 4.0
 EOF_OBJECT
 
-ion_mass="3.6438D-28"
+ion_mass="$(awk -v ratio="$mass_ratio" 'BEGIN { printf "%.10E", 9.1095e-31 * ratio }')"
 cat > "$app_dir/INPUT/pic.inp" <<EOF_PIC
-! Maxwellian mi/me=400 two-species plasma expansion
+! ${distribution_tag} mi/me=${mass_ratio} two-species plasma expansion
 0, 0
 .false.
 .false.
@@ -347,14 +353,17 @@ mkdir -p "$app_dir/OUTPUT/Field" "$app_dir/OUTPUT/Velocity" "$app_dir/OUTPUT/Par
          "$app_dir/OUTPUT/Global" "$app_dir/OUTPUT/Phase" "$app_dir/OUTPUT/Energy" \
          "$app_dir/OUTPUT/History" "$app_dir/OUTPUT/Average" "$app_dir/DUMP"
 
-case_name="maxwellian_dx${dx_tag}_dt${dt_tag}_ppc${ppg}_seed${random_seed}_${left_boundary}"
+case_name="${distribution_tag}_mi${mass_ratio}_dx${dx_tag}_dt${dt_tag}_ppc${ppg}_seed${random_seed}_${left_boundary}"
 
 cat > "$app_dir/case_config.txt" <<EOF_CONFIG
 case_name = ${case_name}
-distribution = maxwellian
+distribution = ${distribution}
+distribution_parameter = ${distribution_shape}
+electron_kappa = ${electron_kappa}
+electron_polytropic_gamma = ${polytropic_gamma}
 left_boundary = ${left_boundary}
 species = electron, ion
-ion_mass_over_electron_mass = 400
+ion_mass_over_electron_mass = ${mass_ratio}
 ion_charge_state = 1
 density_ref_m3 = 1.0e21
 Te0_eV = 1.0
@@ -366,6 +375,8 @@ dx_lambdaD = ${dx}
 dy_lambdaD = ${dx}
 dt_omega_pe = ${dt}
 nt = ${nt}
+run_mode = ${run_mode}
+archive_results = ${archive_results}
 particles_per_cell_per_species = ${ppg}
 initial_particles_total = ${initial_particles}
 particle_capacity = ${particle_capacity}
@@ -382,7 +393,7 @@ EOF_CONFIG
 
 cat > "$app_dir/run_${case_name}.slurm" <<EOF_SLURM
 #!/bin/bash
-#SBATCH -J mx_${dx_tag}_${dt_tag}_${ppg}
+#SBATCH -J ${distribution_tag}_${mass_ratio}_${ppg}
 #SBATCH -p comp
 #SBATCH -N 1
 #SBATCH -n 1
@@ -399,6 +410,10 @@ module load cmake/3.23.5
 cd "$app_dir"
 ulimit -s unlimited
 export PIC_RANDOM_SEED=${random_seed}
+export PIC_ELECTRON_DISTRIBUTION=${distribution}
+export PIC_KAPPA=${electron_kappa}
+export PIC_POLYTROPIC_GAMMA=${polytropic_gamma}
+export PIC_LEFT_BOUNDARY=${left_boundary}
 
 if command -v flock >/dev/null 2>&1; then
   exec 9>.pic_run.lock
@@ -424,6 +439,11 @@ git_revision="\$(git -C "$repo_root" rev-parse HEAD 2>/dev/null || echo unknown)
 
 cat > run_metadata.txt <<EOF_METADATA
 case_name = ${case_name}
+distribution = ${distribution}
+distribution_parameter = ${distribution_shape}
+left_boundary = ${left_boundary}
+ion_mass_over_electron_mass = ${mass_ratio}
+run_mode = ${run_mode}
 git_revision = \$git_revision
 slurm_job_id = \${SLURM_JOB_ID:-unknown}
 hostname = \$(hostname)
@@ -438,8 +458,12 @@ if [[ "\$run_status" -ne 0 ]]; then
   exit "\$run_status"
 fi
 
-PIC_APP_DIR="$app_dir" PIC_ARCHIVE_ROOT="$archive_root" \
-  bash "$repo_root/scripts/archive_verification_case.sh"
+if [[ "${archive_results}" == "yes" ]]; then
+  PIC_APP_DIR="$app_dir" PIC_ARCHIVE_ROOT="$archive_root" \
+    bash "$repo_root/scripts/archive_verification_case.sh"
+else
+  echo "smoke test completed; results remain in $app_dir/OUTPUT and are not archived"
+fi
 EOF_SLURM
 
 pic_ispe="$(awk 'NR==11 {print $1}' "$app_dir/INPUT/pic.inp" | tr -d ',')"
@@ -448,21 +472,24 @@ if [[ "$pic_ispe" != "2" || "$pic_nt" != "$nt" ]]; then
   echo "case validation failed: ispe_tot=$pic_ispe nt=$pic_nt" >&2
   exit 1
 fi
-grep -q "Integer(4) :: MaxKappa=1" "$mcc_file"
-grep -q "PAPER_CASE_LEFT_BOUNDARY_BEGIN" "$mcc_file"
+grep -q "Use ModuleVelocityDistribution" "$mcc_file"
+grep -q "PAPER_CASE_LEFT_BOUNDARY_RUNTIME" "$mcc_file"
 grep -q "CF%NRun               =   $nt" "$app_dir/MCC_jw/input/controlflow.txt"
 grep -q "PIC random seed" "$app_dir/code/PIC/Main_IFE_Test_2.f90"
 
 cat <<EOF_DONE
 Prepared standard paper baseline case:
   app_dir        = $app_dir
-  distribution   = Maxwellian
+  distribution   = ${distribution}
+  parameter      = ${distribution_shape}
   left_boundary  = $left_boundary
-  species        = electron + ion (mi/me=400)
+  species        = electron + Maxwellian ion (mi/me=${mass_ratio})
   ppc            = $ppg
   seed           = $random_seed
   dx, dt         = $dx, $dt
   nt             = $nt
+  run mode       = ${run_mode}
+  auto archive   = ${archive_results}
   Slurm CPUs     = 1
   Slurm memory   = ${requested_memory_mib} MiB
   Slurm walltime = ${requested_walltime}
@@ -470,12 +497,28 @@ Prepared standard paper baseline case:
   config         = $app_dir/case_config.txt
   slurm          = $app_dir/run_${case_name}.slurm
 
-Expected key outputs:
+Expected immediate output:
+  run.log
+  run_metadata.txt
   OUTPUT/global_diagnostics.csv
+EOF_DONE
+
+if [[ "$archive_results" == "yes" ]]; then
+  cat <<EOF_PRODUCTION
+
+Expected paper snapshots and automatic archive:
   OUTPUT/Field/Average_x_${target_t30_file_step}.dat
   OUTPUT/Field/Average_x_${target_t50_file_step}.dat
   OUTPUT/Velocity/velocity_IJ_3${target_t30_file_step}.dat
   OUTPUT/Velocity/velocity_IJ_3${target_t50_file_step}.dat
   OUTPUT/Energy/energy_IJ2_${target_t30_file_step}.dat
   OUTPUT/Energy/energy_IJ2_${target_t50_file_step}.dat
-EOF_DONE
+  ${archive_root}/${case_name}
+EOF_PRODUCTION
+else
+  cat <<EOF_SMOKE
+
+This is a short smoke test. It verifies initialization, boundary sampling,
+solver startup, and clean termination only; it is not a paper result.
+EOF_SMOKE
+fi

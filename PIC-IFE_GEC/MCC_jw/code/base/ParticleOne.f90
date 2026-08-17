@@ -1,5 +1,7 @@
       Module ModuleParticleOne
         Use ModuleField 
+        Use ModuleVelocityDistribution, Only: DIST_KAPPA, DIST_POLYTROPIC, &
+            SampleInitialVelocity
         Implicit none
         Type :: ParticleOne
 		       Real(8) :: X,Y,Z,Vx,Vy,Vz,Ax,Ay,Az,Wq
@@ -151,96 +153,20 @@
             return 
          End subroutine VelocityMaxwellianInitializationParticleOne
          
-         Subroutine VelocityKappaInitializationParticleOne(PO, Mass, Temperature,VFactor)
+         Subroutine VelocityKappaInitializationParticleOne(PO, Mass, Temperature, Kappa)
             Class(ParticleOne), intent(inout) :: PO
-            Real(8), intent(in) :: Mass, Temperature,VFactor
-            Real(8) :: V(3), R, P, MaxP, C, Sigma,Kappa,kB,Te,Sigma_e,Me,beta
-            double precision ::  ranf1,ranf2
-            INTEGER :: AcceptedSamples,i
-            double precision ::  ranum
+            Real(8), intent(in) :: Mass, Temperature, Kappa
 
-            Kappa=2.0
-            Te=11605.0  !电子温度
-            kB=1.3807d-23
-            Me=9.1095d-31
-            !  Sigma=theta**2
-            Sigma =((Kappa-1.5)/Kappa)*(2.d0*kB * Temperature / Mass)
-            Sigma_e=((Kappa-1.5)/Kappa)*(2.d0*kB * Te/ Me)
-            V(3)=0.0
-            beta=Mass/(2*KB*Temperature)
-
-            C =  gamma(Kappa + 1) /(((Pi*Kappa*Sigma)**1.5)*gamma(Kappa - 0.5))
-
-            ! 估计最大值
-            MaxP = C
-            AcceptedSamples=0
-
-             !取舍法采样，继续直到成功
-
-                do while (AcceptedSamples == 0)
-                    ! 生成均匀随机数
-                    call DRandom(ranum)
-                    !CALL RANDOM_NUMBER(R)
-                    V(1) = (SQRT(Sigma/Sigma_e))*(20.d0*ranum - 10.d0)  ! 在[-5, 5]区间生成速度
-             
-                    ! 计算对应的概率密度函数
-                    P = (1.0d0 +((V(1))**2)/((2*Kappa-3)*Sigma/Sigma_e))**(-Kappa)
-             
-                    call DRandom(ranum)
-             
-                    ! 进行取舍判断
-                    if (ranum <= P) then
-                        AcceptedSamples=1
-                        !Call VelocityRandomInitializationParticleOne(PO, V)  ! 设置速度
-                    end if
-                end do
-             PO%Vx=V(1)
-             PO%Vy=0
-             PO%Vz=0
-            !call DRandom(ranf1)
-            !PO%Vx =SQRT ((1.d0*Kappa-1.5)/beta*((ranf1)**(-1/(Kappa-1))-1))
-            !call PO%VelRes(VFactor)
-            !return
+            Call SampleInitialVelocity(DIST_KAPPA, Mass, Temperature, Kappa, &
+                                       2.0D0, PO%Vx, PO%Vy, PO%Vz)
          End Subroutine VelocityKappaInitializationParticleOne
-         
-        subroutine VelocityPolytropicInitializationParticleOne(PO, Mass, Temperature,VFactor)
+
+        subroutine VelocityPolytropicInitializationParticleOne(PO, Mass, Temperature, PolyGamma)
             class (ParticleOne),intent (inout) ::PO
-            Real(8), intent(in) :: Mass, Temperature,VFactor
-            Real(8) :: V(3), R, P,  Sigma,gama,kB,Te,Sigma_e,Me,beta,V_max
-            INTEGER :: AcceptedSamples,i
-            
-            gama=3
-            Te=11605.0  !电子温度
-            kB=1.3807d-23
-            Me=9.1095d-31
-            Sigma =(2.d0*kB * Temperature / Mass)
-            Sigma_e=(2.d0*kB * Te/ Me)
-            V(3)=0.0
-            AcceptedSamples=0
-            
-        if(gama==3)then
-               CALL RANDOM_NUMBER(R) 
-               V_max=sqrt(gama)
-               V(1)=(SQRT(Sigma/Sigma_e))*2.0*V_max*(R-0.5)
-        else
-            do while (AcceptedSamples == 0)
-                    CALL RANDOM_NUMBER(R)
-                    V(1) = (SQRT(Sigma/Sigma_e))*(4.d0*R - 2.d0)  ! 在[-5, 5]区间生成速度
-            
-                    P = (1.0d0 -((gama-1)*(V(1))**2)/(2.0*gama*Sigma/Sigma_e))**((3.0-gama)/(2*gama-2.0))
-            
-                    CALL RANDOM_NUMBER(R)
-            
-                    if (R <= P) then
-                        AcceptedSamples=1
-                        !Call VelocityRandomInitializationParticleOne(PO, V)  ! 设置速度
-                    end if
-            end do
-        end if
-            PO%Vx=V(1)
-            !call RANDOM_NUMBER (R)
-            !PO%Vx=SQRT (gama/((gama-1)/Sigma)*(1-(R)**((2.0*gama-2)/(gama+1))))
-            !call PO%VelRes(VFactor)
+            Real(8), intent(in) :: Mass, Temperature, PolyGamma
+
+            Call SampleInitialVelocity(DIST_POLYTROPIC, Mass, Temperature, &
+                                       2.0D0, PolyGamma, PO%Vx, PO%Vy, PO%Vz)
         end subroutine VelocityPolytropicInitializationParticleOne
 
          

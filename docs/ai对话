@@ -183,3 +183,21 @@ bash scripts/setup_maxwell_mi400_case.sh 80000 20000 thermal
 ```
 
 跑完后日志里应该只看到 electron 和一个 ion species，不应该再出现 `Ar(+)`。核心输出仍然是 `global_diagnostics.csv`、`Average_x_012000/020000.dat`、`velocity_IJ_3012000/3020000.dat`。
+
+## 2026-08-17 Maxwellian 数值验证完成
+
+Maxwellian、`mi/me=400` 的 `ppc`、随机 seed、时间步和网格验证均已完成并通过。三 seed 正式统计仍为 t30 `gamma_e=1.02149 +/- 0.00131`、t50 `1.02006 +/- 0.00082`，误差是 seed 样本标准差。时间步从 `0.05` 减半到 `0.025` 后，t30/t50 的 `gamma_e` 只变化 `+0.0160%/+0.0080%`。
+
+细网格 case `maxwellian_dx05_dt005_ppc80000_seed101_thermal` 正常运行 20000 步，作业 444122 用时 `7-10:04:27`，峰值内存约 `43.02 GiB`，粒子数误差 `dNe=3.38e-8`、`dNi=0`，能量预算误差约 `-0.0255%`。修正后 t30/t50 为 `gamma_e=1.0206161/1.0194338`；相对 dx=1 基线只变化 `-0.215%/-0.0755%`，前沿变化约 `+0.715%/+0.517%`，网格收敛通过。
+
+重要后处理规则：`OUTPUT_velocity.f90` 按 `FLOOR(X)+1` 固定使用覆盖 `[0,1024] lambda_D0` 的 1024 个速度箱，箱宽始终为 `1 lambda_D0`，不能把 cell 编号乘以模拟场网格的 `dx`。原错误会把 dx=0.5 的速度横坐标压缩一半，并把 t50 `gamma_e` 伪造为 `1.0886`。`draw_png.py` 和 `postprocess_maxwell_mi400.py` 已修复，并增加速度计数与场密度相关性检查。
+
+接下来不再跑昂贵的 Maxwellian 收敛作业。下一阶段先审查 Kappa `kappa=2` 和 Polytropic `gamma=2` 的初始化公式、随机采样、归一化，以及 thermal reservoir 是否按同一种目标分布进行通量加权回注；这些实现确认后才能提交三种分布的正式比较 case。
+
+## 2026-08-17 分布与边界实现完成，等待服务器验收
+
+已新增统一的 `ModuleVelocityDistribution`：电子可在运行时选择 Maxwellian、Kappa `kappa=2/6`、Polytropic `gamma=2/3`，左边界可选 matching thermal reservoir 或 specular reflection，离子保持 Maxwellian。thermal 法向速度按 `v_x f(v_x)` 通量加权逆采样，切向速度保持对应原分布；specular 只反转 `v_x`。
+
+新增 `scripts/setup_paper_case.sh`、`scripts/test_velocity_distributions.sh` 和 Fortran 采样自测。短于目标 t50 的 case 自动标记为 smoke 且不归档，避免测试输出混入论文结果。当前本地数学对照、Fortran 静态解析、Shell/Python 语法和 case 生成均通过；下一步只在服务器做 Intel 编译、自测以及 Kappa2/Poly2 各 200 步冒烟，不直接提交 80k 正式作业。
+
+论文 Kappa 初始化公式当前写成 `-(kappa+1)`，但边界式、密度闭合式、`<v^2>=k_B T/m` 和原程序目标对应一维指数 `-kappa`。代码采用内部一致的 `-kappa`，正式改稿时必须修正文稿中的冲突。

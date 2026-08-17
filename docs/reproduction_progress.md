@@ -384,3 +384,42 @@ exit status = 0
 - 对 `gamma_e`、离子前沿、主要矩剖面和守恒预算，时间步收敛判定通过。
 - 归档中缺少 `OUTPUT/Energy/energy_IJ2_024000.dat` 和 `energy_IJ2_040000.dat`，尚不能从本地归档核对完整高能尾。若服务器主目录输出仍在，应补存能谱文件；后续归档脚本需自动保存 t30/t50 能谱。
 - 本作业 `sacct` 的 `TotalCPU/MaxRSS` 尚待补录。网格收敛作业正在独立 worktree 中运行，无需停止。
+
+## 2026-08-17 dx=0.5 网格收敛
+
+```text
+case = maxwellian_dx05_dt005_ppc80000_seed101_thermal
+git revision = d8ecfbe704d074750f80df67a8c595bf3317abaf
+Slurm job = 444122
+node = c2n022
+elapsed = 7-10:04:27
+TotalCPU = 7-09:28:38
+AllocCPUS = 8
+ReqMem = 60000 MiB
+MaxRSS = 45109120 KiB (43.02 GiB)
+exit status = 0
+```
+
+- seed 为 `101`，完整运行到 `it=20000`；归档、本地后处理和关键能谱补存成功。
+- 粒子预算：`dNe=+3.379589e-8`，`dNi=0`。
+- 最终能量预算：`dE=-2.548677e-4`，约 `-0.0255%`。
+- 首次后处理曾错误地把速度诊断 cell 编号乘以模拟网格间距 `dx=0.5`，导致速度矩坐标缩短一半，得到伪结果 t30/t50 `gamma_e=1.0381/1.0886`。检查 `OUTPUT_velocity.f90` 后确认该诊断固定按 `FLOOR(X)+1` 分到覆盖完整 `[0,1024] lambda_D0` 的 1024 个箱，箱宽始终为 `1 lambda_D0`，与场网格 `dx` 无关。
+- `scripts/postprocess_maxwell_mi400.py` 和 `scripts/draw_png.py` 已改为从完整物理域和速度箱数计算箱宽，并新增电子计数与场密度的对数相关性检查。dx=0.5 的 t30/t50 相关系数为 `0.999696/0.999690`，证明修正后的坐标配对正确。
+- 修正后 t30：`gamma_e=1.0206161 +/- 0.0005559`，`R^2=0.8605`，残差标准误差 `0.01592`。
+- 修正后 t50：`gamma_e=1.0194338 +/- 0.0004477`，`R^2=0.8329`，残差标准误差 `0.01906`。
+- 相对同 seed 的 `dx=1.0` 基线，t30/t50 `gamma_e` 分别变化 `-0.0022021/-0.0007703`，即 `-0.215%/-0.0755%`，分别为 seed 样本标准差的 `1.68/0.94` 倍，均显著小于预设的 `2%-3%` 网格判据。
+- `ni/n0=10^-3` 前沿位置：t30 `258.9168 -> 260.7668`，t50 `392.3864 -> 394.4145`，相对变化 `+0.715%/+0.517%`。
+- 在 `ni/n0 >= 10^-3` 区域，t30/t50 的电子密度相对 L2 差异为 `0.191%/0.199%`，离子密度为 `0.205%/0.215%`，电子热速度为 `0.843%/1.341%`，电子温度为 `1.634%/2.613%`。
+- 能谱绝对幅值仍受旧输出归一化限制，因此只比较面积归一化后的形状。dx=0.5、dt=0.05 与已完成的 dx=1、dt=0.025 在 t30/t50 的电子 `E>=3 eV` 尾部分数分别为 `9.110%/9.080%`，对照值为 `9.121%/9.060%`；总变差距离为 `0.51%/1.24%`。该比较同时混合了 dx 和 dt 差异，只作为高能尾稳定性的补充证据，不替代严格单参数比较。
+- Maxwellian 基线的粒子数、随机 seed、时间步和网格验证至此全部通过。下一步不再提交昂贵的 Maxwellian 收敛作业，转入 Kappa 与 Polytropic 初始化及同分布 thermal 边界采样核查。
+
+## 2026-08-17 三种分布与边界参数化
+
+- 新增 `ModuleVelocityDistribution`，运行时通过环境变量选择 Maxwellian、Kappa 或 Polytropic 电子分布，以及 thermal 或 specular 左边界；离子保持 Maxwellian。
+- Kappa 不再使用有限速度区间的取舍采样，而采用无截断 Student-t 构造；Polytropic 使用对称 Beta 采样并保留有限速度截止。三种分布都满足单分量 `<v^2>=k_B T/m`。
+- thermal 左边界的法向速度按 `v_x f(v_x)` 通量加权分布逆变换采样，切向速度保持对应的原始分布；specular 只反转法向 `v_x`，不改变粒子动能。
+- 论文当前 Kappa 初始化式写成指数 `-(kappa+1)`，但边界式、密度闭合式、统一二阶矩以及旧程序目标均对应一维指数 `-kappa`。代码采用内部一致的 `-kappa` 约定，论文正式改稿前必须修正这处公式冲突。
+- 对无截断 `kappa=2`，通量加权 thermal 法向分布的回注动能均值形式上发散。当前没有擅自加入截止；独立测试会打印最大采样法向速度，正式大作业前必须明确截止策略或把有限样本隐式截止写成模型局限。
+- 新增 `scripts/test_velocity_distributions.sh` 和 `tests/velocity_distribution_smoke.f90`。测试会检查均值、温度二阶矩、Kappa 指数解析变换、Polytropic 截止、thermal 法向通量 CDF 及切向温度。
+- 新增 `scripts/setup_paper_case.sh`，统一参数为 `DISTRIBUTION SHAPE PPC NT BOUNDARY SEED DT DX MI_ME`。短于 `omega_pi t=50` 的任务标记为 smoke 且不自动归档，正式任务才写入 `verification_runs/`。
+- 本地完成脚本语法、Fortran 静态解析、解析分布的 Monte Carlo 对照和 case 生成测试；本机没有 Fortran 编译器，下一步必须在服务器先运行独立采样测试、完整 Intel 编译及两个 200 步冒烟 case。

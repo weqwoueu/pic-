@@ -2,6 +2,7 @@ Module ModuleMCCInterface
     Use ModuleMCCInitialization
     Use ModuleReactionOnePegasus
     Use ModuleSpecyOne
+    Use ModuleParticleOne, Only: ParticleOne
     Use ModuleParticleBundle
     Use ModuleParticleBoundary
     Use DiagnosticsEEPF
@@ -14,6 +15,7 @@ Module ModuleMCCInterface
     Use ModuleDiagCounters
     Use Object_2D
     Use Object_Data_2D
+    Use ModuleVelocityDistribution
     Implicit none
     
     Integer(4),private :: NCollision
@@ -30,13 +32,14 @@ Module ModuleMCCInterface
         Implicit none
         Integer(4) :: i
         
+        Call InitializeVelocityDistributionConfig()
         Call InitializationControlFlow(ControlFlowGlobal)
         ControlFlowGlobal%Dt = dt*time_ref
         If (irestart==0) Then
             ControlFlowGlobal%ReStartParticles = .TRUE.
         End If
         Call GasInitPegasus(ControlFlowGlobal)      !$ SpecyGlobal and GasGlobal is initialized in the subroutine
-        print *, "������������ Ns = ", ControlFlowGlobal%Ns
+        print *, "Number of initialized plasma species Ns = ", ControlFlowGlobal%Ns
         Allocate(ParticleGlobal(0:ControlFlowGlobal%Ns))
         !Allocate(ParticleEPFGlobal(0:ControlFlowGlobal%Ns))
         DO i=0,ControlFlowGlobal%Ns
@@ -55,7 +58,6 @@ Module ModuleMCCInterface
         Real(8) :: XFactor,VFactor
         Logical ::  Status
         Integer(4) :: isp
-        Integer(4) :: MaxKappa=2   !1:maxwell, 0:kappa 2:poly
         Real(8) :: RegionVolume
         Real(8) :: XL,XU,YL,YU
         Integer(4) :: i_part,nParMesh=128
@@ -106,9 +108,7 @@ Module ModuleMCCInterface
                             PB%LXScaled = .True.
                             Call PB%PO(i_part)%PosInit(XL,XU,YL,YU)
                             PB%LVScaled = .True.
-                            Call PB%PO(i_part)%VelMaxInit(PB%SO%Mass,PB%SO%InitTemperature)
-                            VFactor = 1.d0 / PB%VFactor
-                            Call PB%PO(i_part)%VelRes(VFactor)       ! normalization
+                            Call InitializeParticleVelocity(PB, PB%PO(i_part))
                             Call PB%PO(i_part)%AccInpInit()
                         Enddo
                     Enddo
@@ -129,9 +129,7 @@ Module ModuleMCCInterface
                                 PB%LXScaled = .True.
                                 Call PB%PO(i_part)%PosInit(XL,XU,YL,YU)
                                 PB%LVScaled = .True.
-                                Call PB%PO(i_part)%VelMaxInit(PB%SO%Mass,PB%SO%InitTemperature)
-                                VFactor = 1.d0 / PB%VFactor
-                                Call PB%PO(i_part)%VelRes(VFactor)       ! normalization
+                                Call InitializeParticleVelocity(PB, PB%PO(i_part))
                                 Call PB%PO(i_part)%AccInpInit()
                             Enddo
                         Enddo
@@ -167,23 +165,13 @@ Module ModuleMCCInterface
                 Do i=1,PB%Npar
                     PB%LXScaled = .True.
                     !Call PB%PO(i)%PosInit(Dble(CF%NxL),Dble(CF%NxU))
-                    Call PB%PO(i)%PosInit(dxminmin,dxmaxmax,dyminmin,dymaxmax) !�ĳ�ʼ�������
+                    Call PB%PO(i)%PosInit(dxminmin,dxmaxmax,dyminmin,dymaxmax) ! initial particle position
                     
                     If (PB%PO(i)%x>dxmax) then
                        Call PB%DelOne(i)
                    End if
                     PB%LVScaled = .True.
-                    if(MaxKappa==1)then 
-                        Call PB%PO(i)%VelMaxInit(PB%SO%Mass,PB%SO%InitTemperature)
-                        VFactor = 1.d0 / PB%VFactor
-                        Call PB%PO(i)%VelRes(VFactor)       ! normalization
-                    elseif (MaxKappa==0) then 
-                        VFactor = 1.d0 / PB%VFactor
-                        Call PB%PO(i)%VelKappaInit(PB%SO%Mass,PB%SO%InitTemperature,VFactor)
-                    else 
-                        VFactor = 1.d0 / PB%VFactor
-                        Call PB%PO(i)%VelPolyInit(PB%SO%Mass,PB%SO%InitTemperature,VFactor)
-                    endif 
+                    Call InitializeParticleVelocity(PB, PB%PO(i))
                     Call PB%PO(i)%AccInpInit()
                     Call PB%PO(i)%ParLocate(0)
                 End Do
@@ -194,14 +182,7 @@ Module ModuleMCCInterface
                         PB%LXScaled = .True.
                         Call PB%PO(i)%PosInit(Dble(CF%NxL),Dble(CF%NxU))
                         PB%LVScaled = .True.
-                        if(MaxKappa==1)then 
-                            Call PB%PO(i)%VelMaxInit(PB%SO%Mass,PB%SO%InitTemperature)
-                            VFactor = 1.d0 / PB%VFactor
-                            Call PB%PO(i)%VelRes(VFactor)       ! normalization
-                        else 
-                            VFactor = 1.d0 / PB%VFactor
-                            Call PB%PO(i)%VelKappaInit(PB%SO%Mass,PB%SO%InitTemperature,VFactor)
-                        endif 
+                        Call InitializeParticleVelocity(PB, PB%PO(i))
                         Call PB%PO(i)%AccInpInit()
                     End Do
                 Else
@@ -213,6 +194,31 @@ Module ModuleMCCInterface
             End If        
         Endif
     End Subroutine AllInitializationParticleBundleIFE
+
+    Subroutine InitializeParticleVelocity(PB, PO)
+        Class(ParticleBundle), Intent(In) :: PB
+        Type(ParticleOne), Intent(InOut) :: PO
+        Real(8) :: VFactor
+
+        If (PB%SO%SpecyIndex == 0) Then
+            Select Case (ElectronDistribution)
+            Case (DIST_MAXWELLIAN)
+                Call PO%VelMaxInit(PB%SO%Mass, PB%SO%InitTemperature)
+            Case (DIST_KAPPA)
+                Call PO%VelKappaInit(PB%SO%Mass, PB%SO%InitTemperature, ElectronKappa)
+            Case (DIST_POLYTROPIC)
+                Call PO%VelPolyInit(PB%SO%Mass, PB%SO%InitTemperature, ElectronPolytropicGamma)
+            Case Default
+                Print*, 'Unknown electron distribution: ', ElectronDistribution
+                Stop 2
+            End Select
+        Else
+            Call PO%VelMaxInit(PB%SO%Mass, PB%SO%InitTemperature)
+        End If
+
+        VFactor = 1.0D0 / PB%VFactor
+        Call PO%VelRes(VFactor)
+    End Subroutine InitializeParticleVelocity
     
     
     Subroutine AdjustParticleBoundary(PB,PO,TimeMove,IvelFlag,IposFlag,N_objects,objects,delta,OriPosi,detaV)
@@ -241,18 +247,12 @@ Module ModuleMCCInterface
         Integer(4) :: NBoundary = 8, CrossBoundary
         Integer(4) :: I_Count
         
-        double precision :: ranf1, ranf2, ranf3
-        REAL(8) :: beta, velocity_tangential,theta_v,VFactor,Kappa,gama
-        Real(8) :: KB=1.3807d-23
-        REAL(8), PARAMETER	::	pii	= 3.14159265358979D0
+        Real(8) :: VFactor, velocity_si(3)
         Real(8) :: ek_before, ek_after, diag_weight
 
         Trail_2D(1,:) = (/OriPosi(1),OriPosi(2)/)
         Trail_2D(2,:) = (/PO%X,PO%Y/)
-        beta=PB%Mass/(2*KB*PB%SO%InitTemperature)
         PB%VFactor = v_ref
-        Kappa=2.0
-        gama=3.0
         
         !> ----------------------------------
         !I_Count = 0
@@ -361,75 +361,40 @@ Module ModuleMCCInterface
         !> ----------------------------------
         
         If (PO%X <= dxmin) Then
-            
-            !Abortion boundary -- delete
-            !PB%nLoss(1) = PB%nLoss(1) + 1 !> ab.ZWZ
-            !PO%X = -2000
-            !! Reflex boundary -- rebounce
-                !Iposflag = 1
-                !TimeRemain = (PO%X - dxmin)/PO%Vx
-                !TimeMove = TimeRemain
-                !PO%Y = PO%Y - PO%Vy * TimeRemain
-                !PO%Vx = -PO%Vx
-                !PO%X = dxmin + 10E-6
-            !diffuse reflection zzj24/10/15 ���� ϡ�����嶯��ѧ3.2 Maxwellian
-            !Iposflag = 1
-            !TimeRemain = (PO%X - dxmin)/PO%Vx
-            !TimeMove = TimeRemain
-            !PO%Y = PO%Y - PO%Vy * TimeRemain
-            !PO%X = dxmin + 10E-6
-            !call DRandom(ranf1)
-            !call DRandom(ranf2)
-            !call DRandom(ranf3)
-            !PO%Vx =SQRT ((-DLOG (ranf1))/beta)
-            !velocity_tangential=SQRT ((-DLOG (ranf2))/beta)
-            !theta_v=2*pii*ranf3
-            !PO%Vy=velocity_tangential*COS (theta_v)
-            !PO%Vz=velocity_tangential*SIN (theta_v)
-            !VFactor = 1.0 / PB%VFactor
-            !call PO%VelRes(VFactor)
-            
-            !kappa������
-            ek_before = PO%Energy(PB%Mass, PB%VFactor)
+            ! PAPER_CASE_LEFT_BOUNDARY_RUNTIME
             Iposflag = 1
-            TimeRemain = (PO%X - dxmin)/PO%Vx
+            TimeRemain = (PO%X - dxmin) / PO%Vx
             TimeMove = TimeRemain
             PO%Y = PO%Y - PO%Vy * TimeRemain
+            PO%Z = PO%Z - PO%Vz * TimeRemain
             PO%X = dxmin + 10E-6
-            !call PO%VelKappaInit(PB%SO%Mass,PB%SO%InitTemperature,PB%VFactor)
-            call DRandom(ranf1)
-            CALL RANDOM_NUMBER(ranf1)
-            PO%Vx =SQRT ((1.d0*Kappa-1.5)/beta*((ranf1)**(-1/(Kappa-1))-1))
-            VFactor = 1.0 / PB%VFactor
-            call PO%VelRes(VFactor)
-            ek_after = PO%Energy(PB%Mass, PB%VFactor)
-            If (PB%UnequalWeightFlag) Then
-                diag_weight = PO%WQ
+
+            If (LeftBoundaryMode == BOUNDARY_SPECULAR) Then
+                PO%Vx = -PO%Vx
             Else
-                diag_weight = PB%Weight
+                ek_before = PO%Energy(PB%Mass, PB%VFactor)
+                If (PB%SO%SpecyIndex == 0) Then
+                    Call SampleThermalBoundaryVelocity(ElectronDistribution, PB%SO%Mass, &
+                        PB%SO%InitTemperature, ElectronKappa, ElectronPolytropicGamma, &
+                        velocity_si(1), velocity_si(2), velocity_si(3))
+                Else
+                    Call SampleThermalBoundaryVelocity(DIST_MAXWELLIAN, PB%SO%Mass, &
+                        PB%SO%InitTemperature, ElectronKappa, ElectronPolytropicGamma, &
+                        velocity_si(1), velocity_si(2), velocity_si(3))
+                End If
+                PO%Vx = velocity_si(1)
+                PO%Vy = velocity_si(2)
+                PO%Vz = velocity_si(3)
+                VFactor = 1.0D0 / PB%VFactor
+                Call PO%VelRes(VFactor)
+                ek_after = PO%Energy(PB%Mass, PB%VFactor)
+                If (PB%UnequalWeightFlag) Then
+                    diag_weight = PO%WQ
+                Else
+                    diag_weight = PB%Weight
+                End If
+                Call AddDiagThermalExchange(diag_weight, ek_before, ek_after)
             End If
-            Call AddDiagThermalExchange(diag_weight, ek_before, ek_after)
-            !poly������
-            !Iposflag = 1
-            !TimeRemain = (PO%X - dxmin)/PO%Vx
-            !TimeMove = TimeRemain
-            !PO%Y = PO%Y - PO%Vy * TimeRemain
-            !PO%X = dxmin + 10E-6
-            !call RANDOM_NUMBER (ranf1)
-            !PO%Vx=SQRT (gama/((gama-1)*beta)*(1-(ranf1)**((2.0*gama-2)/(gama+1))))
-            !VFactor = 1.0 / PB%VFactor
-            !call PO%VelRes(VFactor)
-            
-            !LineEnds(1,:) = (/dxmin,dymin/)
-            !LineEnds(2,:) = (/dxmin,dymax/)
-            !Call LineIntersection(LineEnds,Trail_2D,InterPoint,InterFlag)
-            !If (InterFlag == 1) Then
-            !    If (PB%SO%SpecyIndex == 0) Then
-            !        Call ElectronIndcedSEEOne(ParticleGlobal(0),PO,InterPoint,0)
-            !    Else
-            !        Call IonIndcedSEEOne(ParticleGlobal(0),PO,InterPoint,0)
-            !    End If
-            !Endif
         Elseif (PO%X > dxmax) Then
             PB%nLoss(2) = PB%nLoss(2) + 1 !> ab.ZWZ
             PO%X = -2000
@@ -697,28 +662,28 @@ Module ModuleMCCInterface
         print*,'ns(1)=',ns(1)
         print*,'ns(2)=',ns(2)
 
-        !!! ******************************* ����һ��bjw 2019-5-7��: ��������׼�������� ***********************************************
+        ! Quasi-neutral particle adjustment (bjw 2019-5-7).
         ne_old = ns(1) 
 
-        !n_cell_in = 10 / hx(2)  !!! ׼���������������
-        n_cell_in = 10 / hx(1)  !!! ׼���������������
+        !n_cell_in = 10 / hx(2)  !!! cells in the adjustment region
+        n_cell_in = 10 / hx(1)  !!! cells in the adjustment region
 
         nnx = nx - 1
         nny = ny - 1
 
         DO insp = 1, 2
-	        CALL INDEXM_cdp(PB_e,PB_i,insp, IC, nnx, nny)  !!! nnx, nny������
-	        ic1(insp,:) = IC(2,:)       !$ ÿ�������������
+	        CALL INDEXM_cdp(PB_e,PB_i,insp, IC, nnx, nny)  !!! mesh dimensions: nnx, nny
+	        ic1(insp,:) = IC(2,:)       !$ particle count in each cell
         ENDDO
         !write(*,*) ic1
         !print*,'before quasi11111111111111:'
-        DO ipre=1, 1 + n_cell_in  !!!x��������(x��Сλ�ô�)
+        DO ipre=1, 1 + n_cell_in  !!! cells near the minimum-x boundary
 	        net_at_cell = 0
 	        net_at_boundary = 0
 	        pro_at_cell = 0
 	        DO jpre = 1, nny
 		        mc = (ipre - 1) * nny + jpre
-		        net_at_cell(ipre,jpre) = ic1(2,mc) - ic1(1,mc)          !$ ������-������
+		        net_at_cell(ipre,jpre) = ic1(2,mc) - ic1(1,mc)          !$ ion count - electron count
                 !print*,'mc = ',mc
                 !print*,'ic1(2,mc)=',ic1(2,mc)
                 !print*,'ic1(1,mc)=',ic1(1,mc)
@@ -757,13 +722,13 @@ Module ModuleMCCInterface
 
 			        CALL DRandom(ranum)
 			        !part(num+1,1) = 0. + (ipre - ranum) * hx(1)			
-			        PB_e%PO(num_elec+1)%X = f_left_wall(1) + (ipre - ranum) * hx(1)			                !$ xλ��
+			        PB_e%PO(num_elec+1)%X = f_left_wall(1) + (ipre - ranum) * hx(1)			                !$ x position
 			        CALL DRandom(ranum)
 			        !part(num+1,2) = 0. + (jpre - ranum) * hx(2)
 			        !part(num+1,2) = f_left_wall(2) + (jpre - ranum) * hx(2)
                    !$ ========================= mb.ZWZ ================================= \\
                     IF(delta == 0) THEN
-                        PB_e%PO(num_elec+1)%Y= f_left_wall(2) + (jpre - ranum) * hx(2)                      !$ yλ��
+                        PB_e%PO(num_elec+1)%Y= f_left_wall(2) + (jpre - ranum) * hx(2)                      !$ y position
                         PB_e%PO(num_elec+1)%Z= 0.
                     ELSEIF(delta == 1) THEN
                         PB_e%PO(num_elec+1)%Y= f_left_wall(2) + SQRT(hx(2)**2*((jpre -1)*(jpre -1) &
@@ -781,7 +746,7 @@ Module ModuleMCCInterface
                     !$ ========================= mb.ZWZ ================================= //
 			
 
-        1000        CALL Loadv(V_x, tmpj(ipf(1)), 1)   !!! ֻ�����ӣ������� temp0(ipf(1))
+        1000        CALL Loadv(V_x, tmpj(ipf(1)), 1)   !!! electron velocity at tmpj(ipf(1))
 		            CALL Loadv(V_y, tmpj(ipf(1)), 1)
 		            CALL Loadv(V_z, tmpj(ipf(1)), 1)
 			        IF(V_x <= 0) THEN
@@ -822,7 +787,7 @@ Module ModuleMCCInterface
 	        ENDIF
         ENDDO
         WRITE(6,*) '# Quasi1: to inject on one side',ns(1)-ne_old
-        DO ipre=nnx - n_cell_in, nnx  !!!x��������(x���λ�ô�)
+        DO ipre=nnx - n_cell_in, nnx  !!! cells near the maximum-x boundary
 	        net_at_cell = 0
 	        net_at_boundary = 0
 	        pro_at_cell = 0
@@ -869,7 +834,7 @@ Module ModuleMCCInterface
                     IF(delta == 0) THEN
                         PB_e%PO(num_elec+1)%Y=f_left_wall(2) + (jpre - ranum) * hx(2)
                         PB_e%PO(num_elec+1)%Z=0.
-                        !part(num+1,2)= f_left_wall(2) + (jpre - ranum) * hx(2)                      !$ yλ��
+                        !part(num+1,2)= f_left_wall(2) + (jpre - ranum) * hx(2)                      !$ y position
                         !part(num+1,3) = 0.
                     ELSEIF(delta == 1) THEN
                 
@@ -884,7 +849,7 @@ Module ModuleMCCInterface
                     ENDIF
                     !$ ========================= mb.ZWZ ================================= //
 
-        2000        CALL Loadv(V_x, tmpj(ipf(1)), 1)   !!! ֻ�����ӣ������� temp0(ipf(1))
+        2000        CALL Loadv(V_x, tmpj(ipf(1)), 1)   !!! electron velocity at tmpj(ipf(1))
 		            CALL Loadv(V_y, tmpj(ipf(1)), 1)
                     CALL Loadv(V_z, tmpj(ipf(1)), 1)
 			        IF(V_x >= 0) THEN

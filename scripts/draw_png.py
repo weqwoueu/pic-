@@ -15,8 +15,8 @@ Expected flat case directory:
 
 Usage:
   cd ~/pic-
-  python3 scripts/draw_png.py verification_runs/maxwellian_mi400_thermal_ppc1000_nt20000 12000
-  python3 scripts/draw_png.py verification_runs/maxwellian_mi400_thermal_ppc1000_nt20000 20000
+  python3 scripts/draw_png.py verification_runs/<case_name> 12000
+  python3 scripts/draw_png.py verification_runs/<case_name> 20000
 
 If the step is omitted, the latest available Average_x/velocity_IJ pair is used.
 PNG files are written to:
@@ -155,6 +155,38 @@ def parse_config_float(path: Path, key: str, default: float) -> float:
     return float(nums[-1].replace("D", "E").replace("d", "e"))
 
 
+def velocity_cell_centers(
+    velocity: np.ndarray,
+    config_file: Path,
+    x_field: np.ndarray,
+) -> np.ndarray:
+    """Map fixed-width velocity bins to the normalized simulation domain."""
+    cell_ids = velocity[:, 6]
+    rounded_ids = np.rint(cell_ids)
+    if (
+        not np.all(np.isfinite(cell_ids))
+        or not np.allclose(cell_ids, rounded_ids)
+        or np.min(rounded_ids) < 1
+    ):
+        raise SystemExit("Velocity output contains invalid cell identifiers.")
+
+    n_bins = int(np.max(rounded_ids))
+    domain_value = parse_config_value(config_file, "domain_lambdaD")
+    domain_numbers = FLOAT_RE.findall(domain_value) if domain_value else []
+    if len(domain_numbers) >= 2:
+        x_min = float(domain_numbers[0].replace("D", "E").replace("d", "e"))
+        x_max = float(domain_numbers[1].replace("D", "E").replace("d", "e"))
+    else:
+        x_min = float(np.nanmin(x_field))
+        x_max = float(np.nanmax(x_field))
+
+    if n_bins <= 0 or not math.isfinite(x_min) or not math.isfinite(x_max) or x_max <= x_min:
+        raise SystemExit("Could not determine the velocity diagnostic bin width.")
+
+    bin_width = (x_max - x_min) / n_bins
+    return x_min + (cell_ids - 0.5) * bin_width
+
+
 def output_paths(case_dir: Path, pattern: str, nested: tuple[str, str]) -> list[Path]:
     paths = sorted(case_dir.glob(pattern))
     if paths:
@@ -202,6 +234,16 @@ def infer_label(config_file: Path, explicit_label: str | None) -> str:
     return str(left_boundary)
 
 
+def distribution_label(config_file: Path) -> tuple[str, str]:
+    distribution = str(parse_config_value(config_file, "distribution", "maxwellian")).lower()
+    parameter = str(parse_config_value(config_file, "distribution_parameter", "none"))
+    if distribution == "kappa":
+        return f"Kappa (kappa={parameter})", f"kappa{parameter}"
+    if distribution == "polytropic":
+        return f"Polytropic (gamma={parameter})", f"poly{parameter}"
+    return "Maxwellian", "maxwellian"
+
+
 def main() -> int:
     args = parse_args()
     case_dir = args.case_dir
@@ -231,6 +273,8 @@ def main() -> int:
     lambda_d0 = parse_ref_value(physics_file, "length ref", 1.0)
     mi_me = parse_config_float(config_file, "ion_mass_over_electron_mass", 400.0)
     dt_omega_pe = parse_config_float(config_file, "dt_omega_pe", 0.05)
+    distribution_text, distribution_tag = distribution_label(config_file)
+    distribution_tag = re.sub(r"[^A-Za-z0-9_.-]+", "_", distribution_tag)
 
     if lambda_d0 <= 0 or (lambda_d0 == 1.0 and np.nanmax(field[:, 0]) < 1.0):
         dx_values = np.diff(field[:, 0])
@@ -242,8 +286,7 @@ def main() -> int:
     ne = np.abs(field[:, 3]) / n0
     ni = np.abs(field[:, 4]) / n0
 
-    dx_lambda_d = parse_config_float(config_file, "dx_lambdaD", 1.0)
-    x_vel = (velocity[:, 6] - 0.5) * dx_lambda_d
+    x_vel = velocity_cell_centers(velocity, config_file, x_lambda)
     thermal_e = velocity[:, 2]
     count_e = velocity[:, 4]
     thermal_e = np.where(count_e > 0, thermal_e, np.nan)
@@ -257,7 +300,7 @@ def main() -> int:
 
     out_dir = case_dir / "postprocessed"
     out_dir.mkdir(parents=True, exist_ok=True)
-    out_file = out_dir / f"maxwell_mi400_t{field_step:06d}.png"
+    out_file = out_dir / f"profile_{distribution_tag}_mi{mi_me:g}_t{field_step:06d}.png"
 
     plt.rcParams.update(
         {
@@ -297,7 +340,7 @@ def main() -> int:
 
     label = infer_label(config_file, args.label)
     fig.suptitle(
-        f"Maxwellian, {label}, mi/me={mi_me:g}, step={field_step}, omega_pi t={omega_pi_t:.1f}",
+        f"{distribution_text}, {label}, mi/me={mi_me:g}, step={field_step}, omega_pi t={omega_pi_t:.1f}",
         fontsize=13,
     )
     fig.subplots_adjust(left=0.08, right=0.985, bottom=0.16, top=0.82, wspace=0.24)

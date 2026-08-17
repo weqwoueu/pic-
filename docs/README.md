@@ -11,15 +11,63 @@
 | `PIC-IFE_GEC/OUTPUT/` | 场、速度、能谱等输出 |
 | `PIC-IFE_GEC/DUMP/` | 重启 dump 文件 |
 | `PIC-IFE_GEC/run_min_case.sh` | 云端已有的最小算例脚本 |
-| `scripts/setup_maxwell_mi400_case.sh` | 配置论文 Maxwell `mi/me=400` 证明算例 |
+| `scripts/setup_paper_case.sh` | 统一配置 Maxwellian、Kappa、Polytropic 论文算例 |
+| `scripts/setup_maxwell_mi400_case.sh` | 被统一入口调用的兼容脚本，旧命令仍可使用 |
 | `scripts/draw_png.py` | 从 `verification_runs/<case_name>/` 读取归档结果并画密度、电子热速度图 |
 | `scripts/postprocess_maxwell_mi400.py` | 从归档结果生成论文后处理 CSV 和 `gamma_e` 拟合结果 |
+| `scripts/postprocess_paper_case.py` | 三种分布通用的后处理入口 |
+| `scripts/test_velocity_distributions.sh` | 独立检验三种初始化分布和 thermal 边界采样公式 |
 | `scripts/summarize_maxwell_seed_ensemble.py` | 汇总多个 Maxwellian seed 的 `gamma_e` 均值、样本标准差和统计图 |
 | `scripts/archive_verification_case.sh` | 按 `case_config.txt` 自动归档正式算例的配置、日志和关键输出 |
 | `docs/numerical_validation_plan.md` | 按 PDF 工作建议整理的收敛性测试顺序和判定标准 |
 | `docs/术语解释.md` | 物理符号、数值术语、诊断量、工作建议和汇报话术的通俗说明 |
 
 程序用相对路径读写文件，所以运行 `1DPIC` 时工作目录必须是 `PIC-IFE_GEC/`。
+
+## 三种分布统一入口
+
+统一命令的参数顺序是：
+
+```text
+DISTRIBUTION SHAPE PPC NT BOUNDARY SEED DT DX MI_ME
+```
+
+例如先准备低成本 Kappa `kappa=2`、thermal 边界的 200 步冒烟测试：
+
+```bash
+cd ~/pic-
+module purge
+module load intel/2022.1
+module load cmake/3.23.5
+
+bash scripts/test_velocity_distributions.sh
+bash scripts/setup_paper_case.sh kappa 2 10 200 thermal 101 0.05 1.0 400
+
+cd PIC-IFE_GEC
+rm -rf build
+cmake -S . -B build -DCMAKE_Fortran_COMPILER="$(which ifort)"
+cmake --build build -j4
+sbatch run_kappa2_mi400_dx1_dt005_ppc10_seed101_thermal.slurm
+```
+
+`NT` 小于 `omega_pi t=50` 对应步数时，配置会标记为 `run_mode=smoke`，只验证初始化、边界、求解器启动和正常结束，不会混入 `verification_runs/`。达到目标步数时标记为 `production`，正常结束后才自动归档 t30/t50 的场、速度和能谱。
+
+支持的分布和边界写法：
+
+```text
+maxwellian none
+kappa 2
+kappa 6
+polytropic 2
+polytropic 3
+
+thermal
+specular
+```
+
+运行日志必须显示 `PIC electron distribution`、对应的 `PIC kappa` 或 `PIC polytropic gamma`，以及 `PIC left boundary`。离子始终使用 Maxwellian 初始化；只有电子分布按 case 切换。
+
+Kappa 实现采用与论文边界式、密度闭合式以及 `<v^2>=k_B T/m` 一致的一维分量形式 `f(v) proportional to [1+v^2/((2*kappa-3)k_B T/m)]^(-kappa)`。论文当前初始化公式中的 `-(kappa+1)` 与上述三处不一致，正式改稿时应一并修正，不能把两种定义混用。
 
 ## 换 IDE 怎么设置
 
@@ -139,7 +187,7 @@ rm -rf build
 cmake -S . -B build -DCMAKE_Fortran_COMPILER="$(which ifort)"
 cmake --build build -j4
 
-sbatch run_maxwellian_dx1_dt005_ppc1000_seed101_thermal.slurm
+sbatch run_maxwellian_mi400_dx1_dt005_ppc1000_seed101_thermal.slurm
 squeue -u dg001947
 ```
 
@@ -212,6 +260,15 @@ postprocess_summary.txt
 
 `gamma_e` 统一按照工作建议中的区间 `10^-3 <= ni/n0 < 1` 拟合；CSV 同时记录标准误差、`R^2`、空间范围、排除点数，profile 文件用 `gamma_fit_included` 标记每个点是否参与拟合。
 
+速度诊断的 cell 编号不是模拟场网格编号。`OUTPUT_velocity.f90` 固定把完整 `[0,1024] lambda_D0` 域分成 1024 个速度统计箱，所以即使算例使用 `dx=0.5`，速度箱宽仍为 `1 lambda_D0`。后处理会从 `domain_lambdaD` 和速度箱数自动计算横坐标，并在 `postprocess_summary.txt` 中记录：
+
+```text
+velocity_bin_width_lambda_D0
+density_count_log_correlation
+```
+
+第二项应非常接近 1；脚本使用下限 `0.95` 检查速度箱与场密度是否错位。
+
 如果服务器没有画图库：
 
 ```bash
@@ -237,7 +294,7 @@ python3 -m pip install --user matplotlib numpy
 cd ~/pic-
 bash scripts/setup_maxwell_mi400_case.sh 20000 20000 thermal 101 0.05 1.0
 cd PIC-IFE_GEC
-sbatch run_maxwellian_dx1_dt005_ppc20000_seed101_thermal.slurm
+sbatch run_maxwellian_mi400_dx1_dt005_ppc20000_seed101_thermal.slurm
 ```
 
 ## Slurm 示例
@@ -245,13 +302,13 @@ sbatch run_maxwellian_dx1_dt005_ppc20000_seed101_thermal.slurm
 配置脚本会在 `PIC-IFE_GEC/` 自动生成 Slurm 文件，不需要手写。文件名包含所有关键参数，例如：
 
 ```text
-run_maxwellian_dx1_dt005_ppc1000_seed101_thermal.slurm
+run_maxwellian_mi400_dx1_dt005_ppc1000_seed101_thermal.slurm
 ```
 
 提交后用 `squeue` 查看状态；任务正常结束会自动归档，不要同时提交两个使用同一 `PIC-IFE_GEC` 工作目录的 case。
 
 ```bash
-sbatch run_maxwellian_dx1_dt005_ppc1000_seed101_thermal.slurm
+sbatch run_maxwellian_mi400_dx1_dt005_ppc1000_seed101_thermal.slurm
 squeue -u dg001947
 ```
 
@@ -279,12 +336,12 @@ module load cmake/3.23.5
 rm -rf build
 cmake -S . -B build -DCMAKE_Fortran_COMPILER="$(which ifort)"
 cmake --build build -j4
-sbatch run_maxwellian_dx1_dt005_ppc1000_seed101_thermal.slurm
+sbatch run_maxwellian_mi400_dx1_dt005_ppc1000_seed101_thermal.slurm
 squeue -u dg001947
 
 # 跑完并自动归档后，在仓库根目录后处理：
 cd ..
-case_dir=verification_runs/maxwellian_dx1_dt005_ppc1000_seed101_thermal
+case_dir=verification_runs/maxwellian_mi400_dx1_dt005_ppc1000_seed101_thermal
 python3 scripts/draw_png.py "$case_dir" 12000
 python3 scripts/draw_png.py "$case_dir" 20000
 python3 scripts/postprocess_maxwell_mi400.py "$case_dir"
@@ -441,7 +498,7 @@ rm -rf build
 cmake -S . -B build -DCMAKE_Fortran_COMPILER="$(which ifort)"
 cmake --build build -j4
 
-sbatch run_maxwellian_dx1_dt005_ppc1000_seed101_thermal.slurm
+sbatch run_maxwellian_mi400_dx1_dt005_ppc1000_seed101_thermal.slurm
 squeue -u dg001947
 ```
 
@@ -464,7 +521,7 @@ PIC_ARCHIVE_ROOT=~/pic-/verification_runs \
 任务正常结束后，脚本会自动把配置、日志、全局诊断以及 `t=30/50` 的场和速度输出归档到：
 
 ```text
-verification_runs/maxwellian_dx1_dt005_ppc1000_seed101_thermal/
+verification_runs/maxwellian_mi400_dx1_dt005_ppc1000_seed101_thermal/
 ```
 
 查看运行：
