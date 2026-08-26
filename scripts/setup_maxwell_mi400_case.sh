@@ -32,6 +32,8 @@ distribution="${7:-maxwellian}"
 distribution_shape="${8:-}"
 mass_ratio="${9:-400}"
 omp_threads="${PIC_OMP_THREADS:-8}"
+slurm_partition="${PIC_SLURM_PARTITION:-comp}"
+slurm_memory_override="${PIC_SLURM_MEMORY_MIB:-}"
 
 distribution="$(printf '%s' "$distribution" | tr '[:upper:]' '[:lower:]')"
 case "$distribution" in
@@ -106,6 +108,17 @@ if ! [[ "$ppg" =~ ^[1-9][0-9]*$ && "$nt" =~ ^[1-9][0-9]*$ && \
   exit 2
 fi
 
+if ! [[ "$slurm_partition" =~ ^[A-Za-z0-9._-]+$ ]]; then
+  echo "PIC_SLURM_PARTITION contains unsupported characters" >&2
+  exit 2
+fi
+
+if [[ -n "$slurm_memory_override" ]] && \
+   ! [[ "$slurm_memory_override" =~ ^[1-9][0-9]*$ ]]; then
+  echo "PIC_SLURM_MEMORY_MIB must be a positive integer" >&2
+  exit 2
+fi
+
 repo_root="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 app_dir="$repo_root/PIC-IFE_GEC"
 archive_root="${PIC_ARCHIVE_ROOT:-$repo_root/verification_runs}"
@@ -134,6 +147,9 @@ requested_memory_mib=$(((estimated_memory_mib * 135 + 99) / 100))
 requested_memory_mib=$((((requested_memory_mib + 499) / 500) * 500))
 if (( requested_memory_mib < 1000 )); then
   requested_memory_mib=1000
+fi
+if [[ -n "$slurm_memory_override" ]]; then
+  requested_memory_mib="$slurm_memory_override"
 fi
 
 estimated_runtime_seconds=$(( \
@@ -386,6 +402,7 @@ particles_per_cell_per_species = ${ppg}
 initial_particles_total = ${initial_particles}
 particle_capacity = ${particle_capacity}
 slurm_cpus = ${omp_threads}
+slurm_partition = ${slurm_partition}
 slurm_memory_mib = ${requested_memory_mib}
 slurm_walltime = ${requested_walltime}
 target_omega_pi_t_30_step = ${target_t30_step}
@@ -399,7 +416,7 @@ EOF_CONFIG
 cat > "$app_dir/run_${case_name}.slurm" <<EOF_SLURM
 #!/bin/bash
 #SBATCH -J ${distribution_tag}_${mass_ratio}_${ppg}
-#SBATCH -p comp
+#SBATCH -p ${slurm_partition}
 #SBATCH -N 1
 #SBATCH -n 1
 #SBATCH -c ${omp_threads}
@@ -505,6 +522,7 @@ Prepared standard paper baseline case:
   nt             = $nt
   run mode       = ${run_mode}
   auto archive   = ${archive_results}
+  Slurm partition= ${slurm_partition}
   Slurm CPUs     = ${omp_threads}
   Slurm memory   = ${requested_memory_mib} MiB
   Slurm walltime = ${requested_walltime}
