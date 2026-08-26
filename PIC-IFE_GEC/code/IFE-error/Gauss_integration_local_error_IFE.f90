@@ -86,13 +86,13 @@ IF (interface_element_type==1) THEN
         u_true(i) = temp2
 
         !error = error + Gauss_coefficient_local_triangle_Nine(i) * (uh(i)-u_true(i)) * (uh(i)-u_true(i))
-        !$ ============== ab.ZWZ for adding cylindrical coordinate ============= \\
+        ! ============== ab.ZWZ for adding cylindrical coordinate ============= \\
         IF (delta == 0) THEN
             error = error + Gauss_coefficient_local_triangle_Nine(i) * (uh(i)-u_true(i)) * (uh(i)-u_true(i))
         ELSEIF (delta == 1) THEN
             error = error + Gauss_coefficient_local_triangle_Nine(i) * (uh(i)-u_true(i)) * (uh(i)-u_true(i))* Gauss_point_local_triangle_Nine(i,2)    
         ENDIF 
-        !$ ============== ab.ZWZ for adding cylindrical coordinate ============= //
+        ! ============== ab.ZWZ for adding cylindrical coordinate ============= //
         
     END DO
 
@@ -130,13 +130,13 @@ IF (interface_element_type==1) THEN
         u_true(i) = temp2
             
         !error = error + Gauss_coefficient_local_triangle_Nine(i) * (uh(i)-u_true(i)) * (uh(i)-u_true(i))
-        !$ ============== ab.ZWZ for adding cylindrical coordinate ============= \\
+        ! ============== ab.ZWZ for adding cylindrical coordinate ============= \\
         IF (delta == 0) THEN
             error = error + Gauss_coefficient_local_triangle_Nine(i) * (uh(i)-u_true(i)) * (uh(i)-u_true(i))
         ELSEIF (delta == 1) THEN
             error = error + Gauss_coefficient_local_triangle_Nine(i) * (uh(i)-u_true(i)) * (uh(i)-u_true(i))* Gauss_point_local_triangle_Nine(i,2)    
         ENDIF 
-        !$ ============== ab.ZWZ for adding cylindrical coordinate ============= //
+        ! ============== ab.ZWZ for adding cylindrical coordinate ============= //
             
     END DO
 
@@ -173,13 +173,13 @@ IF (interface_element_type==1) THEN
         u_true(i) = temp2
             
         !error = error + Gauss_coefficient_local_triangle_Nine(i) * (uh(i)-u_true(i)) * (uh(i)-u_true(i))
-        !$ ============== ab.ZWZ for adding cylindrical coordinate ============= \\
+        ! ============== ab.ZWZ for adding cylindrical coordinate ============= \\
         IF (delta == 0) THEN
             error = error + Gauss_coefficient_local_triangle_Nine(i) * (uh(i)-u_true(i)) * (uh(i)-u_true(i))
         ELSEIF (delta == 1) THEN
             error = error + Gauss_coefficient_local_triangle_Nine(i) * (uh(i)-u_true(i)) * (uh(i)-u_true(i))* Gauss_point_local_triangle_Nine(i,2)    
         ENDIF 
-        !$ ============== ab.ZWZ for adding cylindrical coordinate ============= //
+        ! ============== ab.ZWZ for adding cylindrical coordinate ============= //
 
     END DO
 
@@ -216,13 +216,13 @@ IF (interface_element_type==1) THEN
         u_true(i) = temp2
             
         !error = error + Gauss_coefficient_local_triangle_Nine(i) * (uh(i)-u_true(i)) * (uh(i)-u_true(i))
-        !$ ============== ab.ZWZ for adding cylindrical coordinate ============= \\
+        ! ============== ab.ZWZ for adding cylindrical coordinate ============= \\
         IF (delta == 0) THEN
             error = error + Gauss_coefficient_local_triangle_Nine(i) * (uh(i)-u_true(i)) * (uh(i)-u_true(i))
         ELSEIF (delta == 1) THEN
             error = error + Gauss_coefficient_local_triangle_Nine(i) * (uh(i)-u_true(i)) * (uh(i)-u_true(i))* Gauss_point_local_triangle_Nine(i,2)    
         ENDIF 
-        !$ ============== ab.ZWZ for adding cylindrical coordinate ============= //
+        ! ============== ab.ZWZ for adding cylindrical coordinate ============= //
 
     END DO
 
@@ -261,13 +261,13 @@ ELSEIF (interface_element_type==2) THEN
         u_true(i) = temp2
             
         !error = error + Gauss_coefficient_local_triangle_Nine(i) * (uh(i)-u_true(i)) * (uh(i)-u_true(i))
-        !$ ============== ab.ZWZ for adding cylindrical coordinate ============= \\
+        ! ============== ab.ZWZ for adding cylindrical coordinate ============= \\
         IF (delta == 0) THEN
             error = error + Gauss_coefficient_local_triangle_Nine(i) * (uh(i)-u_true(i)) * (uh(i)-u_true(i))
         ELSEIF (delta == 1) THEN
             error = error + Gauss_coefficient_local_triangle_Nine(i) * (uh(i)-u_true(i)) * (uh(i)-u_true(i))* Gauss_point_local_triangle_Nine(i,2)    
         ENDIF 
-        !$ ============== ab.ZWZ for adding cylindrical coordinate ============= //
+        ! ============== ab.ZWZ for adding cylindrical coordinate ============= //
  
     ENDDO
     
@@ -304,13 +304,13 @@ ELSEIF (interface_element_type==2) THEN
         u_true(i) = temp2
             
         !error = error + Gauss_coefficient_local_triangle_Nine(i) * (uh(i)-u_true(i)) * (uh(i)-u_true(i))
-        !$ ============== ab.ZWZ for adding cylindrical coordinate ============= \\
+        ! ============== ab.ZWZ for adding cylindrical coordinate ============= \\
         IF (delta == 0) THEN
             error = error + Gauss_coefficient_local_triangle_Nine(i) * (uh(i)-u_true(i)) * (uh(i)-u_true(i))
         ELSEIF (delta == 1) THEN
             error = error + Gauss_coefficient_local_triangle_Nine(i) * (uh(i)-u_true(i)) * (uh(i)-u_true(i))* Gauss_point_local_triangle_Nine(i,2)    
         ENDIF 
-        !$ ============== ab.ZWZ for adding cylindrical coordinate ============= //
+        ! ============== ab.ZWZ for adding cylindrical coordinate ============= //
  
     ENDDO
     
@@ -347,13 +347,13 @@ ELSEIF (interface_element_type==2) THEN
         u_true(i) = temp2
             
         !error = error + Gauss_coefficient_local_triangle_Nine(i) * (uh(i)-u_true(i)) * (uh(i)-u_true(i))
-        !$ ============== ab.ZWZ for adding cylindrical coordinate ============= \\
+        ! ============== ab.ZWZ for adding cylindrical coordinate ============= \\
         IF (delta == 0) THEN
             error = error + Gauss_coefficient_local_triangle_Nine(i) * (uh(i)-u_true(i)) * (uh(i)-u_true(i))
         ELSEIF (delta == 1) THEN
             error = error + Gauss_coefficient_local_triangle_Nine(i) * (uh(i)-u_true(i)) * (uh(i)-u_true(i))* Gauss_point_local_triangle_Nine(i,2)    
         ENDIF 
-        !$ ============== ab.ZWZ for adding cylindrical coordinate ============= //         
+        ! ============== ab.ZWZ for adding cylindrical coordinate ============= //
  
     ENDDO
     
@@ -392,13 +392,13 @@ ELSEIF (interface_element_type==2) THEN
         u_true(i) = temp2
             
         !error = error + Gauss_coefficient_local_triangle_Nine(i) * (uh(i)-u_true(i)) * (uh(i)-u_true(i))
-        !$ ============== ab.ZWZ for adding cylindrical coordinate ============= \\
+        ! ============== ab.ZWZ for adding cylindrical coordinate ============= \\
         IF (delta == 0) THEN
             error = error + Gauss_coefficient_local_triangle_Nine(i) * (uh(i)-u_true(i)) * (uh(i)-u_true(i))
         ELSEIF (delta == 1) THEN
             error = error + Gauss_coefficient_local_triangle_Nine(i) * (uh(i)-u_true(i)) * (uh(i)-u_true(i))* Gauss_point_local_triangle_Nine(i,2)    
         ENDIF 
-        !$ ============== ab.ZWZ for adding cylindrical coordinate ============= //
+        ! ============== ab.ZWZ for adding cylindrical coordinate ============= //
     
     ENDDO
     

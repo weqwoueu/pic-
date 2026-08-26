@@ -6,7 +6,7 @@ USE Gauss_Data
 USE IFE_INTERFACE, ONLY: Generate_Gauss_local_triangle, Retangular_local_basis_IFE		
 IMPLICIT NONE
 
-!$ 2021/4/19 zwz: 改了判断delta的位置，减少代码量, 并且为了impic加了coefficient函数
+! 2021/4/19 zwz: 改了判断delta的位置，减少代码量, 并且为了impic加了coefficient函数
 
 REAL(8),DIMENSION(:)				        ::    Gauss_coefficient_reference_triangle
 REAL(8),DIMENSION(:,:)		                ::    Gauss_point_reference_triangle

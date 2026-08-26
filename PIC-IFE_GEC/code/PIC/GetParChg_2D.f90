@@ -31,12 +31,12 @@ REAL(8)                    ::  dist1, dist2, dist3, dist4, dist_total
 REAL(8)                    ::  rho_temp1, rho_temp2, rho_temp3, rho_temp4, rho_temp_total
 REAL(8)                    ::  x_part, y_part, x_rec, y_rec, Cell_volume_bjw
 
-!$ =============== mb.ZWZ 2021/7/11 ========================== \\
+! =============== mb.ZWZ 2021/7/11 ========================== \\
 REAL(8) :: P1, P2, P3, P4 
 REAL(8) :: R
 REAL(8) :: YFACTOR
 REAL(8) :: BETA
-!$ =============== mb.ZWZ 2021/7/11 ========================== //
+! =============== mb.ZWZ 2021/7/11 ========================== //
 REAL(8) :: V2 !$ ab.ZWZ 2022/2/29 for output energy distribution
 REAL(8) :: Energy !$ ab.ZWZ 2022/5/26 for output energy distribution
 

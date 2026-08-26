@@ -641,11 +641,11 @@ Subroutine PostPushOne(PO,isp,TimeMove, IvelFlag, IposFlag, delta, OriPosi, deta
                 A_y = yefield * qm(isp+1)
                 A_z = zefield * qm(isp+1)
               Elseif (delta_global == 1) Then !2D axis-symmetric coordinates.
-                !$ axisymmetric e field
+                ! axisymmetric e field
                 zefield = Efield_old(1) + Efield_bro(1)
                 refield = Efield_old(2) + Efield_bro(2)
                 tefield = Efield_old(3) + Efield_bro(3)
-                !$ Convert axisymmetric efield to Cartesian efield
+                ! Convert axisymmetric efield to Cartesian efield
                 Theta = PO%Z
                 xefield = refield*DCOS(Theta) - tefield*DSIN(Theta)
                 yefield = refield*DSIN(Theta) + tefield*DCOS(Theta)
@@ -670,11 +670,11 @@ Subroutine PostPushOne(PO,isp,TimeMove, IvelFlag, IposFlag, delta, OriPosi, deta
                   Omega(2) = ybfield * qm(isp+1) * 0.5 * TimeMove
                   Omega(3) = zbfield * qm(isp+1) * 0.5 * TimeMove
                 Elseif (delta_global == 1) Then  !2D axis-symmetric coordinates.
-                  !$ axisymmetric b field
+                  ! axisymmetric b field
                   zbfield = Bfield_old(1) + Bfield_bro(1)
                   rbfield = Bfield_old(2) + Bfield_bro(2)
                   tbfield = Bfield_old(3) + Bfield_bro(3)
-                  !$ Convert axisymmetric bfield to Cartesian bfield
+                  ! Convert axisymmetric bfield to Cartesian bfield
                   Theta = PO%Z
                   xbfield = rbfield*DCOS(Theta) - tbfield*DSIN(Theta)
                   ybfield = rbfield*DSIN(Theta) + tbfield*DCOS(Theta)
@@ -917,11 +917,11 @@ Subroutine PostPushOne(PO,isp,TimeMove, IvelFlag, IposFlag, delta, OriPosi, deta
               A_y = yefield * qm(isp+1)
               A_z = zefield * qm(isp+1)
             Elseif (delta_global == 1) Then !2D axis-symmetric coordinates.
-              !$ axisymmetric e field
+              ! axisymmetric e field
               zefield = Efield_old(1) + Efield_bro(1)
               refield = Efield_old(2) + Efield_bro(2)
               tefield = Efield_old(3) + Efield_bro(3)
-              !$ Convert axisymmetric efield to Cartesian efield
+              ! Convert axisymmetric efield to Cartesian efield
               Theta = PO%Z
               xefield = refield*DCOS(Theta) - tefield*DSIN(Theta)
               yefield = refield*DSIN(Theta) + tefield*DCOS(Theta)
@@ -946,11 +946,11 @@ Subroutine PostPushOne(PO,isp,TimeMove, IvelFlag, IposFlag, delta, OriPosi, deta
                 Omega(2) = ybfield * qm(isp+1) * 0.5 * TimeMove
                 Omega(3) = zbfield * qm(isp+1) * 0.5 * TimeMove
               Elseif (delta_global == 1) Then  !2D axis-symmetric coordinates.
-                !$ axisymmetric b field
+                ! axisymmetric b field
                 zbfield = Bfield_old(1) + Bfield_bro(1)
                 rbfield = Bfield_old(2) + Bfield_bro(2)
                 tbfield = Bfield_old(3) + Bfield_bro(3)
-                !$ Convert axisymmetric bfield to Cartesian bfield
+                ! Convert axisymmetric bfield to Cartesian bfield
                 Theta = PO%Z
                 xbfield = rbfield*DCOS(Theta) - tbfield*DSIN(Theta)
                 ybfield = rbfield*DSIN(Theta) + tbfield*DCOS(Theta)
@@ -1204,11 +1204,11 @@ Subroutine PostPushOne(PO,isp,TimeMove, IvelFlag, IposFlag, delta, OriPosi, deta
                 A_y = yefield * qm(isp+1)
                 A_z = zefield * qm(isp+1)
               Elseif (delta_global == 1) Then !2D axis-symmetric coordinates.
-                !$ axisymmetric e field
+                ! axisymmetric e field
                 zefield = Efield_old(1) + Efield_bro(1)
                 refield = Efield_old(2) + Efield_bro(2)
                 tefield = Efield_old(3) + Efield_bro(3)
-                !$ Convert axisymmetric efield to Cartesian efield
+                ! Convert axisymmetric efield to Cartesian efield
                 Theta = PO%Z
                 xefield = refield*DCOS(Theta) - tefield*DSIN(Theta)
                 yefield = refield*DSIN(Theta) + tefield*DCOS(Theta)
@@ -1233,11 +1233,11 @@ Subroutine PostPushOne(PO,isp,TimeMove, IvelFlag, IposFlag, delta, OriPosi, deta
                   Omega(2) = ybfield * qm(isp+1) * 0.5 * TimeMove
                   Omega(3) = zbfield * qm(isp+1) * 0.5 * TimeMove
                 Elseif (delta_global == 1) Then  !2D axis-symmetric coordinates.
-                  !$ axisymmetric b field
+                  ! axisymmetric b field
                   zbfield = Bfield_old(1) + Bfield_bro(1)
                   rbfield = Bfield_old(2) + Bfield_bro(2)
                   tbfield = Bfield_old(3) + Bfield_bro(3)
-                  !$ Convert axisymmetric bfield to Cartesian bfield
+                  ! Convert axisymmetric bfield to Cartesian bfield
                   Theta = PO%Z
                   xbfield = rbfield*DCOS(Theta) - tbfield*DSIN(Theta)
                   ybfield = rbfield*DSIN(Theta) + tbfield*DCOS(Theta)
@@ -1504,11 +1504,11 @@ Subroutine PostPushOne(PO,isp,TimeMove, IvelFlag, IposFlag, delta, OriPosi, deta
               A_y = yefield * qm(isp+1)
               A_z = zefield * qm(isp+1)
             Elseif (delta_global == 1) Then !2D axis-symmetric coordinates.
-              !$ axisymmetric e field
+              ! axisymmetric e field
               zefield = Efield_old(1) + Efield_bro(1)
               refield = Efield_old(2) + Efield_bro(2)
               tefield = Efield_old(3) + Efield_bro(3)
-              !$ Convert axisymmetric efield to Cartesian efield
+              ! Convert axisymmetric efield to Cartesian efield
               Theta = PO%Z
               xefield = refield*DCOS(Theta) - tefield*DSIN(Theta)
               yefield = refield*DSIN(Theta) + tefield*DCOS(Theta)
@@ -1533,11 +1533,11 @@ Subroutine PostPushOne(PO,isp,TimeMove, IvelFlag, IposFlag, delta, OriPosi, deta
                 Omega(2) = ybfield * qm(isp+1) * 0.5 * TimeMove
                 Omega(3) = zbfield * qm(isp+1) * 0.5 * TimeMove
               Elseif (delta_global == 1) Then  !2D axis-symmetric coordinates.
-                !$ axisymmetric b field
+                ! axisymmetric b field
                 zbfield = Bfield_old(1) + Bfield_bro(1)
                 rbfield = Bfield_old(2) + Bfield_bro(2)
                 tbfield = Bfield_old(3) + Bfield_bro(3)
-                !$ Convert axisymmetric bfield to Cartesian bfield
+                ! Convert axisymmetric bfield to Cartesian bfield
                 Theta = PO%Z
                 xbfield = rbfield*DCOS(Theta) - tbfield*DSIN(Theta)
                 ybfield = rbfield*DSIN(Theta) + tbfield*DCOS(Theta)
@@ -1693,11 +1693,11 @@ Subroutine PostPushOne(PO,isp,TimeMove, IvelFlag, IposFlag, delta, OriPosi, deta
           A_y = yefield * qm(isp+1)
           A_z = zefield * qm(isp+1)
         Elseif (delta_global == 1) Then !2D axis-symmetric coordinates.
-          !$ axisymmetric e field
+          ! axisymmetric e field
           zefield = Efield(1)
           refield = Efield(2)
           tefield = Efield(3)
-          !$ Convert axisymmetric efield to Cartesian efield
+          ! Convert axisymmetric efield to Cartesian efield
           Theta = PO%Z
           xefield = refield*DCOS(Theta) - tefield*DSIN(Theta)
           yefield = refield*DSIN(Theta) + tefield*DCOS(Theta)
@@ -1727,14 +1727,14 @@ Subroutine PostPushOne(PO,isp,TimeMove, IvelFlag, IposFlag, delta, OriPosi, deta
             Omega(3) = zbfield * qm(isp+1) * 0.5 * TimeMove
 
           Elseif (delta_global == 1) Then  !2D axis-symmetric coordinates.
-            !$ axisymmetric b field
+            ! axisymmetric b field
             zbfield = W1 * bfx(HT(1,n_element_old),1) + W2 * bfx(HT(2,n_element_old),1) + &
                       W3 * bfx(HT(3,n_element_old),1) + W4 * bfx(HT(4,n_element_old),1)
             rbfield = W1 * bfy(HT(1,n_element_old),1) + W2 * bfy(HT(2,n_element_old),1) + &
                       W3 * bfy(HT(3,n_element_old),1) + W4 * bfy(HT(4,n_element_old),1)
             tbfield = W1 * bfz(HT(1,n_element_old),1) + W2 * bfz(HT(2,n_element_old),1) + &
                       W3 * bfz(HT(3,n_element_old),1) + W4 * bfz(HT(4,n_element_old),1)
-            !$ Convert axisymmetric bfield to Cartesian bfield
+            ! Convert axisymmetric bfield to Cartesian bfield
             Theta = PO%Z
             xbfield = rbfield*DCOS(Theta) - tbfield*DSIN(Theta)
             ybfield = rbfield*DSIN(Theta) + tbfield*DCOS(Theta)

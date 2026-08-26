@@ -73,13 +73,13 @@ DO i=1,SIZE(HT,2)
            u_true(k) = temp2
            
            !error = error + Gauss_coefficient_local(k) * (uh(k)-u_true(k)) * (uh(k)-u_true(k))
-           !$ ============== ab.ZWZ for adding cylindrical coordinate ===== \\
+           ! ============== ab.ZWZ for adding cylindrical coordinate ===== \\
            IF (delta == 0) THEN
                 error = error + Gauss_coefficient_local(k) * (uh(k)-u_true(k)) * (uh(k)-u_true(k))
            ELSEIF (delta == 1) THEN
                 error = error + Gauss_coefficient_local(k) * (uh(k)-u_true(k)) * (uh(k)-u_true(k)) *Gauss_point_local(k,2)
            ENDIF
-           !$ ============== ab.ZWZ for adding cylindrical coordinate ===== //
+           ! ============== ab.ZWZ for adding cylindrical coordinate ===== //
            
            error2 =  error2 + temp
            
@@ -104,13 +104,13 @@ DO i=1,SIZE(HT,2)
            u_true(k) = temp2
            
            !error = error + Gauss_coefficient_local(k) * (uh(k)-u_true(k)) * (uh(k)-u_true(k))
-           !$ ============== ab.ZWZ for adding cylindrical coordinate ===== \\
+           ! ============== ab.ZWZ for adding cylindrical coordinate ===== \\
            IF (delta == 0) THEN
                 error = error + Gauss_coefficient_local(k) * (uh(k)-u_true(k)) * (uh(k)-u_true(k))
            ELSEIF (delta == 1) THEN
                 error = error + Gauss_coefficient_local(k) * (uh(k)-u_true(k)) * (uh(k)-u_true(k)) *Gauss_point_local(k,2)
            ENDIF
-           !$ ============== ab.ZWZ for adding cylindrical coordinate ===== //
+           ! ============== ab.ZWZ for adding cylindrical coordinate ===== //
            
            error2 =  error2 + temp
        END DO   

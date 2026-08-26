@@ -19,7 +19,7 @@ REAL(8)   :: SVelocity(1:3)=0.d0
 
 INTEGER         :: index
 
-!$ ========= ab.ZWZ 2021/7/13 ====== \\
+! ========= ab.ZWZ 2021/7/13 ====== \\
 REAL(8)   :: xcellmdx, ycellmdy
 REAL(8)   :: R, R1, R2, den
 REAL(8)   :: P1, P2, P3, P4
@@ -29,7 +29,7 @@ REAL(8)   :: zefield, refield, tefield
 REAL(8)   :: xefield, yefield
 REAL(8)   :: zbfield, rbfield, tbfield
 REAL(8)   :: xbfield, ybfield
-!$ ========= ab.ZWZ 2021/7/13 ====== //
+! ========= ab.ZWZ 2021/7/13 ====== //
 
 
 
@@ -46,7 +46,7 @@ DO i_part = 1, ntot
 	j = yp        !!! 粒子在第i个单元里
 	dy = yp-j
 
-    !$ ===================== mb.ZWZ 2021/7/11 ======================= \\
+    ! ===================== mb.ZWZ 2021/7/11 ======================= \\
     xcellmdx = 1. -dx
     ycellmdy = 1. -dy
         
@@ -66,7 +66,7 @@ DO i_part = 1, ntot
         P3 = xcellmdx *(R*R-R1*R1)/den
         P4 = dx       *(R*R-R1*R1)/den 
     ENDIF
-    !$ ===================== mb.ZWZ 2021/7/11 ======================= //
+    ! ===================== mb.ZWZ 2021/7/11 ======================= //
     
     IF (Bfiled_index) THEN   !!!! 有磁场
         
@@ -166,7 +166,7 @@ DO i_part = 1, ntot
         !g = bfz(i,j+1)+dx*(bfz(i+1,j+1)-bfz(i,j+1))
         !Omega(3) = (f + dy*(g-f)) * qm(ispe) * 0.5 * dt 
         
-        !$ ========================== mb.ZWZ 2021/7/13 ======================== \\
+        ! ========================== mb.ZWZ 2021/7/13 ======================== \\
         IF (delta == 0) THEN
             Efield(1) = efx(i,j)*P1 + efx(i+1,j)*P2 + efx(i,j+1)*P3 + efx(i+1,j+1)*P4   
             Efield(2) = efy(i,j)*P1 + efy(i+1,j)*P2 + efy(i,j+1)*P3 + efy(i+1,j+1)*P4   
@@ -185,11 +185,11 @@ DO i_part = 1, ntot
             Omega(3) = Bfield(3) * qm(ispe) * 0.5 * dt
         
         ELSE IF (delta == 1) THEN
-            !$ axisymmetric e field
+            ! axisymmetric e field
             zefield = efx(i,j)*P1 + efx(i+1,j)*P2 + efx(i,j+1)*P3 + efx(i+1,j+1)*P4  
             refield = efy(i,j)*P1 + efy(i+1,j)*P2 + efy(i,j+1)*P3 + efy(i+1,j+1)*P4   
             tefield = efz(i,j)*P1 + efz(i+1,j)*P2 + efz(i,j+1)*P3 + efz(i+1,j+1)*P4  
-            !$ Convert axisymmetric efield to Cartesian efield
+            ! Convert axisymmetric efield to Cartesian efield
             xefield = refield*DCOS(part(i_part,3)) - tefield*DSIN(part(i_part,3))
             yefield = refield*DSIN(part(i_part,3)) + tefield*DCOS(part(i_part,3))
             
@@ -197,11 +197,11 @@ DO i_part = 1, ntot
             deta_vy =  0.5*qm(ispe)*xefield*dt
             deta_vz =  0.5*qm(ispe)*yefield*dt
             
-            !$ axisymmetric e field
+            ! axisymmetric e field
             zbfield = bfx(i,j)*P1 + bfx(i+1,j)*P2 + bfx(i,j+1)*P3 + bfx(i+1,j+1)*P4  
             rbfield = bfy(i,j)*P1 + bfy(i+1,j)*P2 + bfy(i,j+1)*P3 + bfy(i+1,j+1)*P4   
             tbfield = bfz(i,j)*P1 + bfz(i+1,j)*P2 + bfz(i,j+1)*P3 + bfz(i+1,j+1)*P4  
-            !$ Convert axisymmetric efield to Cartesian efield
+            ! Convert axisymmetric efield to Cartesian efield
             xbfield = rbfield*DCOS(part(i_part,3)) - tbfield*DSIN(part(i_part,3))
             ybfield = rbfield*DSIN(part(i_part,3)) + tbfield*DCOS(part(i_part,3))
             
@@ -210,7 +210,7 @@ DO i_part = 1, ntot
             Omega(3) = ybfield * qm(ispe) * 0.5 * dt
                      
         ENDIF
-        !$ ========================== mb.ZWZ 2021/7/13 ======================== //
+        ! ========================== mb.ZWZ 2021/7/13 ======================== //
         
         part(i_part,4) = part(i_part,4) + deta_vx
         part(i_part,5) = part(i_part,5) + deta_vy
@@ -245,7 +245,7 @@ DO i_part = 1, ntot
         !deta_vy = qm(ispe)*Efield(2)*dt      !!! 1/2*q*E/m 
         !part(i_part,5) = part(i_part,5) + deta_vy
         
-        !$ ========================== mb.ZWZ 2021/7/13 ======================== \\
+        ! ========================== mb.ZWZ 2021/7/13 ======================== \\
         IF(delta == 0) THEN
             Efield(1) = efx(i,j)*P1 + efx(i+1,j)*P2 + efx(i,j+1)*P3 + efx(i+1,j+1)*P4   
             Efield(2) = efy(i,j)*P1 + efy(i+1,j)*P2 + efy(i,j+1)*P3 + efy(i+1,j+1)*P4     
@@ -256,17 +256,17 @@ DO i_part = 1, ntot
             part(i_part,4) = part(i_part,4) + deta_vx
             part(i_part,5) = part(i_part,5) + deta_vy
         
-        !$ ========================== mb.ZWZ 2021/7/13 ======================== //
+        ! ========================== mb.ZWZ 2021/7/13 ======================== //
         
         !part(i_part,1:3) = part(i_part,1:3) + part(i_part,4:6)*dt
         
         ELSEIF(delta == 1) THEN
             
-            !$ axisymmetric e field
+            ! axisymmetric e field
             zefield = efx(i,j)*P1 + efx(i+1,j)*P2 + efx(i,j+1)*P3 + efx(i+1,j+1)*P4  
             refield = efy(i,j)*P1 + efy(i+1,j)*P2 + efy(i,j+1)*P3 + efy(i+1,j+1)*P4   
             tefield = efz(i,j)*P1 + efz(i+1,j)*P2 + efz(i,j+1)*P3 + efz(i+1,j+1)*P4   
-            !$ Convert axisymmetric efield to Cartesian efield
+            ! Convert axisymmetric efield to Cartesian efield
             xefield = refield*DCOS(part(i_part,3)) - tefield*DSIN(part(i_part,3))
             yefield = refield*DSIN(part(i_part,3)) + tefield*DCOS(part(i_part,3))
         

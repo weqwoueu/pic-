@@ -167,7 +167,7 @@ nsold = 0
 		    END IF
 		END IF
 	END DO
-!$OMP END PARALLEL DO
+! OMP parallel loop is disabled in this legacy MCC implementation.
    !DO isp=1,ispe_tot
    !    ns(isp)=ns(isp)+ionized_particle !将新产生的电子数和离子数加入数组
    !END DO

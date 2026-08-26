@@ -48,10 +48,10 @@ EXTERNAL									      FUN_2D_ONE
 REAL(8)		G_Stiff_HW(2,4,4), G_RHS_HW(2,4,4), G_Mass_HW(2,4,4,4), G_Interpol_HW(4,4)
 !================================dukun New add END=========================================
 
-!$ ========================== ab.ZWZ 2021/4/22 after changing the EBC ========================================\\
+! ========================== ab.ZWZ 2021/4/22 after changing the EBC ========================================\\
 Gauss_point_number = 4
 CALL Generate_Gauss_reference( Gauss_point_number, Gauss_coefficient_reference_Four, Gauss_point_reference_Four)
-!$ ========================== ab.ZWZ 2021/4/22 after changing the EBC ========================================//
+! ========================== ab.ZWZ 2021/4/22 after changing the EBC ========================================//
 				
 n_t	= SIZE(t_c1,2) ! n_t is the number of element
 

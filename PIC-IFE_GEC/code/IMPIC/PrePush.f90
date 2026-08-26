@@ -12,7 +12,7 @@ INTEGER   :: i, j, i_part, ispe
 REAL(8)   :: SVelocity(1:3)=0.d0
 REAL(8)   :: xp, dx, yp, dy, f, g
 
-!$ ========= ab.ZWZ 2021/7/11 ====== \\
+! ========= ab.ZWZ 2021/7/11 ====== \\
 Integer   :: isp
 REAL(8)   :: xcellmdx, ycellmdy
 REAL(8)   :: R, R1, R2, den
@@ -23,9 +23,9 @@ REAL(8)	  :: xefield, yefield
 REAL(8)   :: zbfield, rbfield, tbfield
 REAL(8)	  :: xbfield, ybfield
 
-!$ cylindrical moving
+! cylindrical moving
 REAL(8)   :: X, Y, Z, Theta
-!$ ========= ab.ZWZ 2021/7/11 ====== //
+! ========= ab.ZWZ 2021/7/11 ====== //
 
 Do isp=0,ControlFlowGlobal%Ns
     Do i_part = 1, ParticleGlobal(isp)%NPar
@@ -69,11 +69,11 @@ Do isp=0,ControlFlowGlobal%Ns
                 Omega(3) = zbfield * qm(isp+1) * 0.5 * dt
         
             ELSE IF (delta_global == 1) THEN
-                !$ axisymmetric e field
+                ! axisymmetric e field
                 zbfield = bfx(i,j)*P1 + bfx(i+1,j)*P2 + bfx(i,j+1)*P3 + bfx(i+1,j+1)*P4  
                 rbfield = bfy(i,j)*P1 + bfy(i+1,j)*P2 + bfy(i,j+1)*P3 + bfy(i+1,j+1)*P4   
                 tbfield = bfz(i,j)*P1 + bfz(i+1,j)*P2 + bfz(i,j+1)*P3 + bfz(i+1,j+1)*P4  
-                !$ Convert axisymmetric efield to Cartesian efield
+                ! Convert axisymmetric efield to Cartesian efield
                 Theta = ParticleGlobal(isp)%PO(i_part)%Z
                 xbfield = rbfield*DCOS(Theta) - tbfield*DSIN(Theta)
                 ybfield = rbfield*DSIN(Theta) + tbfield*DCOS(Theta)

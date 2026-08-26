@@ -634,7 +634,7 @@ Module ModuleMCCInterface
     SUBROUTINE	Quasi_cdp(PB_e,PB_i,delta,it)
 
         !USE PIC_MAIN_PARAM_2D
-          !$ ab.ZWZ for checking atom distribution 
+          ! ab.ZWZ for checking atom distribution
         IMPLICIT NONE
         Class(ParticleBundle), intent(inout) :: PB_e,PB_i
         INTEGER,INTENT(IN) :: delta !$ ab.ZWZ
@@ -731,7 +731,7 @@ Module ModuleMCCInterface
 			        CALL DRandom(ranum)
 			        !part(num+1,2) = 0. + (jpre - ranum) * hx(2)
 			        !part(num+1,2) = f_left_wall(2) + (jpre - ranum) * hx(2)
-                   !$ ========================= mb.ZWZ ================================= \\
+                   ! ========================= mb.ZWZ ================================= \\
                     IF(delta == 0) THEN
                         PB_e%PO(num_elec+1)%Y= f_left_wall(2) + (jpre - ranum) * hx(2)                      !$ y position
                         PB_e%PO(num_elec+1)%Z= 0.
@@ -748,7 +748,7 @@ Module ModuleMCCInterface
                         !rweight(num+1) = part(num+1,2)*dy_inject(ipf(jj))
                         !YINI(num+1) = part(num+1,2)
                     ENDIF
-                    !$ ========================= mb.ZWZ ================================= //
+                    ! ========================= mb.ZWZ ================================= //
 			
 
         1000        CALL Loadv(V_x, tmpj(ipf(1)), 1)   !!! electron velocity at tmpj(ipf(1))
@@ -835,7 +835,7 @@ Module ModuleMCCInterface
                     PB_e%PO(num_elec+1)%X=0. + (ipre - ranum) * hx(1)
 			        !part(num+1,1) = 0. + (ipre - ranum) * hx(1)			
 			        CALL DRandom(ranum)
-                    !$ ========================= mb.ZWZ ================================= \\
+                    ! ========================= mb.ZWZ ================================= \\
                     IF(delta == 0) THEN
                         PB_e%PO(num_elec+1)%Y=f_left_wall(2) + (jpre - ranum) * hx(2)
                         PB_e%PO(num_elec+1)%Z=0.
@@ -852,7 +852,7 @@ Module ModuleMCCInterface
                         CALL DRandom(ranum)
                         PB_e%PO(num_elec+1)%Z = 2.*PI_1*ranum
                     ENDIF
-                    !$ ========================= mb.ZWZ ================================= //
+                    ! ========================= mb.ZWZ ================================= //
 
         2000        CALL Loadv(V_x, tmpj(ipf(1)), 1)   !!! electron velocity at tmpj(ipf(1))
 		            CALL Loadv(V_y, tmpj(ipf(1)), 1)

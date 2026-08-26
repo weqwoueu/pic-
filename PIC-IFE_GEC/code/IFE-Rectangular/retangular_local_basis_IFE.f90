@@ -61,7 +61,7 @@ IF (basis_type == 1) THEN
     
     ENDIF
     
-    !$ =-------------------要传给function_coefficient affine mapping 之前的x,y值 -------------------------------------
+    ! =-------------------要传给function_coefficient affine mapping 之前的x,y值 -------------------------------------
     
     IF (derivative_degree_x == 0 .AND. derivative_degree_y == 0) THEN
 

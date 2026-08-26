@@ -196,7 +196,7 @@ DO i=1,SIZE(t_c,2)
 						    END IF
 					    END DO
                     ENDIF
-                !$ ============= ab.ZWZ 2021/7/9 ==================== \\   
+                ! ============= ab.ZWZ 2021/7/9 ==================== \\
                 ELSEIF( node_type(2,t_c(j,i)) < 0 ) THEN
                     ! This is an Known node
                     IF (size(matrix_xt%K)==1)  Then
@@ -214,7 +214,7 @@ DO i=1,SIZE(t_c,2)
                             END IF
                         END DO
                     ENDIF
-                !$ ============= ab.ZWZ 2021/7/9 ==================== //  
+                ! ============= ab.ZWZ 2021/7/9 ==================== //
 				END IF
 			END DO
 		END IF

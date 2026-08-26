@@ -92,7 +92,7 @@ DO ipre=nnx - n_cell_in, nnx  !!!x方向入射(x最大位置处)
 			CALL DRandom(ranum)
 			part(num+1,1) = 0. + (ipre - ranum) * hx(1)			
 			CALL DRandom(ranum)
-            !$ ========================= mb.ZWZ ================================= \\
+            ! ========================= mb.ZWZ ================================= \\
             IF(delta == 0) THEN
                 part(num+1,2)= f_left_wall(2) + (jpre - ranum) * hx(2)                      !$ y位置
                 part(num+1,3) = 0.
@@ -103,7 +103,7 @@ DO ipre=nnx - n_cell_in, nnx  !!!x方向入射(x最大位置处)
                 CALL DRandom(ranum)
                 part(num+1,3) = 2.*PI*ranum
             ENDIF
-            !$ ========================= mb.ZWZ ================================= //
+            ! ========================= mb.ZWZ ================================= //
 
 2000        CALL Loadv(V_x, tmpj(ipf(1)), 1)   !!! 只补电子，所以用 temp0(ipf(1))
 		    CALL Loadv(V_y, tmpj(ipf(1)), 1)

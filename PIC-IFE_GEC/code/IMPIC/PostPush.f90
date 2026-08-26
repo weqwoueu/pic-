@@ -13,7 +13,7 @@ REAL(8)   :: SVelocity(1:3)=0.d0
 REAL(8)   :: xp, dx, yp, dy, f, g, A_x, A_y, A_z  
 REAL(8)   :: deta_vx, deta_vy, deta_vz
 
-!$ ========= ab.ZWZ 2021/7/11 ====== \\
+! ========= ab.ZWZ 2021/7/11 ====== \\
 Integer   :: isp
 REAL(8)   :: xcellmdx, ycellmdy
 REAL(8)   :: R, R1, R2, den
@@ -24,9 +24,9 @@ REAL(8)	  :: xefield, yefield
 REAL(8)   :: zbfield, rbfield, tbfield
 REAL(8)	  :: xbfield, ybfield
 
-!$ cylindrical moving
+! cylindrical moving
 REAL(8)   :: X, Y, Z, Theta
-!$ ========= ab.ZWZ 2021/7/11 ====== //
+! ========= ab.ZWZ 2021/7/11 ====== //
 Do isp=0,ControlFlowGlobal%Ns
     DO i_part = 1, ParticleGlobal(isp)%NPar
         xp = (ParticleGlobal(isp)%PO(i_part)%X - Vert_o(1))*hxi(1)	
@@ -66,11 +66,11 @@ Do isp=0,ControlFlowGlobal%Ns
             A_y = yefield * qm(isp+1)
             A_z = zefield * qm(isp+1)
         ELSEIF (delta_global == 1) THEN
-            !$ axisymmetric e field
+            ! axisymmetric e field
             zefield = efx(i,j)*P1 + efx(i+1,j)*P2 + efx(i,j+1)*P3 + efx(i+1,j+1)*P4  
             refield = efy(i,j)*P1 + efy(i+1,j)*P2 + efy(i,j+1)*P3 + efy(i+1,j+1)*P4   
             tefield = efz(i,j)*P1 + efz(i+1,j)*P2 + efz(i,j+1)*P3 + efz(i+1,j+1)*P4  
-            !$ Convert axisymmetric efield to Cartesian efield
+            ! Convert axisymmetric efield to Cartesian efield
             Theta = ParticleGlobal(isp)%PO(i_part)%Z
             xefield = refield*DCOS(Theta) - tefield*DSIN(Theta)
             yefield = refield*DSIN(Theta) + tefield*DCOS(Theta)
@@ -96,11 +96,11 @@ Do isp=0,ControlFlowGlobal%Ns
                 Omega(2) = ybfield * qm(isp+1) * 0.5 * dt
                 Omega(3) = zbfield * qm(isp+1) * 0.5 * dt 
             ELSE IF (delta_global == 1) THEN
-                !$ axisymmetric e field
+                ! axisymmetric e field
                 zbfield = bfx(i,j)*P1 + bfx(i+1,j)*P2 + bfx(i,j+1)*P3 + bfx(i+1,j+1)*P4  
                 rbfield = bfy(i,j)*P1 + bfy(i+1,j)*P2 + bfy(i,j+1)*P3 + bfy(i+1,j+1)*P4   
                 tbfield = bfz(i,j)*P1 + bfz(i+1,j)*P2 + bfz(i,j+1)*P3 + bfz(i+1,j+1)*P4  
-                !$ Convert axisymmetric efield to Cartesian efield
+                ! Convert axisymmetric efield to Cartesian efield
                 Theta = ParticleGlobal(isp)%PO(i_part)%Z
                 xbfield = rbfield*DCOS(Theta) - tbfield*DSIN(Theta)
                 ybfield = rbfield*DSIN(Theta) + tbfield*DCOS(Theta)

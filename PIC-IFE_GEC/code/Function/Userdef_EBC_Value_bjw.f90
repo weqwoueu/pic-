@@ -44,7 +44,7 @@ DO e=1, num_elem
         !EBC_Value(i,e) = EXP(x*x+y*y)/10.0
         !
         !EBC_Value_xt(node_index) = EXP(x*x+y*y)/10.0
-        !$ ======================= mb.ZWZ 2021/7/7 ================= \\
+        ! ======================= mb.ZWZ 2021/7/7 ================= \\
         IF (delta == 0) THEN
           !EBC_Value(i,e) = EXP(x*x+y*y)/Global_Beta(1)
           !EBC_Value_xt(node_index) = EXP(x*x+y*y)/Global_Beta(1)
@@ -56,7 +56,7 @@ DO e=1, num_elem
           EBC_Value(i,e) = true_value
           EBC_Value_xt(node_index) = true_value
         ENDIF
-        !$ ======================= mb.ZWZ 2021/7/7 ================= //
+        ! ======================= mb.ZWZ 2021/7/7 ================= //
 
       END IF
 

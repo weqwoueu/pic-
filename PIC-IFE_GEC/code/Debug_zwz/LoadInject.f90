@@ -36,7 +36,7 @@ DO jj=1,ispe_inject
     END IF
     
     CALL DRandom(ranum)
-    !$ ============= mb.ZWZ =================== \\
+    ! ============= mb.ZWZ =================== \\
     IF (delta == 0) THEN
         add_N(ipf(jj))=int(dens0(ipf(jj))*n_ref*ABS(b_amb(ipf(jj),1))*v_ref*dt*time_ref* &
                           (f_right_wall(2)-f_left_wall(2))*L_ref/affp_bjw(ipf(jj))+ranum) 
@@ -49,7 +49,7 @@ DO jj=1,ispe_inject
         add_N(ipf(jj)) = 25
         !pause
     ENDIF
-    !$ ============= mb.ZWZ =================== //
+    ! ============= mb.ZWZ =================== //
 END DO
 !add_N(1) == 100
 

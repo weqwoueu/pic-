@@ -252,12 +252,12 @@ IF (NSolver==0) THEN		! Linear Solver
 		PRINT*
 
 		DEALLOCATE(rhs, rhs_res)
-        !$ ab.ZWZ 2021/11/9 if IFE_start added into loop \\
+        ! ab.ZWZ 2021/11/9 if IFE_start added into loop \\
         IF (IMPIC_Index) THEN
             DEALLOCATE(A_stiff) 
             DEALLOCATE(A_diag) 
         ENDIF
-        !$ ab.ZWZ 2021/11/9 if IFE_start added into loop //
+        ! ab.ZWZ 2021/11/9 if IFE_start added into loop //
 ELSEIF (NSolver==1) THEN		! Gauss-Seidel
 
 	PRINT*, 'Gasuss-Seidel Solver :'
@@ -518,7 +518,7 @@ END DO
 
 DEALLOCATE(R_fe_full, U_fe_full, U_fe, U_fe_old)
 
-!$ ab.ZWZ 2021/11/9 if IFE_start added into loop
+! ab.ZWZ 2021/11/9 if IFE_start added into loop
 !IF (.Not. IMPIC_INDEX)THEN
 !    DEALLOCATE(rhs_FIX) 
 !ENDIF

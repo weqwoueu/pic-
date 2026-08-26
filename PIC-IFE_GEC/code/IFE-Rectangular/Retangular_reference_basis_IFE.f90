@@ -51,17 +51,17 @@ CALL Function_coefficient_2D(k22,1._8, x_beforeaffine, y_beforeaffine, 0,1,0,1, 
 !=========LY modification for checking convergence=========
 !=========LY modification, 2022-7-25=========
 
-!$ ============= mb.ZWZ 2021/5/10 ======================== \\
+! ============= mb.ZWZ 2021/5/10 ======================== \\
 !CALL Function_coefficient_2D(k11,1._8, x_beforeaffine, y_beforeaffine, 1,0,1,0)
 !CALL Function_coefficient_2D(k12,0._8, x_beforeaffine, y_beforeaffine, 1,0,0,1)
 !CALL Function_coefficient_2D(k21,0._8, x_beforeaffine, y_beforeaffine, 0,1,1,0)
 !CALL Function_coefficient_2D(k22,1._8, x_beforeaffine, y_beforeaffine, 0,1,0,1)
-!$ ====== ab.ZWZ when checking convergence ============== \\
+! ====== ab.ZWZ when checking convergence ============== \\
 !CALL Function_coefficient_2D(k11,1._8,0._8,0._8, 1,0,1,0)
 !CALL Function_coefficient_2D(k12,1._8,0._8,0._8, 1,0,0,1)
 !CALL Function_coefficient_2D(k21,1._8,0._8,0._8, 0,1,1,0)
 !CALL Function_coefficient_2D(k22,1._8,0._8,0._8, 0,1,0,1)
-!$ ====== ab.ZWZ when checking convergence ============== //
+! ====== ab.ZWZ when checking convergence ============== //
 
 IF (basis_type == 1) THEN
 

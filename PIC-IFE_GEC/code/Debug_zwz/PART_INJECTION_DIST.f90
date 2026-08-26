@@ -27,7 +27,7 @@ SUBROUTINE PART_INJECTION_DIST(ILOOPA)
         !PART_STAT_VY = PART_STAT_VY * VETH /SQRT(M_FACTOR(ISPA))
         !PART_STAT_VZ = PART_STAT_VZ * VETH /SQRT(M_FACTOR(ISPA))
  
-        !$------------ x position -----------
+        !------------ x position -----------
         max_p = MAXVAL(PART_stat_xp)
         min_p = MINVAL(PART_stat_xp)
         delta_p = (max_p-min_p) /real(df_size-1)
@@ -37,7 +37,7 @@ SUBROUTINE PART_INJECTION_DIST(ILOOPA)
         dist_pax(df_size) = max_p
         CALL DF_STATS(PART_STAT_NUM, PART_STAT_XP, DF_SIZE, DIST_PAX, DIST_FPAX)
         
-        !$------------ y position -----------
+        !------------ y position -----------
         max_p = MAXVAL(PART_stat_yp)
         min_p = MINVAL(PART_stat_yp)
         delta_p = (max_p-min_p) /real(df_size-1)
@@ -47,7 +47,7 @@ SUBROUTINE PART_INJECTION_DIST(ILOOPA)
         dist_pay(df_size) = max_p
         CALL DF_STATS(PART_STAT_NUM, PART_STAT_YP, DF_SIZE, DIST_PAY, DIST_FPAY)
         
-        !$------------ x velocity -----------
+        !------------ x velocity -----------
         MAX_V = MAXVAL(PART_STAT_VX)
         MIN_V = MINVAL(PART_STAT_VX)
         DELTA_V = (MAX_V-MIN_V) /REAL(DF_SIZE-1)
@@ -57,7 +57,7 @@ SUBROUTINE PART_INJECTION_DIST(ILOOPA)
         DIST_VAX(DF_SIZE) = MAX_V
         CALL DF_STATS(PART_STAT_NUM, PART_STAT_VX, DF_SIZE, DIST_VAX, DIST_FVAX)
                 
-        !$------------ y velocity -----------
+        !------------ y velocity -----------
         MAX_V = MAXVAL(PART_STAT_VY)
         MIN_V = MINVAL(PART_STAT_VY)
         DELTA_V = (MAX_V-MIN_V) /REAL(DF_SIZE-1)
@@ -67,7 +67,7 @@ SUBROUTINE PART_INJECTION_DIST(ILOOPA)
         DIST_VAY(DF_SIZE) = MAX_V
         CALL DF_STATS(PART_STAT_NUM, PART_STAT_VY, DF_SIZE, DIST_VAY, DIST_FVAY)
         
-        !$------------ z velocity -----------
+        !------------ z velocity -----------
         MAX_V = MAXVAL(PART_STAT_VZ)
         MIN_V = MINVAL(PART_STAT_VZ)
         DELTA_V = (MAX_V-MIN_V) /REAL(DF_SIZE-1)
@@ -95,10 +95,10 @@ SUBROUTINE PART_INJECTION_DIST(ILOOPA)
         
         PART_STAT_COUNT = 0.
         
-        !$------------------
+        !------------------
         PART_STAT_XP = 0.
         PART_STAT_YP = 0.
-        !$------------------
+        !------------------
         
         PART_STAT_VX = 0.
         PART_STAT_VY = 0.

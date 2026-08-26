@@ -12,7 +12,7 @@ IMPLICIT NONE
 INTEGER   :: ispe, i, j
 
 
-!$ modified by ZWZ
+! modified by ZWZ
 !IF (.NOT.ALLOCATED(Chi)) THEN
 !    ALLOCATE(Chi(0:nx+1,0:ny+1))
 !ENDIF

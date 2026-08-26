@@ -372,13 +372,13 @@ T_ref = Temperature_ref * eVtoK   !(1eV=11605K)
 L_ref = SQRT(EPSILON0 * kB * T_ref / n_ref / E / E)
 
 
-!$ ====== For mcc benchmark ===== \\
+! ====== For mcc benchmark ===== \\
 !L_ref = 0.01/32             !$ a cell's length equals to Debye length (implicit)
 !L_ref = 0.02/128             !$ (explicit)
 !L_ref = 2*0.01/32             !$ 2 cell's length equals to Debye length
 !L_ref = 0.067/128             !> turner2013 1st
 !n_ref = EPSILON0 * kB * T_ref / L_ref / L_ref / E / E
-!$ ====== For mcc benchmark ===== //
+! ====== For mcc benchmark ===== //
 
 !!! 时间参考(电子回旋频率的倒数) --- zwz: 电子振荡频率吧
 time_ref = SQRT(EPSILON0 * Me / n_ref / E / E)

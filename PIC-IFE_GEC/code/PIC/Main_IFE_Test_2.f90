@@ -101,7 +101,7 @@ ENDIF
 !---- Setup IFE Mesh
 CALL Setup_IFE_Mesh_2D(delta, xmin, xmax, ymin, ymax, nnx, nny, N_Objects, N_Boundary, objects)
 
-!$ ab.ZWZ 2021/7/9 for passing value to Domain module
+! ab.ZWZ 2021/7/9 for passing value to Domain module
 delta_global = delta 
 region_type=0      !0--��ʼ�ֲ�Ϊ���Σ�1--����
 dxmin = xmin
@@ -149,7 +149,7 @@ ENDIF
 !!!! bjw add 2019.10.23
 !CALL SetupBfield_circle(xmin, xmax, ymin, ymax, zmin, zmax, nnx, nny, nnz, VertX)  !? can this subroutine be delete?
 
-!$ ab.ZWZ 2021/9/8 for LH's magnetic field
+! ab.ZWZ 2021/9/8 for LH's magnetic field
 IF (Bfiled_Index) Then
     !CALL SetMagFld_2D(delta) ! should revise when use SIDG
 Endif
@@ -168,10 +168,10 @@ CALL SetupPartInject_QLL(Ndisf)     !? used in DSMC, retain?
 
 !CALL Init_MCC_2D       !? the original MCC(not JW's) init, delete?
 
-!$ ========= ab.ZWZ 2021/12/19 for JW's MCC =========== \\
+! ========= ab.ZWZ 2021/12/19 for JW's MCC =========== \\
 CALL AllInitialization()
 Call DiagInitilalization(ControlFlowGlobal)
-!$ ========= ab.ZWZ 2021/12/19 for JW's MCC =========== //
+! ========= ab.ZWZ 2021/12/19 for JW's MCC =========== //
 
 !---- Comment this IF you wanna start from scratch
 CALL Restart_2D  !$ Should be revise When use in SIDG wsy 2022 7 22
@@ -194,7 +194,7 @@ CALL IFE_Start_2D(	IFE_phi_bkgd, IFE_Te_bkgd, IFE_Rho_bkgd, nbkgd,		&
  
  
 !? the follow code is used for convergence checking and particle trail checking, delete?
-!$ ====================== ab.ZWZ to check convergence ========================== \\
+! ====================== ab.ZWZ to check convergence ========================== \\
 !CALL IFE_Solve_2D(Rho, Phi, nx, ny, delta, xt)
 !
 !CALL Get_PointPatch(nnx, nny, xmin, xmax, ymin, ymax)
@@ -222,10 +222,10 @@ CALL IFE_Start_2D(	IFE_phi_bkgd, IFE_Te_bkgd, IFE_Rho_bkgd, nbkgd,		&
 !		END DO
 !	END DO
 !CLOSE(1)
-!$ ====================== ab.ZWZ to check convergence ========================== //
-!$ ====================== ab.ZWZ to check trail of particle ==================== \\
+! ====================== ab.ZWZ to check convergence ========================== //
+! ====================== ab.ZWZ to check trail of particle ==================== \\
 !CALL CheckTrail(N_Objects,objects)
-!$ ====================== ab.ZWZ to check trail of particle ==================== //
+! ====================== ab.ZWZ to check trail of particle ==================== //
 
 
 !!******Solve the Initial Field *********** 
@@ -261,7 +261,7 @@ IF (irestart/=1) THEN
         Call ParticleGlobal(isp)%Dump(0)
     End do
     
-   !$ ================================= mb.ZWZ for writing title for output file =========================================\\
+   ! ================================= mb.ZWZ for writing title for output file =========================================\\
     OPEN(540,ACTION='WRITE', FILE='./OUTPUT/PartcountReal.dat',POSITION='APPEND', STATUS='REPLACE')
         WRITE(540,"(A100)")'VARIABLES = "it" "tot" "num_e" "num_i"'
     CLOSE(540)
@@ -281,7 +281,7 @@ IF (irestart/=1) THEN
     OPEN(540,FILE='./OUTPUT/PartcountReal.dat',POSITION='APPEND')
         WRITE(540,*) 0, ntot * ParticleGlobal(0)%Weight, (ns(isp+1)* ParticleGlobal(isp)%Weight,isp=0,ControlFlowGlobal%Ns)
     CLOSE(540)
-    !$ ============================================ mb.ZWZ ================================================================//     
+    ! ============================================ mb.ZWZ ================================================================//
     
 ELSE
 
@@ -408,7 +408,7 @@ DO it = ilap+1, nt
     !End Do
     
     !Call DiagOneStep(ControlFlowGlobal) !> get the EPF and accumulate it
-    !$ === Average value accumulating === //
+    ! === Average value accumulating === //
     
     !> output average value every period and zero out them
     IF(it - iStep_previous == Pstep .And. .False. ) THEN
@@ -515,7 +515,7 @@ DO it = ilap+1, nt
                             VertX, phi, rho, rho_s, efx, efy, part, 1, P_average, HP, HT, SIZE(HP,2), SIZE(HT,2), SIZE(P_average,2))
     Endif
 	
-    !$ ============================ mb.ZWZ ==================\\
+    ! ============================ mb.ZWZ ==================\\
     ntot = 0
     ns = 0
     Do isp=0,ControlFlowGlobal%Ns
@@ -592,7 +592,7 @@ DO it = ilap+1, nt
     !    ParticleGlobal(isp)%nGen=0
     !    ParticleGlobal(isp)%nLoss=0
     !End Do
-    !$ ============================ mb.ZWZ ==================//
+    ! ============================ mb.ZWZ ==================//
     
     
     !IF(MOD(it,n_dump).eq.0) CALL Dump_2D(it)

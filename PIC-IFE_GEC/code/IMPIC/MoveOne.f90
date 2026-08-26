@@ -168,11 +168,11 @@ Subroutine MoveOne(PO,isp,TimeMove, IvelFlag, IposFlag, delta, OriPosi)
             Omega(3) = Bfield(3) * qm(isp+1) * 0.5 * TimeMove
 
             Elseif (delta_global == 1) Then  !2D axis-symmetric coordinates.
-            !$ axisymmetric e field
+            ! axisymmetric e field
             zefield = Efield(1)
             refield = Efield(2)
             tefield = Efield(3)
-            !$ Convert axisymmetric efield to Cartesian efield
+            ! Convert axisymmetric efield to Cartesian efield
             xefield = refield*DCOS(PO%Z) - tefield*DSIN(PO%Z)
             yefield = refield*DSIN(PO%Z) + tefield*DCOS(PO%Z)
           
@@ -180,14 +180,14 @@ Subroutine MoveOne(PO,isp,TimeMove, IvelFlag, IposFlag, delta, OriPosi)
             deta_vy = 0.5 * qm(isp+1) * xefield * TimeMove
             deta_vz = 0.5 * qm(isp+1) * yefield * TimeMove
 
-            !$ axisymmetric b field
+            ! axisymmetric b field
             zbfield = W1 * bfx(HT(1,n_element_old),1) + W2 * bfx(HT(2,n_element_old),1) + &
                         W3 * bfx(HT(3,n_element_old),1) + W4 * bfx(HT(4,n_element_old),1)
             rbfield = W1 * bfy(HT(1,n_element_old),1) + W2 * bfy(HT(2,n_element_old),1) + &
                         W3 * bfy(HT(3,n_element_old),1) + W4 * bfy(HT(4,n_element_old),1)
             tbfield = W1 * bfz(HT(1,n_element_old),1) + W2 * bfz(HT(2,n_element_old),1) + &
                         W3 * bfz(HT(3,n_element_old),1) + W4 * bfz(HT(4,n_element_old),1)
-            !$ Convert axisymmetric bfield to Cartesian bfield
+            ! Convert axisymmetric bfield to Cartesian bfield
             xbfield = rbfield*DCOS(PO%Z) - tbfield*DSIN(PO%Z)
             ybfield = rbfield*DSIN(PO%Z) + tbfield*DCOS(PO%Z)
           
@@ -218,11 +218,11 @@ Subroutine MoveOne(PO,isp,TimeMove, IvelFlag, IposFlag, delta, OriPosi)
             PO%Vx = PO%Vx + deta_vx
             PO%Vy = PO%Vy + deta_vy
             Elseif (delta_global == 1) Then  !2D axis-symmetric coordinates.
-            !$ axisymmetric e field
+            ! axisymmetric e field
             zefield = Efield(1)
             refield = Efield(2)
             tefield = Efield(3)
-            !$ Convert axisymmetric efield to Cartesian efield
+            ! Convert axisymmetric efield to Cartesian efield
             xefield = refield*DCOS(PO%Z) - tefield*DSIN(PO%Z)
             yefield = refield*DSIN(PO%Z) + tefield*DCOS(PO%Z)
           

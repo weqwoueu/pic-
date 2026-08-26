@@ -112,13 +112,13 @@ END DO
 !!! ************************ bjw add for impic 2019-6-3 **********************************************
 ! Initialize the particle array
 !ALLOCATE(part(N_part_tot,10)) !!! 123-xyz,456-vxyz,7-index,8910-axyz£¬ 11-12MCC
-!$ ========== ab.ZWZ ======== \\
+! ========== ab.ZWZ ======== \\
 !IF (delta_global == 1) THEN
 !    !ALLOCATE(YINI(N_part_tot))  
 !    ALLOCATE(Rweight(N_part_tot))
 !    Rweight = 1.
 !ENDIF
-!$ ========== ab.ZWZ ======== //
+! ========== ab.ZWZ ======== //
 
 !DO i_part = 1, N_part_tot
 !	part(i_part,:) = Zero

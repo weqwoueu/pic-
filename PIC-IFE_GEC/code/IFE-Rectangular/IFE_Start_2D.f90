@@ -422,7 +422,7 @@ If (StiffUpdateFlag) Then !ab.ZWZ
         ENDDO
     
         DEALLOCATE(matrix1, matrix2, matrix3, matrix4,matrix7,matrix8,matrix_D,matrix_Dt,matrix_O,matrix_Ot)
-        !$ ============================ ab.ZWZ ============================== //
+        ! ============================ ab.ZWZ ============================== //
     
     ELSE  !!!! ÎÞ´Å³¡
         !!constructing the Global IFE stiff
@@ -490,7 +490,7 @@ n_nodes_in_elem = 4 ! Retangular element
 !
 !ALLOCATE(BETA_SIGN(size(information_1,2),2))
 
-!$ ============== mb.ZWZ 2021/7/9 ============= \\
+! ============== mb.ZWZ 2021/7/9 ============= \\
 IF( N_Objects /= 0) THEN
     ALLOCATE(el_type(size(information_1,2)))
     el_type(:)  =information_1(6,:)
@@ -500,7 +500,7 @@ ELSE
     el_type(:)  = 0
     ALLOCATE(BETA_SIGN(2,2))
 END IF
-!$ ============== mb.ZWZ 2021/7/9 ============= //
+! ============== mb.ZWZ 2021/7/9 ============= //
 
 !------------------------------------------------------------------------------------
 

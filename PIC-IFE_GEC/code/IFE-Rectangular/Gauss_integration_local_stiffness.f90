@@ -69,15 +69,15 @@ DO i = 1, Gpn
 	!	  STOP
  !  ENDIF
    
-   !$ ====================================== mb.ZWZ for impic and code simplification 2021/4/19 ======================================= \\
+   ! ====================================== mb.ZWZ for impic and code simplification 2021/4/19 ======================================= \\
     
-    !$ trial evalution on local basis function 
+    ! trial evalution on local basis function
     CALL Retangular_local_basis(Gauss_point_local(i,1),Gauss_point_local(i,2),left_lower_point,h_partition, &
 	                            trial_basis_type,trial_basis_index,trial_derivative_degree_x,trial_derivative_degree_y, temp1)  
-    !$ test evalution on local basis function
+    ! test evalution on local basis function
     CALL Retangular_local_basis(Gauss_point_local(i,1),Gauss_point_local(i,2),left_lower_point,h_partition, &
                                     test_basis_type,test_basis_index,test_derivative_degree_x,test_derivative_degree_y, temp2)       
-    !$ coefficient function evaluation on gauss nodes
+    ! coefficient function evaluation on gauss nodes
     CALL Function_coefficient_2D(coefficient_function_name_impic,coefficient_function_name, &
                                  Gauss_point_local(i,1),Gauss_point_local(i,2), &
                                  trial_derivative_degree_x,trial_derivative_degree_y, &
@@ -91,7 +91,7 @@ DO i = 1, Gpn
 		  PRINT*, ' delta value is wrong, check again, stop'
 		  STOP
     ENDIF
-    !$ ===================================== mb.ZWZ for impic and code simplification 2021/4/19 ======================================= //
+    ! ===================================== mb.ZWZ for impic and code simplification 2021/4/19 ======================================= //
 
 ENDDO
 

@@ -24,11 +24,11 @@ REAL(8)    bx, by   !$ ab.ZWZ 2021/9/11
 	!CALL GTOP(i_part,bz,bfz)
 	!CALL GTOP(i_part,br,bfy)
 
-!$ ====== mb.ZWZ 2021/9/11 ==== \\
+! ====== mb.ZWZ 2021/9/11 ==== \\
     CALL GTOP(i_part,bx,bfx)    
     CALL GTOP(i_part,by,bfy)
     CALL GTOP(i_part,bz,bfz)
-!$ ====== mb.ZWZ 2021/9/11 ==== //
+! ====== mb.ZWZ 2021/9/11 ==== //
 
     CALL GTOP(i_part,phi2,Phi)
 	    

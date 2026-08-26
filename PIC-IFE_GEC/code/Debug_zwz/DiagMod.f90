@@ -16,7 +16,7 @@ MODULE MDL_DEBUG
     INTEGER, PARAMETER :: PART_STAT_NUM = 2000*48
     INTEGER :: PART_STAT_COUNT = 0
     
-!$------------------ position ---------------------
+!------------------ position ---------------------
     REAL(4) :: PART_STAT_XP(PART_STAT_NUM) = 0
     REAL(4) :: PART_STAT_YP(PART_STAT_NUM) = 0
     REAL(4) :: PART_STAT_ZP(PART_STAT_NUM) = 0
@@ -26,7 +26,7 @@ MODULE MDL_DEBUG
     REAL(4) :: DIST_FPAX(DF_SIZE) = 0.
     REAL(4) :: DIST_FPAY(DF_SIZE) = 0.
     
-!$------------------- velocity --------------------   
+!------------------- velocity --------------------
     REAL(4) :: PART_STAT_VX(PART_STAT_NUM) = 0.
     REAL(4) :: PART_STAT_VY(PART_STAT_NUM) = 0.
     REAL(4) :: PART_STAT_VZ(PART_STAT_NUM) = 0.

@@ -92,10 +92,10 @@ ntot = ntot + Num_Load
 !    ENDIF
 !ENDDO
 
-!$ === ab. ZWZ 2020/10/29 m====
+! === ab. ZWZ 2020/10/29 m====
 ntot =0
 DO insp=1, ispe_tot
     ntot = ntot + ns(insp)
 ENDDO
-!$ === ab. ZWZ 2020/10/29 m====
+! === ab. ZWZ 2020/10/29 m====
 END SUBROUTINE

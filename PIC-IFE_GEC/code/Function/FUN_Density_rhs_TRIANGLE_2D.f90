@@ -17,9 +17,9 @@ INTEGER	i
 REAL(8)                                 Xi, Yi
 
 REAL(8)									beta_minus, beta_plus, y0
-!$ ab.ZWZ for analysing error convergence ======== \\
+! ab.ZWZ for analysing error convergence ======== \\
 REAL(8) :: a11, a12, a21, a22, z, r, r_1
-!$ ab.ZWZ for analysing error convergence ======== //
+! ab.ZWZ for analysing error convergence ======== //
 
 IF (n /=3) THEN
 PRINT*, ' n/=3, Check FUN_Density_rhs_2D.f90, STOP'
@@ -98,7 +98,7 @@ y0 = 1.0
 !	f_(i) =  0.0
 !ENDDO
 
-!$ ab.ZWZ for analysing error convergence ======== \\
+! ab.ZWZ for analysing error convergence ======== \\
 !a11 = 2.
 !a12 = 2.
 !a21 = 2.
@@ -112,7 +112,7 @@ y0 = 1.0
 !    !r_1 = r - 1 
 !    !f_(i) = -( a11*(2+4.*z**2) + a12*(4.*z*r_1) + a21*(2.*z/r+4.*z*r_1) + a22*(2.*r_1/r+2+4.*r_1**2) )*EXP(z**2+r_1**2) !$ Cylindrical  anisotropy
 !END DO
-!$ ab.ZWZ for analysing error convergence ======== //
+! ab.ZWZ for analysing error convergence ======== //
 
 IF (region == -1) THEN
 	DO i=1,SIZE(phi_)

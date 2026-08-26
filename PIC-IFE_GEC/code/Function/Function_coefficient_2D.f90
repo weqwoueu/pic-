@@ -18,14 +18,14 @@ INTEGER   :: trial_derivative_degree_x,trial_derivative_degree_y, &
 		     test_derivative_degree_x,test_derivative_degree_y
 REAL(8)   :: rxp, ryp, dx, dy, f, g
 INTEGER   :: i, j
-!$ ==================== ab.ZWZ 2021/4/12=======================\\
+! ==================== ab.ZWZ 2021/4/12=======================\\
 REAL(8) :: xcellmdx, ycellmdy
 REAL(8) :: R1, R2, den
 REAL(8) :: P1, P2, P3, P4
 REAL(8) :: BETA = 1.
 !INTEGER :: delta 
 REAL(8) :: Chi_p
-!$ ==================== ab.ZWZ 2021/4/12=======================//
+! ==================== ab.ZWZ 2021/4/12=======================//
 !=========LY modification, 2022-7-25=========
 Integer :: element_Gauss
 Real(8) :: hx_partition, hy_partition
@@ -43,7 +43,7 @@ dy = (y - HP(2, HT(1, element_Gauss))) / hy_partition
 xcellmdx = 1.0 - dx
 ycellmdy = 1.0 - dy
 
-!$ ==================== mb.ZWZ 2021/4/12=======================\\
+! ==================== mb.ZWZ 2021/4/12=======================\\
 IF( delta_global == 0 ) THEN
   P1 = xcellmdx * ycellmdy    !local 1
   P2 = dx       * ycellmdy    !local 2
@@ -128,7 +128,7 @@ IF (Bfiled_index) THEN   !!!! 有磁场
 ELSE !!!! 无磁场
 
     
-    !$ =============== mb.ZWZ 2021/7/8 ================ \\
+    ! =============== mb.ZWZ 2021/7/8 ================ \\
     Chi_p = Chi(HT(1,element_Gauss),1)*P1 + Chi(HT(2,element_Gauss),1)*P2 + &
             Chi(HT(3,element_Gauss),1)*P3 + Chi(HT(4,element_Gauss),1)*P4
     
@@ -142,10 +142,10 @@ ELSE !!!! 无磁场
     !=========PIC=========
     coefficient_function_name_impic = Chi_p + coefficient_function_name
     !=========PIC=========
-    !$ =============== mb.ZWZ 2021/7/8 ================ //
+    ! =============== mb.ZWZ 2021/7/8 ================ //
     
 END IF
-!$ ==================== mb.ZWZ 2021/4/12=======================//
+! ==================== mb.ZWZ 2021/4/12=======================//
 !=========LY modification, 2022-7-25=========
 
 !IF (Bfiled_index) THEN   !!!! 有磁场

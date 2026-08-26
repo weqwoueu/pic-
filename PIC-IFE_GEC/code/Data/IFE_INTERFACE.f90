@@ -747,7 +747,7 @@ INTERFACE
 	
     END SUBROUTINE
                                 
-    !$=============== ab.ZWZ 2021/7/9 ====================\\
+    !=============== ab.ZWZ 2021/7/9 ====================\\
     SUBROUTINE Global_RHS_EBC_2D_bjw(A_stiff_xt, p_basic, t_basic_int, e_basic, node_type, U_full, bnd_elem_index, rhs_EBC, &
 																		delta)
   
@@ -768,8 +768,8 @@ INTERFACE
         REAL(8), DIMENSION(:), ALLOCATABLE      ::	EBC_Value_xt
 	
 	END SUBROUTINE
-    !$=============== ab.ZWZ 2021/7/9 ====================//            
-    !$=============== ab.ZWZ 2021/7/9 ====================//                     
+    !=============== ab.ZWZ 2021/7/9 ====================//
+    !=============== ab.ZWZ 2021/7/9 ====================//
 
 	SUBROUTINE Global_RHS_NBC_2D_dj (element_index, el_type1, information_1, information_2, p_basic, t_basic_int, e_basic,	&
 					  	        p_int_x, p_int_y,  beta,	&
@@ -978,7 +978,7 @@ INTERFACE
 
     END SUBROUTINE
     
-    !$=============== ab.ZWZ 2021/7/9 ====================\\
+    !=============== ab.ZWZ 2021/7/9 ====================\\
     SUBROUTINE MY_JPCG_Solver(matrix, R, X, M, NZ, N, ITER)
         USE IFE_MAIN_PARAM   
         TYPE(SPARSE), DIMENSION(NZ), TARGET		::	matrix
@@ -988,7 +988,7 @@ INTERFACE
         INTEGER									::	NZ, N
         INTEGER, INTENT(OUT)					::	ITER
     END SUBROUTINE
-    !$=============== ab.ZWZ 2021/7/9 ====================//
+    !=============== ab.ZWZ 2021/7/9 ====================//
 
 END INTERFACE
 
@@ -1358,7 +1358,7 @@ END INTERFACE
 ! PIC Boundary
 ! ==========
 INTERFACE
-    !$ ===================== ab.ZWZ 2021/7/9 =========================\\
+    ! ===================== ab.ZWZ 2021/7/9 =========================\\
     SUBROUTINE AdjustBoundary_2D(time, dt, delta, N_Objects, objects)
         USE Object_Data_2D
         REAL(8)    :: time, dt
@@ -1366,7 +1366,7 @@ INTERFACE
         TYPE(ObjectType), DIMENSION(:), POINTER		::	objects
         INTEGER    :: N_Objects
     END SUBROUTINE
-    !$ ===================== ab.ZWZ 2021/7/9 =========================//
+    ! ===================== ab.ZWZ 2021/7/9 =========================//
 
     SUBROUTINE dielectric_2D(i_part, ispe, inters_point, boundary, nnp, newloss, i_Boundary)
 
