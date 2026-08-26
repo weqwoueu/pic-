@@ -31,6 +31,7 @@ dx="${6:-1.0}"
 distribution="${7:-maxwellian}"
 distribution_shape="${8:-}"
 mass_ratio="${9:-400}"
+omp_threads="${PIC_OMP_THREADS:-8}"
 
 distribution="$(printf '%s' "$distribution" | tr '[:upper:]' '[:lower:]')"
 case "$distribution" in
@@ -99,8 +100,9 @@ case "$dx" in
 esac
 
 if ! [[ "$ppg" =~ ^[1-9][0-9]*$ && "$nt" =~ ^[1-9][0-9]*$ && \
-        "$random_seed" =~ ^[0-9]+$ && "$mass_ratio" =~ ^[1-9][0-9]*$ ]]; then
-  echo "ppc, nt, and mi/me must be positive integers; seed must be a non-negative integer" >&2
+        "$random_seed" =~ ^[0-9]+$ && "$mass_ratio" =~ ^[1-9][0-9]*$ && \
+        "$omp_threads" =~ ^[1-9][0-9]*$ ]]; then
+  echo "ppc, nt, mi/me, and PIC_OMP_THREADS must be positive integers; seed must be non-negative" >&2
   exit 2
 fi
 
@@ -197,7 +199,6 @@ backup_once "$app_dir/MCC_jw/input/controlflow.txt"
 # Initial slab [0,128] x [0,4], embedded in full [0,1024] x [0,4] domain.
 perl -0pi -e 's/dxmaxmax = [0-9.]+/dxmaxmax = 128.0/' "$app_dir/code/PIC/Main_IFE_Test_2.f90"
 perl -0pi -e 's/dymaxmax = [0-9.]+/dymaxmax = ymax/' "$app_dir/code/PIC/Main_IFE_Test_2.f90"
-perl -0pi -e 's/    call OUTPUT_velocity\(it\)\n    call Output_Energy\(it\)/    If (Mod(it,1000).eq.0 .Or. it == 1 .Or. it == nt) Then\n        call OUTPUT_velocity(it)\n        call Output_Energy(it)\n    Endif/' "$app_dir/code/PIC/Main_IFE_Test_2.f90"
 perl -0pi -e 's/    If \(Mod\(it,1000\)\.eq\.0 \.Or\. it == 1\) Then/    If (Mod(it,1000).eq.0 .Or. it == 1 .Or. it == nt) Then/' "$app_dir/code/PIC/Main_IFE_Test_2.f90"
 
 # Keep the global particle sanity check consistent with the selected ppc.
@@ -384,7 +385,7 @@ archive_results = ${archive_results}
 particles_per_cell_per_species = ${ppg}
 initial_particles_total = ${initial_particles}
 particle_capacity = ${particle_capacity}
-slurm_cpus = 1
+slurm_cpus = ${omp_threads}
 slurm_memory_mib = ${requested_memory_mib}
 slurm_walltime = ${requested_walltime}
 target_omega_pi_t_30_step = ${target_t30_step}
@@ -401,7 +402,7 @@ cat > "$app_dir/run_${case_name}.slurm" <<EOF_SLURM
 #SBATCH -p comp
 #SBATCH -N 1
 #SBATCH -n 1
-#SBATCH -c 1
+#SBATCH -c ${omp_threads}
 #SBATCH --mem=${requested_memory_mib}M
 #SBATCH -t ${requested_walltime}
 #SBATCH -o slurm-%j.out
@@ -418,6 +419,15 @@ export PIC_ELECTRON_DISTRIBUTION=${distribution}
 export PIC_KAPPA=${electron_kappa}
 export PIC_POLYTROPIC_GAMMA=${polytropic_gamma}
 export PIC_LEFT_BOUNDARY=${left_boundary}
+export PIC_PROFILE=1
+export OMP_NUM_THREADS=${omp_threads}
+export OMP_DYNAMIC=FALSE
+export OMP_PROC_BIND=close
+export OMP_PLACES=cores
+export KMP_AFFINITY=granularity=fine,compact,1,0
+export OMP_STACKSIZE=64M
+export KMP_STACKSIZE=64m
+export MKL_NUM_THREADS=1
 
 if command -v flock >/dev/null 2>&1; then
   exec 9>.pic_run.lock
@@ -427,7 +437,7 @@ if command -v flock >/dev/null 2>&1; then
   fi
 fi
 
-rm -f run.log OUTPUT/global_diagnostics.csv
+rm -f run.log OUTPUT/global_diagnostics.csv OUTPUT/performance_summary.csv
 mkdir -p OUTPUT/{Field,Velocity,Particle,Global,Phase,Energy,History,Average} DUMP
 
 run_start_utc="\$(date -u +%Y-%m-%dT%H:%M:%SZ)"
@@ -447,6 +457,7 @@ distribution = ${distribution}
 distribution_parameter = ${distribution_shape}
 left_boundary = ${left_boundary}
 ion_mass_over_electron_mass = ${mass_ratio}
+omp_threads = ${omp_threads}
 run_mode = ${run_mode}
 git_revision = \$git_revision
 slurm_job_id = \${SLURM_JOB_ID:-unknown}
@@ -494,7 +505,7 @@ Prepared standard paper baseline case:
   nt             = $nt
   run mode       = ${run_mode}
   auto archive   = ${archive_results}
-  Slurm CPUs     = 1
+  Slurm CPUs     = ${omp_threads}
   Slurm memory   = ${requested_memory_mib} MiB
   Slurm walltime = ${requested_walltime}
   archive root   = $archive_root
@@ -505,6 +516,7 @@ Expected immediate output:
   run.log
   run_metadata.txt
   OUTPUT/global_diagnostics.csv
+  OUTPUT/performance_summary.csv
 EOF_DONE
 
 if [[ "$archive_results" == "yes" ]]; then

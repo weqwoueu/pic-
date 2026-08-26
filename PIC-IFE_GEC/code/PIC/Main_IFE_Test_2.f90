@@ -27,6 +27,7 @@ USE ModuleMCCInterface   !$ ab.ZWZ 2021/12/19 for JW's MCC
 Use ModuleDiagOneStep
 Use ModuleGlobalDiagnostics
 Use ModuleSimulationRandomSeed, Only: InitializeSimulationRandomSeed
+Use ModulePerformanceTimers
 IMPLICIT NONE
 
 !? ------------------- what are they used for? -------------------------
@@ -65,6 +66,7 @@ REAL(8), PARAMETER	::	pii	= 3.14159265358979D0
 !? the above varibles are not used in Main, delete?
 
 REAL(8) :: xp, yp, resu, error  !$ ab.ZWZ to check convergence 2021/7/9     !? used in convergence checking, delete ?
+REAL(8) :: perf_t0
 Logical :: DumpFlag
 
 Integer(4) :: isp
@@ -292,6 +294,7 @@ ELSE
     
 END IF
 
+Call InitializePerformanceTimers()
 Call SYSTEM_CLOCK(Time1)
 !!!**********begin the time loop******************************* 
 DO it = ilap+1, nt
@@ -305,8 +308,12 @@ DO it = ilap+1, nt
         ns(isp+1) = ParticleGlobal(isp)%Npar 
     End Do
     
-    call OUTPUT_velocity(it)
-    call Output_Energy(it)
+    perf_t0 = PerformanceNow()
+    If (Mod(it,1000).eq.0 .Or. it == 1 .Or. it == nt) Then
+        call OUTPUT_velocity(it)
+        call Output_Energy(it)
+    Endif
+    Call AddPerformanceTime(Perf_Output, perf_t0)
 
 !------ Inject new slice of Particles from upstream
     !> inject particles from boundary
@@ -327,37 +334,57 @@ DO it = ilap+1, nt
     
     IF (IMPIC_index) THEN   !!!! ��ʽ
        
+      perf_t0 = PerformanceNow()
       Do i=0,ControlFlowGlobal%Ns
         Call MoveAll(ParticleGlobal(i), ControlFlowGlobal,N_objects,objects,delta,1)
       End Do
+      Call AddPerformanceTime(Perf_Move, perf_t0)
 
+      perf_t0 = PerformanceNow()
       CALL GetParChg_2D(delta)
+      Call AddPerformanceTime(Perf_Deposit, perf_t0)
 
+      perf_t0 = PerformanceNow()
       CALL OneAndChi_2D
       CALL IFE_Start_2D(	IFE_phi_bkgd, IFE_Te_bkgd, IFE_Rho_bkgd, nbkgd,		&
                           Phi, nx, ny, delta, xt	)
 
       CALL IFE_Solve_2D(Rho, Phi, nx, ny, delta, xt)
+      Call AddPerformanceTime(Perf_Field_Solve, perf_t0)
       
+      perf_t0 = PerformanceNow()
       Call GetEField_SIDG_PPR
+      Call AddPerformanceTime(Perf_Efield, perf_t0)
 
+      perf_t0 = PerformanceNow()
       Do i=0,ControlFlowGlobal%Ns
         Call MoveAll(ParticleGlobal(i), ControlFlowGlobal,N_objects,objects,delta,2)
       End Do
+      Call AddPerformanceTime(Perf_Move, perf_t0)
         
     ELSE  !!!! ��ʽ
          !write(*,*) 'move'
+      perf_t0 = PerformanceNow()
       Do i=0,ControlFlowGlobal%Ns
         Call MoveAll(ParticleGlobal(i), ControlFlowGlobal,N_objects,objects,delta,0)
       End Do
+      Call AddPerformanceTime(Perf_Move, perf_t0)
          !write(*,*) 'gpt'
+      perf_t0 = PerformanceNow()
       CALL GetParChg_2D(delta)
+      Call AddPerformanceTime(Perf_Deposit, perf_t0)
       
+      perf_t0 = PerformanceNow()
       CALL IFE_Solve_2D(Rho, Phi, nx, ny, delta, xt)
+      Call AddPerformanceTime(Perf_Field_Solve, perf_t0)
             
+      perf_t0 = PerformanceNow()
       Call GetEField_SIDG_PPR
+      Call AddPerformanceTime(Perf_Efield, perf_t0)
         
     END IF    
+
+    perf_t0 = PerformanceNow()
     
     !write(*,*) 'inject'
 	!CALL InjectBeams_2D(it, delta, ParticleGlobal)
@@ -579,10 +606,12 @@ DO it = ilap+1, nt
         End do
         DumpFlag = .False.
     End If
+    Call AddPerformanceTime(Perf_Output, perf_t0)
 END DO
 
 WRITE(6,*) 
 WRITE(6,*) 'run finish at after it=', it-1 
+Call WritePerformanceSummary(it-1-ilap)
 
 CLOSE(540)  !$ close partcount file
 

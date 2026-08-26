@@ -1,7 +1,11 @@
 MODULE ModuleSimulationRandomSeed
+    USE Omp_Lib, ONLY: Omp_Get_Thread_Num
     IMPLICIT NONE
     INTEGER, SAVE :: DRandomR1 = 1271199957
     INTEGER, SAVE :: DRandomR2 = 1013501921
+    INTEGER, SAVE :: SimulationBaseSeed = 101
+    LOGICAL, SAVE :: DRandomInitialized = .FALSE.
+!$OMP THREADPRIVATE(DRandomR1, DRandomR2, DRandomInitialized)
 
 CONTAINS
 
@@ -12,6 +16,7 @@ CONTAINS
         INTEGER(8) :: seed64, intrinsic_modulus
 
         seed64 = ABS(INT(seed, 8))
+        SimulationBaseSeed = seed
         intrinsic_modulus = INT(HUGE(0), 8) - 1_8
 
         CALL RANDOM_SEED(SIZE=seed_size)
@@ -24,18 +29,32 @@ CONTAINS
 
         DRandomR1 = INT(MODULO(seed64 * 104729_8 + 1271199957_8, 2147483646_8) + 1_8)
         DRandomR2 = INT(MODULO(seed64 * 130363_8 + 1013501921_8, 2147483646_8) + 1_8)
+        DRandomInitialized = .TRUE.
     END SUBROUTINE InitializeSimulationRandomSeed
+
+    SUBROUTINE EnsureThreadRandomSeed()
+        INTEGER(8) :: thread_seed64
+
+        IF (DRandomInitialized) RETURN
+        thread_seed64 = ABS(INT(SimulationBaseSeed, 8)) + &
+                        1000003_8 * INT(Omp_Get_Thread_Num(), 8)
+        DRandomR1 = INT(MODULO(thread_seed64 * 104729_8 + 1271199957_8, 2147483646_8) + 1_8)
+        DRandomR2 = INT(MODULO(thread_seed64 * 130363_8 + 1013501921_8, 2147483646_8) + 1_8)
+        DRandomInitialized = .TRUE.
+    END SUBROUTINE EnsureThreadRandomSeed
 
 END MODULE ModuleSimulationRandomSeed
 
 
 SUBROUTINE DRandom(randum)
-    USE ModuleSimulationRandomSeed, ONLY: r1 => DRandomR1, r2 => DRandomR2
+    USE ModuleSimulationRandomSeed, ONLY: r1 => DRandomR1, r2 => DRandomR2, EnsureThreadRandomSeed
     IMPLICIT NONE
 
     DOUBLE PRECISION, INTENT(OUT) :: randum
     DOUBLE PRECISION :: h1l, h1u, r0, r3, asc, bsc
     INTEGER :: i1, isc
+
+    CALL EnsureThreadRandomSeed()
 
     h1l = 65533.0D0
     h1u = 32767.0D0

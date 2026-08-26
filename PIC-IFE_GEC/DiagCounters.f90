@@ -35,10 +35,13 @@ Contains
         Integer(4), Intent(In) :: isp
         Real(8), Intent(In)    :: weight, energy
 
+!$omp atomic update
         E_lost_cum = E_lost_cum + energy * weight
         If (isp == 0) Then
+!$omp atomic update
             Ne_lost_cum = Ne_lost_cum + weight
         Else
+!$omp atomic update
             Ni_lost_cum = Ni_lost_cum + weight
         End If
     End Subroutine AddDiagLost
@@ -48,10 +51,13 @@ Contains
         Integer(4), Intent(In) :: isp
         Real(8), Intent(In)    :: weight, energy
 
+!$omp atomic update
         E_inj_cum = E_inj_cum + energy * weight
         If (isp == 0) Then
+!$omp atomic update
             Ne_inj_cum = Ne_inj_cum + weight
         Else
+!$omp atomic update
             Ni_inj_cum = Ni_inj_cum + weight
         End If
     End Subroutine AddDiagInjected
@@ -61,13 +67,19 @@ Contains
         Integer(4), Intent(In) :: isp
         Real(8), Intent(In) :: weight, energy_lost, energy_injected
 
+!$omp atomic update
         E_lost_cum = E_lost_cum + energy_lost * weight
+!$omp atomic update
         E_inj_cum  = E_inj_cum  + energy_injected * weight
         If (isp == 0) Then
+!$omp atomic update
             Ne_lost_cum = Ne_lost_cum + weight
+!$omp atomic update
             Ne_inj_cum  = Ne_inj_cum  + weight
         Else
+!$omp atomic update
             Ni_lost_cum = Ni_lost_cum + weight
+!$omp atomic update
             Ni_inj_cum  = Ni_inj_cum  + weight
         End If
     End Subroutine AddDiagThermalExchange

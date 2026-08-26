@@ -47,13 +47,16 @@ INTERFACE
 END INTERFACE
 
 
-REAL(8), DIMENSION(:), POINTER	::	X0, R0, W, P, Q
+REAL(8), DIMENSION(:), ALLOCATABLE, SAVE :: X0, R0, W, P, Q
 REAL(8)		alpha, beta, rho, rho0, normR, normRHS, RELTOL2
 INTEGER		i, j
 
 RELTOL2 = RELTOL**2
 
-ALLOCATE(X0(N), R0(N), W(N), P(N), Q(N))
+IF (ALLOCATED(X0)) THEN
+	IF (SIZE(X0) /= N) DEALLOCATE(X0, R0, W, P, Q)
+END IF
+IF (.NOT. ALLOCATED(X0)) ALLOCATE(X0(N), R0(N), W(N), P(N), Q(N))
 
 normRHS = 0
 DO j = 1, N
@@ -136,7 +139,5 @@ DO j = 1, N
 	X(j) = X0(j)
 	R(j) = R0(j)
 END DO			
-
-DEALLOCATE(X0, R0, W, P, Q)
 
 END SUBROUTINE

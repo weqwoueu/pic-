@@ -252,8 +252,6 @@ Module ModuleMCCInterface
 
         Trail_2D(1,:) = (/OriPosi(1),OriPosi(2)/)
         Trail_2D(2,:) = (/PO%X,PO%Y/)
-        PB%VFactor = v_ref
-        
         !> ----------------------------------
         !I_Count = 0
         !TimeRemain = 0.
@@ -396,6 +394,7 @@ Module ModuleMCCInterface
                 Call AddDiagThermalExchange(PB%SO%SpecyIndex, diag_weight, ek_before, ek_after)
             End If
         Elseif (PO%X > dxmax) Then
+!$omp atomic update
             PB%nLoss(2) = PB%nLoss(2) + 1 !> ab.ZWZ
             PO%X = -2000
             !LineEnds(1,:) = (/dxmax,dymin/)
@@ -548,6 +547,7 @@ Module ModuleMCCInterface
     !> added by ZWZ -- Move all particles
     Subroutine MoveAll(PB,CF,N_objects,objects,delta,PushFlag)
         Use Domain_2D, Only:dxmin
+        Use IMPIC_Data_2D, Only:Bfiled_index
         Implicit none
         Class(ParticleBundle), intent(inout) :: PB
         Class(ControlFlow), intent(in) :: CF
@@ -558,13 +558,17 @@ Module ModuleMCCInterface
         Integer(4) :: i,isp
         Real(8) :: ek_lost
         Real(8) :: weight_lost
-        Integer(4) :: IvelFlag = 0, IposFlag = 0
+        Integer(4) :: IvelFlag, IposFlag
         Real(8) :: TimeMove
         Real(8) :: OriPosi(3)
         Real(8) :: detaV(3)
        
         PB%nLoss(1) =0
+        PB%VFactor = v_ref
         isp = PB%SO%SpecyIndex
+!$omp parallel do default(shared) schedule(static) &
+!$omp& private(i, TimeMove, IvelFlag, IposFlag, OriPosi, detaV) &
+!$omp& if(PushFlag == 0 .And. .Not. Bfiled_index)
         Do i = 1, PB%Npar
             
             ! ========Turner Case=============
@@ -590,6 +594,7 @@ Module ModuleMCCInterface
                 !Call AdjustParticleBoundary(PB,PB%PO(i),TimeMove,IvelFlag,IposFlag,N_objects,objects,delta,OriPosi)
             End Do
         End Do
+!$omp end parallel do
         
         Do i=PB%NPar,1,-1
             If (PB%PO(i)%X<=dxmin) then

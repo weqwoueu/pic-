@@ -45,6 +45,7 @@ fi
 required_files=(
   "$app_dir/run.log"
   "$app_dir/OUTPUT/global_diagnostics.csv"
+  "$app_dir/OUTPUT/performance_summary.csv"
   "$app_dir/OUTPUT/physics_parameter.inp"
   "$app_dir/OUTPUT/normalize.inp"
   "$app_dir/OUTPUT/Field/Average_x_${t30_file_step}.dat"
@@ -65,6 +66,7 @@ done
 mkdir -p "$archive_dir"
 cp "$config_file" "$app_dir/INPUT/pic.inp" "$app_dir/MCC_jw/input/controlflow.txt" "$archive_dir/"
 cp "$app_dir/run.log" "$app_dir/OUTPUT/global_diagnostics.csv" \
+   "$app_dir/OUTPUT/performance_summary.csv" \
    "$app_dir/OUTPUT/physics_parameter.inp" "$app_dir/OUTPUT/normalize.inp" "$archive_dir/"
 cp "$app_dir/OUTPUT/Field/Average_x_${t30_file_step}.dat" \
    "$app_dir/OUTPUT/Field/Average_x_${t50_file_step}.dat" "$archive_dir/"

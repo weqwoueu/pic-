@@ -29,6 +29,7 @@ list(REMOVE_ITEM MCC_JW_SRCS "${CMAKE_CURRENT_SOURCE_DIR}/MCC_jw/code/Main.F90")
 
 set(ROOT_FORTRAN_SRCS
   "${CMAKE_CURRENT_SOURCE_DIR}/DiagCounters.f90"
+  "${CMAKE_CURRENT_SOURCE_DIR}/PerformanceTimers.f90"
   "${CMAKE_CURRENT_SOURCE_DIR}/OUTPUT_velocity.f90"
   "${CMAKE_CURRENT_SOURCE_DIR}/Output_Energy.f90"
   "${CMAKE_CURRENT_SOURCE_DIR}/GlobalDiagnostics.f90"
@@ -38,5 +39,9 @@ set(ROOT_FORTRAN_SRCS
 )
 
 add_executable(${PROJECT_NAME} ${SRCS} ${MCC_JW_SRCS} ${ROOT_FORTRAN_SRCS})
+
+find_package(OpenMP REQUIRED COMPONENTS Fortran)
+target_link_libraries(${PROJECT_NAME} PRIVATE OpenMP::OpenMP_Fortran)
+
 set(EXECUTABLE_OUTPUT_PATH ${PROJECT_SOURCE_DIR})
 

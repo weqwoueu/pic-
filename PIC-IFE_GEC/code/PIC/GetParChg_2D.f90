@@ -35,7 +35,7 @@ REAL(8)                    ::  x_part, y_part, x_rec, y_rec, Cell_volume_bjw
 REAL(8) :: P1, P2, P3, P4 
 REAL(8) :: R
 REAL(8) :: YFACTOR
-REAL(8) :: BETA  = 1.!$ 参靠操慧珺论文，添加Larson的修正因子
+REAL(8) :: BETA
 !$ =============== mb.ZWZ 2021/7/11 ========================== //
 REAL(8) :: V2 !$ ab.ZWZ 2022/2/29 for output energy distribution
 REAL(8) :: Energy !$ ab.ZWZ 2022/5/26 for output energy distribution
@@ -83,11 +83,9 @@ rho_s = 0.0
 rho_p = 0.0
 Ek_tot = 0.0
 
-If (.Not. Allocated(HE_particle))   Allocate(HE_particle(5, Size(HE,2)))
 If (.Not. Allocated(rho_s_sum))     Allocate(rho_s_sum(1, Size(HP,2), ispe_tot))
 If (.Not. Allocated(rho_p_sum))     Allocate(rho_p_sum(1, Size(HP,2), ispe_tot))
 If (.Not. Allocated(Ek_tot_sum))    Allocate(Ek_tot_sum(1, Size(HP,2), ispe_tot))
-HE_particle = 0.0
 rho_s_sum = 0.0
 rho_p_sum = 0.0
 Ek_tot_sum = 0.0
@@ -120,6 +118,18 @@ Mapymin = hx(2) / (2**repeat_refinement)
 
 !==========Part 1 : Particle location and charge distribution==========
 Do isp=0, ControlFlowGlobal%Ns
+!$omp parallel do default(shared) schedule(static) &
+!$omp& private(i_part, i, j, ii, jj, l, ntemp, n, n_element, n_node, node_index_el) &
+!$omp& private(rxp, ryp, dx, dy, xcellmdx, ycellmdy, R1, R2, den, rho_temp, VertX_Cell) &
+!$omp& private(dist1, dist2, dist3, dist4, dist_total, rho_temp1, rho_temp2, rho_temp3) &
+!$omp& private(rho_temp4, rho_temp_total, x_part, y_part, x_rec, y_rec, Cell_volume_bjw) &
+!$omp& private(P1, P2, P3, P4, R, YFACTOR, BETA, V2, Energy, part_x, part_y, traverse_flag) &
+!$omp& private(n_element_old, n_element_bro, n_element_bro_initial, part_ele_left) &
+!$omp& private(part_ele_right, part_ele_bottom, part_ele_top, left_right_centre, bottom_top_centre) &
+!$omp& private(delta_1, delta_2, part_edge_count, edge_count, num, k, hx_partition, hy_partition) &
+!$omp& private(W1, W2, W3, W4, edge_boundary, edge_bro_count, edge_temp_count) &
+!$omp& private(edge_self_element, edge_self_element_min, edge_bro_element, temp_count) &
+!$omp& private(EdgeArray, HE_particle) reduction(+:rho_p, rho_s, Ek_tot)
   Do i_part = 1, ParticleGlobal(isp)%NPar
     
     part_x = ParticleGlobal(isp)%PO(i_part)%X
@@ -843,6 +853,7 @@ Do isp=0, ControlFlowGlobal%Ns
     Ek_tot(4, n_element_old, isp+1) = Ek_tot(4, n_element_old, isp+1) + W4 * Energy
     
   End Do
+!$omp end parallel do
 End Do
 
 !==========Part 2 : Sum mesh nodes charge weight from basis nodes==========
